@@ -44,111 +44,41 @@ const certs = [
 
 export default function Experience() {
   return (
-    <section
-      id="experience"
-      style={{
-        padding: "6rem 2rem",
-        maxWidth: "1200px",
-        margin: "0 auto",
-      }}
-    >
+    <section id="experience" className="py-24 px-8 max-w-300 mx-auto">
       <ScrollReveal>
         <SectionLabel label="experience" lineNumber={4} />
       </ScrollReveal>
 
-      <div
-        style={{
-          position: "relative",
-          paddingLeft: "1.5rem",
-          marginBottom: "3.5rem",
-        }}
-      >
+      <div className="relative pl-6 mb-14">
         {/* Vertical line */}
         <div
-          style={{
-            position: "absolute",
-            left: 0,
-            top: "6px",
-            bottom: "6px",
-            width: "1px",
-            background:
-              "linear-gradient(to bottom, var(--accent), rgba(34,197,94,0.1))",
-            opacity: 0.3,
-          }}
+          className="absolute left-0 top-[6px] bottom-[6px] w-px opacity-30"
+          style={{ background: "linear-gradient(to bottom, var(--accent), rgba(34,197,94,0.1))" }}
         />
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}>
+        <div className="flex flex-col gap-10">
           {timeline.map((item, i) => (
             <ScrollReveal key={item.role} delay={i * 0.1}>
-              <div style={{ position: "relative" }}>
+              <div className="relative">
                 {/* Dot */}
                 <div
-                  style={{
-                    position: "absolute",
-                    left: "-1.87rem",
-                    top: "5px",
-                    width: "7px",
-                    height: "7px",
-                    borderRadius: "50%",
-                    background: "var(--accent)",
-                    opacity: 0.6,
-                    boxShadow: "0 0 8px rgba(34,197,94,0.4)",
-                  }}
+                  className="absolute top-[5px] w-[7px] h-[7px] rounded-full bg-accent opacity-60"
+                  style={{ left: "-1.87rem", boxShadow: "0 0 8px rgba(34,197,94,0.4)" }}
                 />
 
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "baseline",
-                    gap: "0.75rem",
-                    flexWrap: "wrap",
-                    marginBottom: "0.4rem",
-                  }}
-                >
-                  <h3
-                    style={{
-                      fontFamily: "var(--font-jetbrains)",
-                      fontWeight: 700,
-                      fontSize: "0.95rem",
-                      color: "var(--text-primary)",
-                      margin: 0,
-                      letterSpacing: "-0.01em",
-                    }}
-                  >
+                <div className="flex items-baseline gap-3 flex-wrap mb-[0.4rem]">
+                  <h3 className="font-mono font-bold text-[0.95rem] text-fg m-0 tracking-[-0.01em]">
                     {item.role}
                   </h3>
-                  <span
-                    style={{
-                      fontFamily: "var(--font-jetbrains)",
-                      fontSize: "0.75rem",
-                      color: "var(--accent)",
-                      opacity: 0.7,
-                    }}
-                  >
+                  <span className="font-mono text-[0.75rem] text-accent opacity-70">
                     - {item.org}
                   </span>
-                  <span
-                    style={{
-                      fontFamily: "var(--font-jetbrains)",
-                      fontSize: "0.65rem",
-                      color: "var(--text-secondary)",
-                      opacity: 0.45,
-                      letterSpacing: "0.06em",
-                    }}
-                  >
+                  <span className="font-mono text-[0.65rem] text-muted opacity-[0.45] tracking-[0.06em]">
                     [{item.period}]
                   </span>
                 </div>
 
-                <p
-                  style={{
-                    fontSize: "0.88rem",
-                    lineHeight: 1.75,
-                    color: "var(--text-secondary)",
-                    margin: 0,
-                    maxWidth: "580px",
-                  }}
-                >
+                <p className="text-[0.88rem] leading-[1.75] text-muted m-0 max-w-145">
                   {item.note}
                 </p>
               </div>
@@ -159,60 +89,20 @@ export default function Experience() {
 
       {/* Certificates */}
       <ScrollReveal delay={0.3}>
-        <p
-          style={{
-            fontFamily: "var(--font-jetbrains)",
-            fontSize: "0.7rem",
-            color: "var(--text-secondary)",
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            marginBottom: "1rem",
-            opacity: 0.5,
-          }}
-        >
-          <span style={{ color: "var(--accent)", opacity: 0.7 }}>{"//"} </span>
+        <p className="font-mono text-[0.7rem] text-muted tracking-[0.12em] uppercase mb-4 opacity-50">
+          <span className="text-accent opacity-70">{"//"} </span>
           certificates
         </p>
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+        <div className="flex flex-col gap-[0.6rem]">
           {certs.map((c) => (
-            <div
-              key={c.label}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.75rem",
-                flexWrap: "wrap",
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: "var(--font-jetbrains)",
-                  fontSize: "0.8rem",
-                  color: "var(--text-primary)",
-                }}
-              >
-                {c.label}
-              </span>
+            <div key={c.label} className="flex items-center gap-3 flex-wrap">
+              <span className="font-mono text-[0.8rem] text-fg">{c.label}</span>
               {c.org && (
-                <span
-                  style={{
-                    fontFamily: "var(--font-jetbrains)",
-                    fontSize: "0.7rem",
-                    color: "var(--text-secondary)",
-                    opacity: 0.55,
-                  }}
-                >
+                <span className="font-mono text-[0.7rem] text-muted opacity-[0.55]">
                   · {c.org}
                 </span>
               )}
-              <span
-                style={{
-                  fontFamily: "var(--font-jetbrains)",
-                  fontSize: "0.65rem",
-                  color: "var(--accent)",
-                  opacity: 0.5,
-                }}
-              >
+              <span className="font-mono text-[0.65rem] text-accent opacity-50">
                 {c.date}
               </span>
               {c.verify && (
@@ -220,25 +110,7 @@ export default function Experience() {
                   href={c.verify}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{
-                    fontFamily: "var(--font-jetbrains)",
-                    fontSize: "0.65rem",
-                    color: "var(--text-secondary)",
-                    textDecoration: "none",
-                    opacity: 0.4,
-                    letterSpacing: "0.04em",
-                    transition: "opacity 0.2s, color 0.2s",
-                  }}
-                  onMouseEnter={(e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.opacity = "1";
-                    el.style.color = "var(--accent)";
-                  }}
-                  onMouseLeave={(e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.opacity = "0.4";
-                    el.style.color = "var(--text-secondary)";
-                  }}
+                  className="font-mono text-[0.65rem] text-muted no-underline opacity-40 tracking-[0.04em] transition-[opacity,color] duration-200 hover:opacity-100 hover:text-accent"
                 >
                   verify ↗
                 </a>

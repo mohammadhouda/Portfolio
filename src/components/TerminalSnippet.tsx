@@ -57,73 +57,20 @@ export default function TerminalSnippet() {
   }, [phase, charIndex, cmdIndex]);
 
   return (
-    <div
-      style={{
-        background: "rgba(17,17,24,0.8)",
-        border: "1px solid rgba(255,255,255,0.06)",
-        borderRadius: "8px",
-        padding: "1rem 1.25rem",
-        fontFamily: "var(--font-jetbrains)",
-        fontSize: "0.82rem",
-        maxWidth: "360px",
-        backdropFilter: "blur(8px)",
-      }}
-    >
+    <div className="bg-[rgba(17,17,24,0.8)] border border-[rgba(255,255,255,0.06)] rounded-lg px-5 py-4 font-mono text-[0.82rem] max-w-90 backdrop-blur-sm">
       {/* Window chrome */}
-      <div
-        style={{
-          display: "flex",
-          gap: "6px",
-          marginBottom: "0.75rem",
-          alignItems: "center",
-        }}
-      >
-        <span
-          style={{
-            width: "10px",
-            height: "10px",
-            borderRadius: "50%",
-            background: "#ff5f57",
-            display: "inline-block",
-          }}
-        />
-        <span
-          style={{
-            width: "10px",
-            height: "10px",
-            borderRadius: "50%",
-            background: "#febc2e",
-            display: "inline-block",
-          }}
-        />
-        <span
-          style={{
-            width: "10px",
-            height: "10px",
-            borderRadius: "50%",
-            background: "#28c840",
-            display: "inline-block",
-          }}
-        />
-        <span
-          style={{
-            marginLeft: "8px",
-            color: "var(--text-secondary)",
-            fontSize: "0.7rem",
-            opacity: 0.5,
-          }}
-        >
-          terminal
-        </span>
+      <div className="flex gap-1.5 mb-3 items-center">
+        <span className="inline-block w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+        <span className="inline-block w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+        <span className="inline-block w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+        <span className="ml-2 text-muted text-[0.7rem] opacity-50">terminal</span>
       </div>
 
       {/* Command line */}
-      <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-        <span style={{ color: "var(--accent)", opacity: 0.8, userSelect: "none" }}>
-          ~
-        </span>
-        <span style={{ color: "var(--accent)", userSelect: "none" }}>❯</span>
-        <span style={{ color: "var(--text-primary)" }}>{displayText}</span>
+      <div className="flex items-center gap-1.5">
+        <span className="text-accent opacity-80 select-none">~</span>
+        <span className="text-accent select-none">❯</span>
+        <span className="text-fg">{displayText}</span>
         <span className="cursor-blink" />
       </div>
     </div>

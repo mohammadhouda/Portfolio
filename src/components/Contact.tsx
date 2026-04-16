@@ -26,14 +26,7 @@ const links = [
     label: "Email",
     href: "mailto:muhamad.houda@gmail.com",
     icon: (
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <rect x="2" y="4" width="20" height="16" rx="2" />
         <path d="m2 7 10 7 10-7" />
       </svg>
@@ -43,84 +36,36 @@ const links = [
 
 export default function Contact() {
   return (
-    <section
-      id="contact"
-      style={{
-        padding: "6rem 2rem 8rem",
-        maxWidth: "1200px",
-        margin: "0 auto",
-      }}
-    >
+    <section id="contact" className="pt-24 px-8 pb-32 max-w-300 mx-auto">
       <ScrollReveal>
         <SectionLabel label="contact" lineNumber={6} />
       </ScrollReveal>
 
       <ScrollReveal delay={0.1}>
         <h2
-          style={{
-            fontFamily: "var(--font-jetbrains)",
-            fontWeight: 700,
-            fontSize: "clamp(2rem, 5vw, 3rem)",
-            letterSpacing: "-0.03em",
-            color: "var(--text-primary)",
-            marginBottom: "1rem",
-            lineHeight: 1.15,
-          }}
+          className="font-mono font-bold tracking-[-0.03em] text-fg mb-4 leading-[1.15]"
+          style={{ fontSize: "clamp(2rem, 5vw, 3rem)" }}
         >
           Let&apos;s build something
           <br />
-          <span style={{ color: "var(--accent)" }}>together.</span>
+          <span className="text-accent">together.</span>
         </h2>
       </ScrollReveal>
 
       <ScrollReveal delay={0.2}>
-        <p
-          style={{
-            fontSize: "1rem",
-            color: "var(--text-secondary)",
-            lineHeight: 1.7,
-            maxWidth: "480px",
-            marginBottom: "2.5rem",
-          }}
-        >
+        <p className="text-[1rem] text-muted leading-[1.7] max-w-120 mb-10">
           Open to backend/full-stack roles, freelance projects, and interesting
           collaborations. If you&apos;re building something that matters, reach out.
         </p>
 
-        <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+        <div className="flex gap-4 flex-wrap">
           {links.map((link) => (
             <a
               key={link.label}
               href={link.href}
               target={link.href.startsWith("mailto") ? undefined : "_blank"}
               rel="noopener noreferrer"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                padding: "0.65rem 1.2rem",
-                background: "var(--surface)",
-                border: "1px solid var(--border)",
-                borderRadius: "6px",
-                color: "var(--text-secondary)",
-                textDecoration: "none",
-                fontFamily: "var(--font-jetbrains)",
-                fontSize: "0.8rem",
-                letterSpacing: "0.04em",
-                transition: "border-color 0.2s, color 0.2s, box-shadow 0.2s",
-              }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.borderColor = "rgba(34,197,94,0.35)";
-                el.style.color = "var(--accent)";
-                el.style.boxShadow = "0 0 16px rgba(34,197,94,0.08)";
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.borderColor = "var(--border)";
-                el.style.color = "var(--text-secondary)";
-                el.style.boxShadow = "none";
-              }}
+              className="inline-flex items-center gap-2 px-[1.2rem] py-[0.65rem] bg-surface border border-border rounded-md text-muted no-underline font-mono text-[0.8rem] tracking-[0.04em] transition-[border-color,color,box-shadow] duration-200 hover:border-[rgba(34,197,94,0.35)] hover:text-accent hover:shadow-[0_0_16px_rgba(34,197,94,0.08)]"
             >
               {link.icon}
               {link.label}
@@ -132,33 +77,7 @@ export default function Contact() {
             href="/Mohammad.Houda_CV.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              padding: "0.65rem 1.2rem",
-              background: "rgba(34,197,94,0.06)",
-              border: "1px solid rgba(34,197,94,0.2)",
-              borderRadius: "6px",
-              color: "var(--accent)",
-              textDecoration: "none",
-              fontFamily: "var(--font-jetbrains)",
-              fontSize: "0.8rem",
-              letterSpacing: "0.04em",
-              transition: "background 0.2s, border-color 0.2s, box-shadow 0.2s",
-            }}
-            onMouseEnter={(e) => {
-              const el = e.currentTarget as HTMLElement;
-              el.style.background = "rgba(34,197,94,0.12)";
-              el.style.borderColor = "rgba(34,197,94,0.4)";
-              el.style.boxShadow = "0 0 16px rgba(34,197,94,0.1)";
-            }}
-            onMouseLeave={(e) => {
-              const el = e.currentTarget as HTMLElement;
-              el.style.background = "rgba(34,197,94,0.06)";
-              el.style.borderColor = "rgba(34,197,94,0.2)";
-              el.style.boxShadow = "none";
-            }}
+            className="inline-flex items-center gap-2 px-[1.2rem] py-[0.65rem] bg-[rgba(34,197,94,0.06)] border border-[rgba(34,197,94,0.2)] rounded-md text-accent no-underline font-mono text-[0.8rem] tracking-[0.04em] transition-[background,border-color,box-shadow] duration-200 hover:bg-[rgba(34,197,94,0.12)] hover:border-[rgba(34,197,94,0.4)] hover:shadow-[0_0_16px_rgba(34,197,94,0.1)]"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />

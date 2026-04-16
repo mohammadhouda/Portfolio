@@ -5,10 +5,25 @@ import TerminalSnippet from "./TerminalSnippet";
 import SectionLabel from "./SectionLabel";
 import ScrollReveal from "./ScrollReveal";
 
+/* ─── animation presets ─── */
+const ease = [0.16, 1, 0.3, 1] as [number, number, number, number];
+
 const fadeUp = (delay: number) => ({
-  initial: { opacity: 0, y: 28 },
+  initial: { opacity: 0, y: 32 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.7, delay, ease: [0.21, 0.47, 0.32, 0.98] as [number, number, number, number] },
+  transition: { duration: 0.9, delay, ease },
+});
+
+const fadeIn = (delay: number) => ({
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  transition: { duration: 1.2, delay, ease },
+});
+
+const staggerLine = (delay: number) => ({
+  initial: { opacity: 0, x: -20 },
+  animate: { opacity: 1, x: 0 },
+  transition: { duration: 0.7, delay, ease },
 });
 
 export default function Hero() {
@@ -20,144 +35,142 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      style={{
-        minHeight: "100svh",
-        display: "flex",
-        alignItems: "center",
-        padding: "6rem 2rem 4rem",
-        maxWidth: "1200px",
-        margin: "0 auto",
-        width: "100%",
-      }}
+      className="relative flex items-center pt-24 px-8 pb-16 max-w-300 mx-auto w-full min-h-svh overflow-hidden"
     >
-      <div style={{ width: "100%" }}>
-        {/* Top label */}
-        <motion.div {...fadeUp(0.1)} style={{ marginBottom: "1.5rem" }}>
+      {/* ── Atmospheric grid background ── */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)",
+          backgroundSize: "80px 80px",
+        }}
+      />
+
+      {/* ── Gradient glow accent ── */}
+      <motion.div
+        {...fadeIn(0.6)}
+        className="pointer-events-none absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full opacity-[0.06]"
+        style={{
+          background:
+            "radial-gradient(circle, var(--color-accent, #22c55e) 0%, transparent 70%)",
+        }}
+      />
+
+      <div className="relative w-full z-10">
+        {/* ── Status line ── */}
+        <motion.div {...staggerLine(0.05)} className="mb-8">
           <ScrollReveal>
-              <SectionLabel label="Based In Lebanon" lineNumber={1} />
+            <SectionLabel label="Based In Lebanon" lineNumber={1} />
           </ScrollReveal>
         </motion.div>
 
-        {/* Main layout: name left, intro right */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "4rem",
-            alignItems: "start",
-          }}
-          className="hero-grid"
-        >
-          {/* Left: name + title + terminal */}
+        {/* ── Two-column 50/50 split ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* ═══ Left column: identity + terminal ═══ */}
           <div>
             <motion.h1
               {...fadeUp(0.2)}
-              style={{
-                fontFamily: "var(--font-jetbrains)",
-                fontWeight: 700,
-                fontSize: "clamp(3.5rem, 8vw, 5.5rem)",
-                lineHeight: 1,
-                letterSpacing: "-0.03em",
-                color: "var(--text-primary)",
-                margin: 0,
-              }}
+              className="font-mono font-bold leading-[0.95] tracking-[-0.04em] text-fg m-0"
+              style={{ fontSize: "clamp(3.2rem, 7.5vw, 5.5rem)" }}
             >
-              Mohammad Houda
-              <span className="cursor-blink" style={{ marginLeft: "4px" }} />
+              <span className="block">Mohammad</span>
+              <span className="block mt-1">
+                Houda
+                <motion.span
+                  className="inline-block w-[3px] h-[0.85em] bg-accent ml-2 align-baseline rounded-[1px]"
+                  animate={{ opacity: [1, 0] }}
+                  transition={{
+                    duration: 0.8,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                    ease: "easeInOut",
+                  }}
+                />
+              </span>
             </motion.h1>
 
-            <motion.p
-              {...fadeUp(0.35)}
-              style={{
-                fontFamily: "var(--font-jetbrains)",
-                fontSize: "0.9rem",
-                color: "var(--accent)",
-                marginTop: "1rem",
-                marginBottom: "2.5rem",
-                letterSpacing: "0.04em",
-              }}
-            >
-              Software Engineer · Backend Focus
-            </motion.p>
+            {/* Role tag */}
+            <motion.div {...fadeUp(0.35)} className="mt-5 mb-10 flex items-center gap-3">
+              <span className="block w-8 h-px bg-accent/50" />
+              <p className="font-mono text-[0.8rem] text-accent tracking-[0.08em] uppercase m-0">
+                Software Engineer · Backend Focus
+              </p>
+            </motion.div>
 
             <motion.div {...fadeUp(0.5)}>
               <TerminalSnippet />
             </motion.div>
           </div>
 
-          {/* Right: intro + CTA */}
-          <motion.div
-            {...fadeUp(0.4)}
-            style={{
-              paddingTop: "1.5rem",
-            }}
-          >
-            <p
-            style={{
-              fontSize: "1.05rem",
-              lineHeight: 1.75,
-              color: "var(--text-secondary)",
-              maxWidth: "420px",
-              marginBottom: "2.5rem",
-            }}
+          {/* ═══ Right column: intro + CTA ═══ */}
+          <motion.div {...fadeUp(0.4)} className="relative lg:pl-12">
+            {/* Vertical divider — desktop only */}
+            <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-px bg-white/[0.06]">
+              {/* Accent notch at top */}
+              <span className="absolute top-0 left-0 w-full h-12 bg-accent/40" />
+            </div>
+
+            {/* Section decorator */}
+            <motion.div
+              {...fadeIn(0.45)}
+              className="font-mono text-[0.65rem] text-muted/30 tracking-[0.15em] uppercase mb-4 select-none"
             >
-            Backend-focused Software Engineer with hands-on experience building
-            production-grade REST APIs, scalable multi-tenant platforms, and
-            distributed systems. Strong in{" "}
-            <span style={{ color: "var(--text-primary)" }}>
-              Node.js, Express, PostgreSQL
-            </span>{" "}
-            and Redis with a full-stack reach via Next.js and TypeScript.
-            Based in{" "}
-            <span style={{ color: "var(--text-primary)" }}>Tripoli, Lebanon</span>.
+              {"/* about */"}
+            </motion.div>
+
+            <p className="text-[1.05rem] leading-[1.8] text-muted mb-10">
+              Backend-focused Software Engineer with hands-on experience building
+              production-grade REST APIs, scalable multi-tenant platforms, and
+              distributed systems. Strong in{" "}
+              <span className="text-fg font-medium">
+                Node.js, Express, PostgreSQL
+              </span>{" "}
+              and Redis with a full-stack reach via Next.js and TypeScript.
+              Based in{" "}
+              <span className="text-fg font-medium">Tripoli, Lebanon</span>.
             </p>
 
-            <motion.button
-              onClick={handleScroll}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                padding: "0.75rem 1.5rem",
-                background: "transparent",
-                border: "1px solid var(--accent)",
-                borderRadius: "6px",
-                color: "var(--accent)",
-                fontFamily: "var(--font-jetbrains)",
-                fontSize: "0.82rem",
-                letterSpacing: "0.06em",
-                cursor: "pointer",
-                transition: "background 0.2s, box-shadow 0.2s",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.background =
-                  "rgba(34,197,94,0.08)";
-                (e.currentTarget as HTMLElement).style.boxShadow =
-                  "0 0 20px rgba(34,197,94,0.15)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.background = "transparent";
-                (e.currentTarget as HTMLElement).style.boxShadow = "none";
-              }}
-            >
-              view_projects
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
+            {/* CTA group */}
+            <div className="flex items-center gap-6 flex-wrap">
+              <motion.button
+                onClick={handleScroll}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="group inline-flex items-center gap-3 px-7 py-3.5 bg-accent/[0.08] border border-accent/60 rounded-md text-accent font-mono text-[0.8rem] tracking-[0.06em] cursor-pointer transition-all duration-300 hover:bg-accent/[0.14] hover:border-accent hover:shadow-[0_0_30px_rgba(34,197,94,0.12)]"
               >
-                <path d="M2 7h10M8 3l4 4-4 4" />
-              </svg>
-            </motion.button>
+                view_projects
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                >
+                  <path d="M2 7h10M8 3l4 4-4 4" />
+                </svg>
+              </motion.button>
+            </div>
           </motion.div>
         </div>
-      </div>
 
+        {/* ── Bottom status bar ── */}
+        <motion.div
+          {...fadeIn(0.8)}
+          className="mt-20 flex items-center gap-6 font-mono text-[0.65rem] text-muted/30 tracking-[0.1em] uppercase select-none"
+        >
+          <span className="flex items-center gap-2">
+            <span className="block w-1.5 h-1.5 rounded-full bg-accent/70 shadow-[0_0_6px_rgba(34,197,94,0.4)]" />
+            available for work
+          </span>
+          <span className="hidden sm:inline">·</span>
+          <span className="hidden sm:inline">UTC+3</span>
+          <span className="hidden sm:inline">·</span>
+          <span className="hidden sm:inline">v2.0</span>
+        </motion.div>
+      </div>
     </section>
   );
 }

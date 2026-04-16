@@ -15,7 +15,7 @@ const METHOD_COLORS: Record<string, { bg: string; color: string }> = {
 
 export default function EndpointSelector({ endpoints, selected, onSelect }: EndpointSelectorProps) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
+    <div className="flex flex-col gap-[0.35rem]">
       {endpoints.map((ep) => {
         const isActive = ep.id === selected.id;
         const mc = METHOD_COLORS[ep.method] ?? METHOD_COLORS.GET;
@@ -24,58 +24,25 @@ export default function EndpointSelector({ endpoints, selected, onSelect }: Endp
           <button
             key={ep.id}
             onClick={() => onSelect(ep)}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.6rem",
-              padding: "0.6rem 0.75rem",
-              background: isActive ? "rgba(34,197,94,0.06)" : "transparent",
-              border: `1px solid ${isActive ? "rgba(34,197,94,0.2)" : "transparent"}`,
-              borderRadius: "6px",
-              cursor: "pointer",
-              textAlign: "left",
-              transition: "background 0.15s, border-color 0.15s",
-              width: "100%",
-            }}
-            onMouseEnter={(e) => {
-              if (!isActive) {
-                (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.03)";
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isActive) {
-                (e.currentTarget as HTMLElement).style.background = "transparent";
-              }
-            }}
+            className={`flex items-center gap-[0.6rem] px-3 py-[0.6rem] border rounded-md cursor-pointer text-left transition-[background,border-color] duration-150 w-full ${
+              isActive
+                ? "bg-[rgba(34,197,94,0.06)] border-[rgba(34,197,94,0.2)]"
+                : "bg-transparent border-transparent hover:bg-[rgba(255,255,255,0.03)]"
+            }`}
           >
             {/* Method badge */}
             <span
-              style={{
-                padding: "0.15rem 0.45rem",
-                borderRadius: "3px",
-                background: mc.bg,
-                color: mc.color,
-                fontFamily: "var(--font-jetbrains)",
-                fontSize: "0.62rem",
-                fontWeight: 700,
-                letterSpacing: "0.06em",
-                flexShrink: 0,
-              }}
+              className="px-[0.45rem] py-[0.15rem] rounded-[3px] font-mono text-[0.62rem] font-bold tracking-[0.06em] shrink-0"
+              style={{ background: mc.bg, color: mc.color }}
             >
               {ep.method}
             </span>
 
             {/* URL */}
             <span
-              style={{
-                fontFamily: "var(--font-jetbrains)",
-                fontSize: "0.75rem",
-                color: isActive ? "var(--text-primary)" : "var(--text-secondary)",
-                letterSpacing: "0.01em",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
+              className={`font-mono text-[0.75rem] tracking-[0.01em] overflow-hidden text-ellipsis whitespace-nowrap ${
+                isActive ? "text-fg" : "text-muted"
+              }`}
             >
               {ep.url}
             </span>

@@ -1,16 +1,15 @@
 "use client";
 
 import { useState, useCallback, memo } from "react";
+import ScrollReveal from "../ScrollReveal";
+import SectionLabel from "../SectionLabel";
 import EndpointSelector from "./EndpointSelector";
 import RequestPanel from "./RequestPanel";
 import ResponsePanel from "./ResponsePanel";
 
-// Memoize panels so they don't re-render on unrelated state changes
 const MemoEndpointSelector = memo(EndpointSelector);
 const MemoRequestPanel = memo(RequestPanel);
 const MemoResponsePanel = memo(ResponsePanel);
-import ScrollReveal from "../ScrollReveal";
-import SectionLabel from "../SectionLabel";
 
 export interface Endpoint {
   id: string;
@@ -48,7 +47,7 @@ const ENDPOINTS: Endpoint[] = [
   },
 ];
 
-const MIN_DELAY = 320; // artificial delay for anticipation
+const MIN_DELAY = 320;
 
 export default function ApiPlayground() {
   const [selected, setSelected] = useState<Endpoint>(ENDPOINTS[0]);
@@ -71,24 +70,19 @@ export default function ApiPlayground() {
     setResponse(null);
     setStatus(null);
     setTime(null);
-
     const start = Date.now();
-
     try {
       const opts: RequestInit = { method: selected.method };
       if (selected.method === "POST") {
         opts.headers = { "Content-Type": "application/json" };
         opts.body = body;
       }
-
       const [res] = await Promise.all([
         fetch(selected.url, opts),
         new Promise((r) => setTimeout(r, MIN_DELAY)),
       ]);
-
       const elapsed = Date.now() - start;
       const json = await res.json();
-
       setStatus(res.status);
       setTime(elapsed);
       setResponse(JSON.stringify(json, null, 2));
@@ -103,94 +97,31 @@ export default function ApiPlayground() {
   }, [selected, body]);
 
   return (
-    <section
-      id="api"
-      style={{
-        padding: "6rem 2rem",
-        maxWidth: "1200px",
-        margin: "0 auto",
-      }}
-    >
+    <section id="api" className="py-24 px-8 max-w-300 mx-auto">
       <ScrollReveal>
         <SectionLabel label="api" lineNumber={5} />
-        <p
-          style={{
-            fontFamily: "var(--font-jetbrains)",
-            fontSize: "0.72rem",
-            color: "var(--text-secondary)",
-            opacity: 0.45,
-            marginBottom: "2rem",
-            letterSpacing: "0.02em",
-          }}
-        >
+        <p className="font-mono text-[0.72rem] text-muted opacity-[0.45] mb-8 tracking-[0.02em]">
           {"// live endpoints — hit them for real"}
         </p>
       </ScrollReveal>
 
       <ScrollReveal delay={0.1}>
         {/* Main playground card */}
-        <div
-          style={{
-            background: "var(--surface)",
-            border: "1px solid var(--border)",
-            borderRadius: "10px",
-            overflow: "hidden",
-          }}
-        >
+        <div className="bg-surface border border-border rounded-[10px] overflow-hidden">
           {/* Window chrome */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-              padding: "0.75rem 1.25rem",
-              borderBottom: "1px solid var(--border)",
-              background: "rgba(0,0,0,0.15)",
-            }}
-          >
-            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#ff5f57", display: "inline-block" }} />
-            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#febc2e", display: "inline-block" }} />
-            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#28c840", display: "inline-block" }} />
-            <span
-              style={{
-                marginLeft: "0.75rem",
-                fontFamily: "var(--font-jetbrains)",
-                fontSize: "0.68rem",
-                color: "var(--text-secondary)",
-                opacity: 0.4,
-              }}
-            >
+          <div className="flex items-center gap-1.5 px-5 py-3 border-b border-border bg-[rgba(0,0,0,0.15)]">
+            <span className="inline-block w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+            <span className="inline-block w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+            <span className="inline-block w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+            <span className="ml-3 font-mono text-[0.68rem] text-muted opacity-40">
               api-playground
             </span>
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "220px 1fr 1fr",
-              minHeight: "420px",
-            }}
-            className="playground-grid"
-          >
+          <div className="playground-grid">
             {/* Endpoint list */}
-            <div
-              style={{
-                borderRight: "1px solid var(--border)",
-                padding: "1rem 0.75rem",
-              }}
-            >
-              <p
-                style={{
-                  fontFamily: "var(--font-jetbrains)",
-                  fontSize: "0.62rem",
-                  color: "var(--text-secondary)",
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  opacity: 0.4,
-                  marginBottom: "0.6rem",
-                  paddingLeft: "0.5rem",
-                }}
-              >
+            <div className="border-r border-border px-3 py-4">
+              <p className="font-mono text-[0.62rem] text-muted tracking-widest uppercase opacity-40 mb-[0.6rem] pl-2">
                 Endpoints
               </p>
               <MemoEndpointSelector
@@ -201,12 +132,7 @@ export default function ApiPlayground() {
             </div>
 
             {/* Request panel */}
-            <div
-              style={{
-                borderRight: "1px solid var(--border)",
-                padding: "1.25rem",
-              }}
-            >
+            <div className="border-r border-border p-5">
               <MemoRequestPanel
                 endpoint={selected}
                 body={body}
@@ -217,7 +143,7 @@ export default function ApiPlayground() {
             </div>
 
             {/* Response panel */}
-            <div style={{ padding: "1.25rem" }}>
+            <div className="p-5">
               <MemoResponsePanel
                 response={response}
                 status={status}
@@ -228,7 +154,6 @@ export default function ApiPlayground() {
           </div>
         </div>
       </ScrollReveal>
-
     </section>
   );
 }

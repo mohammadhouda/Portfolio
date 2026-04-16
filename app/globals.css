@@ -15,9 +15,10 @@
 @theme inline {
   --color-bg: var(--bg);
   --color-surface: var(--surface);
+  --color-border: var(--border);
   --color-accent: var(--accent);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
+  --color-fg: var(--text-primary);
+  --color-muted: var(--text-secondary);
   --font-mono: var(--font-jetbrains);
   --font-sans: var(--font-satoshi);
 }
@@ -108,6 +109,27 @@ body::before {
 .card:hover {
   border-color: var(--border-hover);
   box-shadow: 0 0 20px var(--accent-glow);
+}
+
+/* ── Layout grid classes ─────────────────────────────── */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+.playground-grid {
+  display: grid;
+  grid-template-columns: 220px 1fr 1fr;
+  min-height: 420px;
 }
 
 /* ── Responsive layout helpers ───────────────────────── */

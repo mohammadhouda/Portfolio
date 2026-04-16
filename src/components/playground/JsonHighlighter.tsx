@@ -2,14 +2,13 @@
 
 import { useMemo } from "react";
 
-// Token colors matching the spec
 const COLORS = {
-  key: "#22c55e",       // accent green
-  string: "#93c5fd",    // light blue
-  number: "#fb923c",    // amber/orange
-  boolean: "#c084fc",   // muted purple
-  null: "#c084fc",      // muted purple
-  brace: "#71717a",     // muted
+  key: "#22c55e",
+  string: "#93c5fd",
+  number: "#fb923c",
+  boolean: "#c084fc",
+  null: "#c084fc",
+  brace: "#71717a",
   comma: "#71717a",
 };
 
@@ -29,7 +28,6 @@ function tokenize(json: string): React.ReactNode[] {
   while (i < json.length) {
     const ch = json[i];
 
-    // Whitespace
     if (/\s/.test(ch)) {
       const start = i;
       while (i < json.length && /\s/.test(json[i])) i++;
@@ -37,23 +35,19 @@ function tokenize(json: string): React.ReactNode[] {
       continue;
     }
 
-    // Braces / brackets / colon / comma
     if ("{}[]".includes(ch)) { push(ch, COLORS.brace); i++; continue; }
     if (ch === ":") { push(": ", COLORS.brace); i++; continue; }
     if (ch === ",") { push(",", COLORS.comma); i++; continue; }
 
-    // String
     if (ch === '"') {
       const start = i;
-      i++; // skip opening quote
+      i++;
       while (i < json.length && json[i] !== '"') {
-        if (json[i] === "\\") i++; // skip escaped char
+        if (json[i] === "\\") i++;
         i++;
       }
-      i++; // skip closing quote
+      i++;
       const raw = json.slice(start, i);
-
-      // Determine if it's a key (next non-whitespace is ":")
       let j = i;
       while (j < json.length && /\s/.test(json[j])) j++;
       const isKey = json[j] === ":";
@@ -61,7 +55,6 @@ function tokenize(json: string): React.ReactNode[] {
       continue;
     }
 
-    // Number
     if (ch === "-" || /\d/.test(ch)) {
       const start = i;
       if (json[i] === "-") i++;
@@ -70,12 +63,10 @@ function tokenize(json: string): React.ReactNode[] {
       continue;
     }
 
-    // true / false / null
     if (json.startsWith("true", i))  { push("true",  COLORS.boolean); i += 4; continue; }
     if (json.startsWith("false", i)) { push("false", COLORS.boolean); i += 5; continue; }
     if (json.startsWith("null", i))  { push("null",  COLORS.null);    i += 4; continue; }
 
-    // Fallback
     push(ch); i++;
   }
 
@@ -94,17 +85,7 @@ export default function JsonHighlighter({ json }: { json: string }) {
   }, [json]);
 
   return (
-    <pre
-      style={{
-        margin: 0,
-        padding: 0,
-        fontFamily: "var(--font-jetbrains)",
-        fontSize: "0.78rem",
-        lineHeight: 1.7,
-        whiteSpace: "pre-wrap",
-        wordBreak: "break-word",
-      }}
-    >
+    <pre className="m-0 p-0 font-mono text-[0.78rem] leading-[1.7] whitespace-pre-wrap wrap-break-word">
       {tokens}
     </pre>
   );

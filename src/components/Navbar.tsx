@@ -33,94 +33,32 @@ export default function Navbar() {
 
   return (
     <>
-      <motion.nav
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 100,
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-        }}
-      >
+      <motion.nav className="fixed top-0 left-0 right-0 z-[100] backdrop-blur-[12px]">
         <motion.div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: "rgba(10, 10, 15, 0.85)",
-            opacity: bgOpacity,
-          }}
+          className="absolute inset-0 bg-[rgba(10,10,15,0.85)]"
+          style={{ opacity: bgOpacity }}
         />
         <motion.div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "1px",
-            background: "rgba(255,255,255,0.06)",
-            opacity: borderOpacity,
-          }}
+          className="absolute bottom-0 left-0 right-0 h-px bg-[rgba(255,255,255,0.06)]"
+          style={{ opacity: borderOpacity }}
         />
 
-        <div
-          style={{
-            position: "relative",
-            maxWidth: "1200px",
-            margin: "0 auto",
-            padding: "0 2rem",
-            height: "64px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
+        <div className="relative max-w-300 mx-auto px-8 h-16 flex items-center justify-between">
           {/* Logo */}
           <Link
             href="/"
-            style={{
-              fontFamily: "var(--font-jetbrains)",
-              fontWeight: 700,
-              fontSize: "1.1rem",
-              color: "var(--accent)",
-              textDecoration: "none",
-              letterSpacing: "-0.02em",
-            }}
+            className="font-mono font-bold text-[1.1rem] text-accent no-underline tracking-[-0.02em]"
           >
             M
           </Link>
 
           {/* Desktop links */}
-          <div
-            style={{
-              display: "flex",
-              gap: "2.5rem",
-              alignItems: "center",
-            }}
-            className="hidden sm:flex"
-          >
+          <div className="hidden sm:flex gap-10 items-center">
             {navLinks.map((link) => (
               <button
                 key={link.href}
                 onClick={() => handleNavClick(link.href)}
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  fontFamily: "var(--font-jetbrains)",
-                  fontSize: "0.8rem",
-                  color: "var(--text-secondary)",
-                  letterSpacing: "0.04em",
-                  transition: "color 0.2s",
-                  padding: 0,
-                }}
-                onMouseEnter={(e) =>
-                  ((e.target as HTMLElement).style.color = "var(--text-primary)")
-                }
-                onMouseLeave={(e) =>
-                  ((e.target as HTMLElement).style.color = "var(--text-secondary)")
-                }
+                className="bg-none border-none cursor-pointer font-mono text-[0.8rem] text-muted tracking-[0.04em] transition-colors duration-200 hover:text-fg p-0"
               >
                 {link.label}
               </button>
@@ -129,46 +67,25 @@ export default function Navbar() {
 
           {/* Mobile hamburger */}
           <button
-            className="sm:hidden"
+            className="flex sm:hidden flex-col gap-[5px] bg-transparent border-none cursor-pointer p-1"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              padding: "4px",
-              display: "flex",
-              flexDirection: "column",
-              gap: "5px",
-            }}
             aria-label="Toggle menu"
           >
             <span
+              className="block w-[22px] h-[1.5px] transition-[transform,background] duration-200"
               style={{
-                display: "block",
-                width: "22px",
-                height: "1.5px",
                 background: isMenuOpen ? "var(--accent)" : "var(--text-secondary)",
-                transition: "transform 0.2s, background 0.2s",
                 transform: isMenuOpen ? "translateY(6.5px) rotate(45deg)" : "none",
               }}
             />
             <span
-              style={{
-                display: "block",
-                width: "22px",
-                height: "1.5px",
-                background: "var(--text-secondary)",
-                transition: "opacity 0.2s",
-                opacity: isMenuOpen ? 0 : 1,
-              }}
+              className="block w-[22px] h-[1.5px] bg-muted transition-opacity duration-200"
+              style={{ opacity: isMenuOpen ? 0 : 1 }}
             />
             <span
+              className="block w-[22px] h-[1.5px] transition-[transform,background] duration-200"
               style={{
-                display: "block",
-                width: "22px",
-                height: "1.5px",
                 background: isMenuOpen ? "var(--accent)" : "var(--text-secondary)",
-                transition: "transform 0.2s, background 0.2s",
                 transform: isMenuOpen ? "translateY(-6.5px) rotate(-45deg)" : "none",
               }}
             />
@@ -182,17 +99,7 @@ export default function Navbar() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 90,
-            background: "rgba(10,10,15,0.97)",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "2rem",
-          }}
+          className="fixed inset-0 z-[90] bg-[rgba(10,10,15,0.97)] flex flex-col items-center justify-center gap-8"
         >
           {navLinks.map((link, i) => (
             <motion.button
@@ -201,15 +108,7 @@ export default function Navbar() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.08 }}
               onClick={() => handleNavClick(link.href)}
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                fontFamily: "var(--font-jetbrains)",
-                fontSize: "1.4rem",
-                color: "var(--text-primary)",
-                letterSpacing: "0.06em",
-              }}
+              className="bg-none border-none cursor-pointer font-mono text-[1.4rem] text-fg tracking-[0.06em]"
             >
               {link.label}
             </motion.button>

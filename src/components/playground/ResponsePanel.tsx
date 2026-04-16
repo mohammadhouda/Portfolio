@@ -33,53 +33,23 @@ export default function ResponsePanel({ response, status, time, loading }: Respo
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        minHeight: "320px",
-      }}
-    >
+    <div className="flex flex-col h-full min-h-80">
       {/* Status bar */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: "0.75rem",
-          minHeight: "28px",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+      <div className="flex items-center justify-between mb-3 min-h-7">
+        <div className="flex items-center gap-[0.6rem]">
           {status !== null && (() => {
             const sc = STATUS_COLOR(status);
             return (
               <span
-                style={{
-                  padding: "0.15rem 0.55rem",
-                  borderRadius: "4px",
-                  background: sc.bg,
-                  color: sc.color,
-                  fontFamily: "var(--font-jetbrains)",
-                  fontSize: "0.68rem",
-                  fontWeight: 700,
-                  letterSpacing: "0.04em",
-                }}
+                className="px-[0.55rem] py-[0.15rem] rounded font-mono text-[0.68rem] font-bold tracking-[0.04em]"
+                style={{ background: sc.bg, color: sc.color }}
               >
                 {status} {STATUS_TEXT[status] ?? ""}
               </span>
             );
           })()}
           {time !== null && (
-            <span
-              style={{
-                fontFamily: "var(--font-jetbrains)",
-                fontSize: "0.68rem",
-                color: "var(--text-secondary)",
-                opacity: 0.5,
-              }}
-            >
+            <span className="font-mono text-[0.68rem] text-muted opacity-50">
               {time}ms
             </span>
           )}
@@ -88,20 +58,9 @@ export default function ResponsePanel({ response, status, time, loading }: Respo
         {response && (
           <button
             onClick={handleCopy}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.3rem",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              fontFamily: "var(--font-jetbrains)",
-              fontSize: "0.68rem",
-              color: copied ? "var(--accent)" : "var(--text-secondary)",
-              opacity: copied ? 1 : 0.45,
-              transition: "color 0.15s, opacity 0.15s",
-              padding: "0.2rem 0.4rem",
-            }}
+            className={`flex items-center gap-[0.3rem] bg-transparent border-none cursor-pointer font-mono text-[0.68rem] px-[0.4rem] py-[0.2rem] transition-[color,opacity] duration-150 ${
+              copied ? "text-accent opacity-100" : "text-muted opacity-[0.45]"
+            }`}
           >
             {copied ? (
               <>✓ copied</>
@@ -119,58 +78,17 @@ export default function ResponsePanel({ response, status, time, loading }: Respo
       </div>
 
       {/* Response body */}
-      <div
-        style={{
-          flex: 1,
-          background: "rgba(0,0,0,0.25)",
-          border: "1px solid var(--border)",
-          borderRadius: "6px",
-          padding: "0.85rem 1rem",
-          overflow: "auto",
-          position: "relative",
-        }}
-      >
+      <div className="flex-1 bg-[rgba(0,0,0,0.25)] border border-border rounded-md px-4 py-[0.85rem] overflow-auto relative">
         {loading ? (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              height: "100%",
-              minHeight: "80px",
-            }}
-          >
-            <span
-              style={{
-                fontFamily: "var(--font-jetbrains)",
-                fontSize: "0.78rem",
-                color: "var(--text-secondary)",
-                opacity: 0.4,
-              }}
-            >
-              fetching
-            </span>
+          <div className="flex items-center gap-2 h-full min-h-20">
+            <span className="font-mono text-[0.78rem] text-muted opacity-40">fetching</span>
             <span className="cursor-blink" />
           </div>
         ) : response ? (
           <JsonHighlighter json={response} />
         ) : (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              height: "100%",
-              minHeight: "80px",
-            }}
-          >
-            <span
-              style={{
-                fontFamily: "var(--font-jetbrains)",
-                fontSize: "0.75rem",
-                color: "var(--text-secondary)",
-                opacity: 0.3,
-              }}
-            >
+          <div className="flex items-center h-full min-h-20">
+            <span className="font-mono text-[0.75rem] text-muted opacity-30">
               {"// response will appear here"}
             </span>
           </div>
