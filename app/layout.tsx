@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -16,11 +17,11 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Mohammad - Software Engineer",
+  title: "Mohammad Houda - Software Engineer",
   description:
     "Software engineer with a backend focus. I build systems that matter from humanitarian platforms to AI sales automation.",
   keywords: [
-    "Mohammad",
+    "Mohammad Houda",
     "Software Engineer",
     "Backend Developer",
     "Node.js",
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Mohammad Houda" }],
   openGraph: {
-    title: "Mohammad - Software Engineer",
+    title: "Mohammad Houda - Software Engineer",
     description:
       "Software engineer with a backend focus. I build systems that matter.",
     type: "website",
@@ -39,7 +40,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mohammad - Software Engineer",
+    title: "Mohammad Houda - Software Engineer",
     description: "Software engineer with a backend focus.",
   },
   robots: {
@@ -59,6 +60,7 @@ export default function RootLayout({
       className={`${jetbrainsMono.variable} ${plusJakartaSans.variable}`}
     >
       <body>{children}</body>
+      <GoogleAnalytics gaId="G-W6T4FQW5GV" />
     </html>
   );
 }
