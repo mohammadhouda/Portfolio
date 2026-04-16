@@ -1,24 +1,23 @@
 import type { MetadataRoute } from "next";
+import { projects } from "../src/lib/projects";
+
+const BASE_URL = "https://mohammadhouda.dev";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://mohammadhouda.dev";
+  const projectEntries: MetadataRoute.Sitemap = projects.map((p) => ({
+    url: `${BASE_URL}/projects/${p.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
 
   return [
     {
-      url: baseUrl,
+      url: BASE_URL,
       lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 1,
     },
-    {
-      url: `${baseUrl}/projects`,
-      lastModified: new Date(),
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-    },
+    ...projectEntries,
   ];
 }

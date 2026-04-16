@@ -16,9 +16,33 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = getProject(slug);
   if (!project) return {};
+
+  const url = `https://mohammadhouda.dev/projects/${slug}`;
+
   return {
-    title: `${project.title} — Mohammad`,
+    title: project.title,
     description: project.description,
+    alternates: { canonical: url },
+    openGraph: {
+      title: `${project.title} — Mohammad Houda`,
+      description: project.description,
+      url,
+      type: "article",
+      images: [
+        {
+          url: "/og-image.png",
+          width: 1200,
+          height: 630,
+          alt: project.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${project.title} — Mohammad Houda`,
+      description: project.description,
+      images: ["/og-image.png"],
+    },
   };
 }
 

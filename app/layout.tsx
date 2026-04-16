@@ -16,36 +16,69 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   display: "swap",
 });
 
+const BASE_URL = "https://mohammadhouda.dev";
+
 export const metadata: Metadata = {
-  title: "Mohammad Houda - Software Engineer",
+  metadataBase: new URL(BASE_URL),
+  title: {
+    default: "Mohammad Houda — Software Engineer",
+    template: "%s — Mohammad Houda",
+  },
   description:
-    "Software engineer with a backend focus. I build systems that matter from humanitarian platforms to AI sales automation.",
+    "Backend-focused Software Engineer building production-grade REST APIs, scalable multi-tenant platforms, and distributed systems. Node.js · PostgreSQL · Next.js · TypeScript · AWS.",
   keywords: [
     "Mohammad Houda",
     "Software Engineer",
     "Backend Developer",
     "Node.js",
+    "Express",
+    "PostgreSQL",
     "Next.js",
     "TypeScript",
+    "Redis",
+    "AWS",
     "Lebanon",
     "Portfolio",
   ],
-  authors: [{ name: "Mohammad Houda" }],
+  authors: [{ name: "Mohammad Houda", url: BASE_URL }],
+  creator: "Mohammad Houda",
+  alternates: {
+    canonical: BASE_URL,
+  },
   openGraph: {
-    title: "Mohammad Houda - Software Engineer",
+    title: "Mohammad Houda — Software Engineer",
     description:
-      "Software engineer with a backend focus. I build systems that matter.",
+      "Backend-focused Software Engineer building production-grade REST APIs, scalable multi-tenant platforms, and distributed systems.",
+    url: BASE_URL,
+    siteName: "Mohammad Houda",
     type: "website",
     locale: "en_US",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Mohammad Houda — Software Engineer",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mohammad Houda - Software Engineer",
-    description: "Software engineer with a backend focus.",
+    title: "Mohammad Houda — Software Engineer",
+    description:
+      "Backend-focused Software Engineer building production-grade REST APIs, scalable multi-tenant platforms, and distributed systems.",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 
