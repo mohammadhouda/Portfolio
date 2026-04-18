@@ -7,7 +7,7 @@ import SectionLabel from "./SectionLabel";
 const stack = {
   Backend: ["Node.js", "Express.js", "PostgreSQL", "Prisma", "Redis", "Firebase", "Socket.io", "REST APIs"],
   Frontend: ["React.js", "Next.js", "TypeScript", "JavaScript", "Tailwind CSS"],
-  "Tools & Cloud": ["Git", "Docker", "AWS", "Supabase", "PM2", "Postman", "Puppeteer"],
+  "Tools & Cloud": ["Git", "Docker", "AWS", "jest", "Supertest", "Supabase", "PM2", "Postman", "Puppeteer"],
   "AI & Tooling": ["Claude", "AI-assisted development", "Prompt engineering"],
 };
 
@@ -59,16 +59,17 @@ export default function About() {
               {"/* who I am */"}
             </p>
 
-            <p className="text-[1.05rem] leading-[1.85] text-muted mb-6">
-              Backend-focused Software Engineer with hands-on experience building
-              production-grade REST APIs, scalable multi-tenant platforms, and
-              distributed systems. Strong expertise in{" "}
-              <span className="text-fg font-medium">Node.js</span>,{" "}
-              <span className="text-fg font-medium">Express</span>,{" "}
-              <span className="text-fg font-medium">PostgreSQL</span>,
-              Prisma, and Redis with practical experience designing secure auth flows,
-              background job pipelines, and real-time features using Socket.io.
-            </p>
+          <p className="text-[1.05rem] leading-[1.85] text-muted mb-6">
+            Backend-focused Software Engineer with hands-on experience building
+            production-grade REST APIs, scalable multi-tenant platforms, and
+            distributed systems. Strong expertise in{" "}
+            <span className="text-fg font-medium">Node.js</span>,{" "}
+            <span className="text-fg font-medium">Express</span>,{" "}
+            <span className="text-fg font-medium">PostgreSQL</span>,
+            Prisma, and Redis. I specialize in designing secure auth flows,
+            background job pipelines, and 
+            <span className="text-fg font-medium"> robust testing suites using Jest & Supertest</span>.
+          </p>
 
             <p className="text-[1.05rem] leading-[1.85] text-muted mb-6">
               Comfortable across the full stack with Next.js, React, and TypeScript.

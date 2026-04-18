@@ -29,9 +29,10 @@ export const projects: Project[] = [
     },
     highlights: [
       "Pre-computed match scoring via BullMQ + Upstash Redis moves expensive work entirely off the request path",
-      "Family-based JWT refresh token rotation with theft detection revoked token reuse invalidates all sessions in the family",
+      "Family-based JWT refresh token rotation with theft detection; revoked token reuse invalidates all sessions in the family",
+      "Developed a robust test suite using Jest and Supertest, leveraging factory patterns to mock Prisma models and ensure 100% reliability on core API endpoints",
       "Three isolated role contexts (Admin / Charity / User) sharing one Express server with middleware-enforced access",
-      "Real-time Socket.io chat rooms tied to volunteer application lifecycle created on approval, closed on opportunity end",
+      "Real-time Socket.io chat rooms tied to volunteer application lifecycle: created on approval, closed on opportunity end",
       "Idempotent score writes via INSERT ... ON CONFLICT DO UPDATE, safe for BullMQ job retries",
     ],
   },
