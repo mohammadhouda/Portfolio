@@ -73,7 +73,7 @@ export default function Hero() {
             <motion.div {...fadeUp(0.3)} className="mt-5 mb-10 flex items-center gap-3">
               <span className="block w-8 h-px bg-accent/50" />
               <p className="font-mono text-[0.8rem] text-accent tracking-[0.08em] uppercase m-0">
-                Software Engineer · Backend Focus
+                Software Engineer · Full-Stack Reach
               </p>
             </motion.div>
 
@@ -91,17 +91,14 @@ export default function Hero() {
             </div>
 
             <p className="font-mono text-[0.65rem] text-muted/30 tracking-[0.15em] uppercase mb-4 select-none">
-              {"/* about */"}
+              {"/* what I build */"}
             </p>
 
             <p className="text-[1.05rem] leading-[1.8] text-muted max-w-[42ch] mb-10">
-              Backend-focused Software Engineer with hands-on experience building
-              production-grade REST APIs, scalable multi-tenant platforms, and
-              distributed systems. Strong in{" "}
-              <span className="text-fg font-medium">Node.js, Express, PostgreSQL</span>{" "}
-              and Redis with a full-stack reach via Next.js and TypeScript.
-              Based in{" "}
-              <span className="text-fg font-medium">Tripoli, Lebanon</span>.
+              I design the systems behind the product auth flows, job pipelines,
+              real-time features, and APIs that hold under load. I ship fast
+              without cutting corners, and I reach into the frontend
+              when the work calls for it.
             </p>
 
             <div className="flex items-center gap-6 flex-wrap">
