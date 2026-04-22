@@ -79,7 +79,7 @@ export default function About() {
               former Backend Developer at{" "}
               <span className="text-fg font-medium">Ishtari Group</span>.
               Based in{" "}
-              <span className="text-fg font-medium">Tripoli, Lebanon</span>.
+              <span className="text-fg font-medium">Lebanon</span>.
             </p>
 
             <p className="text-[1.05rem] leading-[1.85] text-muted mb-10">
