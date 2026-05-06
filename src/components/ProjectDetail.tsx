@@ -1,10 +1,116 @@
 "use client";
 
 import Link from "next/link";
+import { useState, useEffect, useCallback } from "react";
 import ArchitectureExplorerLoader from "./architecture/ArchitectureExplorerLoader";
 import type { Project } from "../lib/projects";
 
+function CameraIcon({ size = 22, className = "" }: { size?: number; className?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className={className}>
+      <path d="M9 3L7.17 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.17L15 3H9z" />
+      <circle cx="12" cy="12" r="3.5" />
+    </svg>
+  );
+}
+
+function Lightbox({
+  images,
+  index,
+  onClose,
+}: {
+  images: string[];
+  index: number;
+  onClose: () => void;
+}) {
+  const [current, setCurrent] = useState(index);
+  const hasPrev = current > 0;
+  const hasNext = current < images.length - 1;
+
+  const prev = useCallback(() => { if (hasPrev) setCurrent((c) => c - 1); }, [hasPrev]);
+  const next = useCallback(() => { if (hasNext) setCurrent((c) => c + 1); }, [hasNext]);
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") prev();
+      if (e.key === "ArrowRight") next();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose, prev, next]);
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      style={{ background: "rgba(0,0,0,0.88)" }}
+      onClick={onClose}
+    >
+      {/* Image container — stop propagation so clicking image doesn't close */}
+      <div
+        className="relative max-w-[90vw] max-h-[85vh] flex items-center justify-center"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <img
+          src={images[current]}
+          alt={`Screenshot ${current + 1}`}
+          className="max-w-[90vw] max-h-[85vh] rounded-lg object-contain"
+          style={{ boxShadow: "0 0 80px rgba(0,0,0,0.8)" }}
+        />
+
+        {/* Counter */}
+        {images.length > 1 && (
+          <span className="absolute bottom-[-2rem] left-1/2 -translate-x-1/2 font-mono text-[0.65rem] text-white/40 tracking-widest">
+            {current + 1} / {images.length}
+          </span>
+        )}
+      </div>
+
+      {/* Prev arrow */}
+      {hasPrev && (
+        <button
+          onClick={(e) => { e.stopPropagation(); prev(); }}
+          className="fixed left-5 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.06] text-white/60 transition-[background,border-color,color] duration-150 hover:bg-white/[0.12] hover:border-white/25 hover:text-white cursor-pointer"
+          aria-label="Previous image"
+        >
+          <svg width="16" height="16" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M8 2L4 6l4 4" />
+          </svg>
+        </button>
+      )}
+
+      {/* Next arrow */}
+      {hasNext && (
+        <button
+          onClick={(e) => { e.stopPropagation(); next(); }}
+          className="fixed right-5 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.06] text-white/60 transition-[background,border-color,color] duration-150 hover:bg-white/[0.12] hover:border-white/25 hover:text-white cursor-pointer"
+          aria-label="Next image"
+        >
+          <svg width="16" height="16" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M4 2l4 4-4 4" />
+          </svg>
+        </button>
+      )}
+
+      {/* Close button */}
+      <button
+        onClick={onClose}
+        className="fixed top-5 right-5 w-9 h-9 flex items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.06] text-white/60 text-lg leading-none transition-[background,border-color,color] duration-150 hover:bg-white/[0.12] hover:border-white/25 hover:text-white cursor-pointer"
+        aria-label="Close lightbox"
+      >
+        ×
+      </button>
+    </div>
+  );
+}
+
 export default function ProjectDetail({ project }: { project: Project }) {
+  const hasImages = project.images && project.images.length > 0;
+  const gallerySlots = hasImages ? project.images! : [null, null, null];
+  const realImages = project.images ?? [];
+
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
   return (
     <main className="max-w-300 mx-auto pt-32 px-8 pb-24">
       {/* Back link */}
@@ -81,6 +187,67 @@ export default function ProjectDetail({ project }: { project: Project }) {
         )}
       </div>
 
+      {/* ── Screenshot Gallery ── */}
+      <div className="mb-14">
+        <p className="font-mono text-[0.7rem] text-muted tracking-[0.12em] uppercase mb-5 opacity-50">
+          <span className="text-accent opacity-70">{"//"} </span>
+          screenshots
+        </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {gallerySlots.map((src, i) => (
+            <div
+              key={i}
+              className={`relative rounded-lg overflow-hidden ${
+                src
+                  ? "border border-border cursor-zoom-in group/img"
+                  : "border border-dashed border-white/[0.1]"
+              }`}
+              style={{ aspectRatio: "16/9" }}
+              onClick={() => src && setLightboxIndex(i)}
+            >
+              {src ? (
+                <>
+                  <img
+                    src={src}
+                    alt={`${project.title} screenshot ${i + 1}`}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover/img:scale-[1.03]"
+                  />
+                  {/* Hover overlay */}
+                  <div className="absolute inset-0 bg-black/0 group-hover/img:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      className="text-white opacity-0 group-hover/img:opacity-80 transition-opacity duration-300 drop-shadow-lg"
+                    >
+                      <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+                    </svg>
+                  </div>
+                </>
+              ) : (
+                <div className="absolute inset-0 bg-white/[0.02] flex flex-col items-center justify-center gap-3">
+                  <div
+                    className="absolute inset-0 opacity-[0.12]"
+                    style={{
+                      backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1px)",
+                      backgroundSize: "16px 16px",
+                    }}
+                  />
+                  <CameraIcon size={22} className="text-white/20 relative z-10" />
+                  <span className="font-mono text-[0.58rem] text-white/15 tracking-[0.2em] uppercase relative z-10 select-none">
+                    screenshot {String(i + 1).padStart(2, "0")}
+                  </span>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Highlights */}
       {project.highlights && project.highlights.length > 0 && (
         <div className="mb-14">
@@ -108,8 +275,17 @@ export default function ProjectDetail({ project }: { project: Project }) {
             <span className="text-accent opacity-70">{"//"} </span>
             architecture explorer
           </p>
-          <ArchitectureExplorerLoader />
+          <ArchitectureExplorerLoader slug={project.slug} />
         </div>
+      )}
+
+      {/* Lightbox */}
+      {lightboxIndex !== null && (
+        <Lightbox
+          images={realImages}
+          index={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+        />
       )}
     </main>
   );

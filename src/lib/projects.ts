@@ -6,6 +6,7 @@ export interface Project {
   longDescription: string;
   stack: string[];
   hasArchitecture?: boolean;
+  images?: string[];
   links?: {
     github?: string;
     live?: string;
@@ -17,6 +18,7 @@ export const projects: Project[] = [
   {
     slug: "hopelink",
     title: "Hope Link",
+    images: ["/hopelink-1.png", "/hopelink-2.png", "/hopelink-3.png"],
     tag: "Humanitarian Platform",
     description:
       "Multi-portal humanitarian platform connecting NGOs, charities, volunteers, and communities. Features subdomain-based routing, smart match-ranked opportunity feeds, real-time chat, and family-based JWT session management.",
@@ -37,19 +39,24 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "clinic-assistant",
-    title: "Clinic Assistant",
-    tag: "AI Healthcare Automation · In Development",
+    slug: "doc-agent",
+    title: "DocAgent",
+    images: ["/docagent-1.png", "/docagent-2.png", "/docagent-3.png"],
+    tag: "AI Document Intelligence",
     description:
-      "WhatsApp-based AI assistant for clinics handles appointment booking, patient inquiries, and status updates automatically. DB-first design keeps the AI grounded in real clinic data. Currently in active development.",
+      "AI-powered document intelligence for construction and engineering projects. Upload BOQs, contracts, specs, and schedules — then ask natural language questions and get instant, cited structured answers powered by a 7-stage ingestion pipeline and an AI agent with 5 flexible SQL tools.",
     longDescription:
-      "Clinic Assistant brings WhatsApp automation to healthcare practices. Patients message the clinic's WhatsApp number and the AI handles the full conversation checking doctor availability, booking appointments, answering common questions, and sending confirmations. The DB-first approach means the AI never fabricates availability or information: it queries real schedule data before responding. Currently in active development.",
-    stack: ["Node.js", "TypeScript", "PostgreSQL", "Prisma", "WhatsApp Business API", "Claude API", "Redis"],
+      "DocAgent transforms raw construction documents into an intelligent query system. Files flow through a 7-stage async pipeline — parse, chunk, embed, classify, profile, extract, store — producing both semantic search vectors and structured SQL extractions. An AI agent with 5 flexible tools then answers business questions: aggregating costs, comparing budgets vs actuals, listing line items, or searching document text. Every number in the answer is fetched from SQL, never fabricated — the agent does zero arithmetic itself. Document profiles (stored as JSONB) supply per-document query hints and tool suggestions that guide the agent's strategy. Answers render as typed cards: tables, timelines, fact grids, and party cards.",
+    stack: ["Next.js", "TypeScript", "Express", "Node.js", "OpenAI", "PostgreSQL", "pgvector", "BullMQ", "Redis", "Drizzle ORM"],
+    hasArchitecture: true,
     highlights: [
-      "DB-first design: AI queries real appointment slots before confirming no hallucinated availability",
-      "Full conversation flow: booking, rescheduling, cancellation, and patient FAQ all over WhatsApp",
-      "Claude AI for intent classification and natural language response generation",
-      "Redis for session state maintains conversation context across multiple messages",
+      "7-stage ingestion pipeline (parse → chunk → embed → classify → profile → extract → store) runs fully async via BullMQ + Redis — UI stays responsive throughout",
+      "Semantic search via pgvector HNSW index with 1,536-dim OpenAI embeddings finds meaning across documents, not just keyword matches",
+      "Deterministic Excel extraction: LLM infers column schema once, regex processes every row — zero tokens per row after the first pass",
+      "AI agent chooses between 5 tools per question; all arithmetic offloaded to compute_result — 100% factual, no hallucinated numbers",
+      "Unified JSONB document profile stores AI-generated query hints and suggested tools, giving the agent per-document query strategy",
+      "Semantic category matching embeds user terms and resolves them to nearest sheet/section names via cosine distance — handles abbreviations, synonyms, and typos",
+      "Structured JSON answers render as typed UI cards (key_facts, table, timeline, list, parties) — predictable shape, extensible frontend",
     ],
   },
   {
@@ -73,21 +80,19 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "lettus-grow-greener",
-    title: "Lettus Grow Greener",
-    tag: "Environmental NGO Website",
+    slug: "clinic-assistant",
+    title: "Clinic Assistant",
+    tag: "AI Healthcare Automation · In Development",
     description:
-      "WordPress site for a Lebanese environmental organization. Built custom PHP shortcodes, event calendars, donation flows, and configured Brevo email automation for campaigns and volunteer onboarding.",
+      "WhatsApp-based AI assistant for clinics handles appointment booking, patient inquiries, and status updates automatically. DB-first design keeps the AI grounded in real clinic data. Currently in active development.",
     longDescription:
-      "A complete web presence for a Lebanese environmental NGO. Beyond standard WordPress configuration, the project involved custom PHP shortcodes for dynamic content, a full event calendar system, integrated donation flows, and Brevo (formerly Sendinblue) email automation for campaign management and volunteer onboarding sequences.",
-    links: {
-      live: "https://lettus.org",
-    },
-    stack: ["WordPress", "PHP", "Elementor", "WPForms", "Brevo", "Custom CSS"],
+      "Clinic Assistant brings WhatsApp automation to healthcare practices. Patients message the clinic's WhatsApp number and the AI handles the full conversation checking doctor availability, booking appointments, answering common questions, and sending confirmations. The DB-first approach means the AI never fabricates availability or information: it queries real schedule data before responding. Currently in active development.",
+    stack: ["Node.js", "TypeScript", "PostgreSQL", "Prisma", "WhatsApp Business API", "Claude API", "Redis"],
     highlights: [
-      "Custom PHP shortcodes for dynamic content rendering",
-      "Brevo email automation for volunteer onboarding and campaign flows",
-      "Event calendar and donation flow integration",
+      "DB-first design: AI queries real appointment slots before confirming no hallucinated availability",
+      "Full conversation flow: booking, rescheduling, cancellation, and patient FAQ all over WhatsApp",
+      "Claude AI for intent classification and natural language response generation",
+      "Redis for session state maintains conversation context across multiple messages",
     ],
   },
 ];

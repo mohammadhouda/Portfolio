@@ -29,11 +29,17 @@ function Skeleton() {
   );
 }
 
-const ArchitectureExplorer = dynamic(
+const HopeLinkExplorer = dynamic(
   () => import("./ArchitectureExplorer"),
   { ssr: false, loading: () => <Skeleton /> }
 );
 
-export default function ArchitectureExplorerLoader() {
-  return <ArchitectureExplorer />;
+const DocAgentExplorer = dynamic(
+  () => import("./DocAgentArchitectureExplorer"),
+  { ssr: false, loading: () => <Skeleton /> }
+);
+
+export default function ArchitectureExplorerLoader({ slug }: { slug: string }) {
+  if (slug === "doc-agent") return <DocAgentExplorer />;
+  return <HopeLinkExplorer />;
 }
