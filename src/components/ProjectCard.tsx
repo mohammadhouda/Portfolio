@@ -10,23 +10,16 @@ interface ProjectCardProps {
 }
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 20 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.6,
-      delay: i * 0.08,
-      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
-      staggerChildren: 0.04,
-      delayChildren: i * 0.08 + 0.35,
+      duration: 0.5,
+      delay: i * 0.07,
+      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
     },
   }),
-};
-
-const pillVariants = {
-  hidden: { opacity: 0, y: 5 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.25, ease: "easeOut" as const } },
 };
 
 function CameraIcon({ size = 16, className = "" }: { size?: number; className?: string }) {
@@ -49,6 +42,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
       whileInView="visible"
       viewport={{ once: true, margin: "-60px" }}
       className="group relative bg-surface border border-border rounded-[10px] overflow-hidden pointer-fine:transition-[border-color,box-shadow] pointer-fine:duration-300 pointer-fine:hover:border-accent/30 pointer-fine:hover:shadow-[0_0_32px_rgba(34,197,94,0.07)]"
+      style={{ willChange: "transform, opacity" }}
     >
       {/* ── Image strip ── */}
       <div className="relative h-56 border-b border-white/[0.05] overflow-hidden">
@@ -140,13 +134,12 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
         {/* Stack pills */}
         <div className="flex flex-wrap gap-2 mb-8">
           {project.stack.map((tech) => (
-            <motion.span
+            <span
               key={tech}
-              variants={pillVariants}
               className="inline-block px-3 py-1.5 bg-white/[0.03] border border-white/[0.06] rounded font-mono text-[0.7rem] text-muted/70 tracking-[0.02em]"
             >
               {tech}
-            </motion.span>
+            </span>
           ))}
         </div>
 

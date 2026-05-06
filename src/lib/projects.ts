@@ -62,6 +62,7 @@ export const projects: Project[] = [
   {
     slug: "shopify-automation",
     title: "Shopify Checkout Automation",
+    images: ["/shopify-1.png", "/shopify-2.png", "/shopify-3.png"],
     tag: "Browser Automation",
     description:
       "Automates the full Shopify checkout flow end-to-end using Puppeteer product selection, address fill, hCaptcha solving via 2Captcha, proxy routing through Oxylabs, and payment submission. Two separate flows: kith.com and ShopNiceKicks with an Electron GUI.",
