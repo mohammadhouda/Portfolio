@@ -1,6 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import type { Project } from "../lib/projects";
 
@@ -8,19 +10,6 @@ interface ProjectCardProps {
   project: Project;
   index: number;
 }
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      delay: i * 0.07,
-      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-    },
-  }),
-};
 
 function CameraIcon({ size = 16, className = "" }: { size?: number; className?: string }) {
   return (
@@ -33,69 +22,74 @@ function CameraIcon({ size = 16, className = "" }: { size?: number; className?: 
 
 export default function ProjectCard({ project, index }: ProjectCardProps) {
   const hasImages = project.images && project.images.length > 0;
+  const isEven = index % 2 === 0;
+  const imageRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: imageRef,
+    offset: ["start end", "center center"],
+  });
+
+  const imageOpacity = useTransform(scrollYProgress, [0, 0.6], [0, 1]);
+  const imageX = useTransform(scrollYProgress, [0, 0.6], [isEven ? -36 : 36, 0]);
+  const imageScale = useTransform(scrollYProgress, [0, 0.6], [1.07, 1]);
 
   return (
     <motion.article
-      custom={index}
-      variants={cardVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-60px" }}
-      className="group relative bg-surface border border-border rounded-[10px] overflow-hidden pointer-fine:transition-[border-color,box-shadow] pointer-fine:duration-300 pointer-fine:hover:border-accent/30 pointer-fine:hover:shadow-[0_0_32px_rgba(34,197,94,0.07)]"
-      style={{ willChange: "transform, opacity" }}
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className={`group relative flex flex-col ${isEven ? "md:flex-row" : "md:flex-row-reverse"} bg-surface border border-border rounded-[10px] overflow-hidden pointer-fine:transition-[border-color,box-shadow] pointer-fine:duration-300 pointer-fine:hover:border-accent/30 pointer-fine:hover:shadow-[0_0_32px_rgba(34,197,94,0.07)]`}
     >
-      {/* ── Image strip ── */}
-      <div className="relative h-56 border-b border-white/[0.05] overflow-hidden">
-        {hasImages ? (
-          <div className="flex h-full">
-            {project.images!.slice(0, 3).map((src, i) => (
-              <div
-                key={i}
-                className={`relative overflow-hidden ${i === 0 ? "flex-[3]" : "flex-1"} ${i > 0 ? "border-l border-white/[0.05]" : ""}`}
-              >
-                <img src={src} alt={`${project.title} screenshot ${i + 1}`} className="w-full h-full object-cover" />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <>
-            {/* Subtle gradient bg */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/[0.025] via-transparent to-accent/[0.015]" />
-            {/* Dot-grid pattern */}
-            <div
-              className="absolute inset-0 opacity-[0.35]"
-              style={{
-                backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px)",
-                backgroundSize: "22px 22px",
-              }}
+      {/* ── Image side ── */}
+      <div ref={imageRef} className="relative md:w-[46%] h-60 md:h-auto shrink-0 overflow-hidden border-b border-white/5 md:border-b-0">
+        <motion.div
+          style={{ opacity: imageOpacity, x: imageX, scale: imageScale }}
+          className="absolute inset-0"
+        >
+          {hasImages ? (
+            <Image
+              src={project.images![0]}
+              alt={`${project.title} screenshot`}
+              fill
+              sizes="(max-width: 768px) 100vw, 46vw"
+              className="object-cover"
             />
-            {/* Placeholder frames */}
-            <div className="absolute inset-0 flex items-center justify-center gap-4 px-10">
-              {/* Main large frame */}
-              <div className="flex-[3] h-36 rounded-lg border border-dashed border-white/[0.12] bg-white/[0.02] flex flex-col items-center justify-center gap-2 shrink-0">
-                <CameraIcon size={20} className="text-white/20" />
-                <span className="font-mono text-[0.52rem] text-white/15 tracking-[0.18em] uppercase select-none">preview</span>
-              </div>
-              {/* Two smaller frames stacked */}
-              <div className="flex flex-col gap-3 flex-[2]">
-                <div className="h-[4.2rem] rounded-md border border-dashed border-white/[0.09] bg-white/[0.015] flex items-center justify-center">
-                  <CameraIcon size={14} className="text-white/15" />
+          ) : (
+            <>
+              <div className="absolute inset-0 bg-linear-to-br from-white/2.5 via-transparent to-accent/1.5" />
+              <div
+                className="absolute inset-0 opacity-[0.35]"
+                style={{
+                  backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px)",
+                  backgroundSize: "22px 22px",
+                }}
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="flex flex-col items-center gap-3">
+                  <CameraIcon size={24} className="text-white/20" />
+                  <span className="font-mono text-[0.52rem] text-white/15 tracking-[0.18em] uppercase select-none">
+                    no preview
+                  </span>
                 </div>
-                <div className="h-[4.2rem] rounded-md border border-dashed border-white/[0.09] bg-white/[0.015] flex items-center justify-center">
-                  <CameraIcon size={14} className="text-white/15" />
-                </div>
               </div>
-            </div>
-            {/* Corner label */}
-            <span className="absolute bottom-3 right-4 font-mono text-[0.52rem] text-white/[0.12] tracking-[0.2em] uppercase select-none">
-              // screenshots
-            </span>
-          </>
-        )}
+            </>
+          )}
+        </motion.div>
+
+        {/* Edge blend gradient — only on desktop */}
+        <div
+          className={`absolute inset-y-0 w-20 pointer-events-none hidden md:block ${
+            isEven
+              ? "right-0 bg-linear-to-r from-transparent to-surface/80"
+              : "left-0 bg-linear-to-l from-transparent to-surface/80"
+          }`}
+        />
       </div>
 
-      {/* ── Card content ── */}
-      <div className="px-10 py-9">
+      {/* ── Content side ── */}
+      <div className="flex-1 flex flex-col px-8 py-8 md:px-10 md:py-10">
         {/* Top row */}
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2.5">
@@ -118,7 +112,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
         </h3>
 
         {/* Description */}
-        <p className="text-[0.95rem] leading-[1.8] text-muted max-w-160 mb-7">
+        <p className="text-[0.95rem] leading-[1.8] text-muted mb-7">
           {project.description}
         </p>
 
@@ -143,8 +137,8 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
           ))}
         </div>
 
-        {/* Links row */}
-        <div className="flex items-center gap-6 flex-wrap">
+        {/* Links row — pushed to bottom */}
+        <div className="flex items-center gap-6 flex-wrap mt-auto">
           <Link
             href={`/projects/${project.slug}`}
             className="group/link inline-flex items-center gap-2 px-4 py-2 bg-accent/[0.06] border border-accent/20 rounded font-mono text-[0.76rem] text-accent no-underline tracking-[0.04em] pointer-fine:transition-[background-color,border-color,box-shadow] pointer-fine:duration-300 pointer-fine:hover:bg-accent/[0.12] pointer-fine:hover:border-accent/40 pointer-fine:hover:shadow-[0_0_20px_rgba(34,197,94,0.08)]"
