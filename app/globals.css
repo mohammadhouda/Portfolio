@@ -162,6 +162,30 @@ body::before {
   will-change: transform, opacity;
 }
 
+/* ── Project card image scroll-driven fade ───────────── */
+@keyframes image-fade-in {
+  from {
+    opacity: 0;
+    translate: var(--x-start, -36px) 0;
+    scale: 1.06;
+  }
+  to {
+    opacity: 1;
+    translate: 0px 0px;
+    scale: 1;
+  }
+}
+
+.image-fade {
+  animation: image-fade-in linear both;
+  animation-timeline: view();
+  animation-range: entry 15% entry 95%;
+}
+
+@supports not (animation-timeline: view()) {
+  .image-fade { opacity: 1; translate: 0px; scale: 1; }
+}
+
 /* ── React Flow overrides ────────────────────────────── */
 .react-flow__background {
   background: var(--bg) !important;

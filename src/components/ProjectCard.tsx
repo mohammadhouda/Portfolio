@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import type { Project } from "../lib/projects";
@@ -23,16 +22,6 @@ function CameraIcon({ size = 16, className = "" }: { size?: number; className?: 
 export default function ProjectCard({ project, index }: ProjectCardProps) {
   const hasImages = project.images && project.images.length > 0;
   const isEven = index % 2 === 0;
-  const imageRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: imageRef,
-    offset: ["start end", "center center"],
-  });
-
-  const imageOpacity = useTransform(scrollYProgress, [0, 0.6], [0, 1]);
-  const imageX = useTransform(scrollYProgress, [0, 0.6], [isEven ? -36 : 36, 0]);
-  const imageScale = useTransform(scrollYProgress, [0, 0.6], [1.07, 1]);
 
   return (
     <motion.article
@@ -43,10 +32,10 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
       className={`group relative flex flex-col ${isEven ? "md:flex-row" : "md:flex-row-reverse"} bg-surface border border-border rounded-[10px] overflow-hidden pointer-fine:transition-[border-color,box-shadow] pointer-fine:duration-300 pointer-fine:hover:border-accent/30 pointer-fine:hover:shadow-[0_0_32px_rgba(34,197,94,0.07)]`}
     >
       {/* ── Image side ── */}
-      <div ref={imageRef} className="relative md:w-[46%] h-60 md:h-auto shrink-0 overflow-hidden border-b border-white/5 md:border-b-0">
-        <motion.div
-          style={{ opacity: imageOpacity, x: imageX, scale: imageScale }}
-          className="absolute inset-0"
+      <div className="relative md:w-[46%] h-60 md:h-auto shrink-0 overflow-hidden border-b border-white/5 md:border-b-0">
+        <div
+          className="image-fade absolute inset-0"
+          style={{ "--x-start": isEven ? "-36px" : "36px" } as React.CSSProperties}
         >
           {hasImages ? (
             <Image
@@ -76,7 +65,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
               </div>
             </>
           )}
-        </motion.div>
+        </div>
 
         {/* Edge blend gradient — only on desktop */}
         <div
