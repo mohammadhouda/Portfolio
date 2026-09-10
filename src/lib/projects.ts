@@ -29,6 +29,9 @@ export const projects: Project[] = [
     year: "2026",
     featured: true,
     images: ["/raise-2.png", "/raise-3.png", "/raise-1.png"],
+    links: {
+      github: "https://github.com/MoustafaWehbe/onramp-fp-founders-app",
+    },
     description:
       "A fundraising SaaS where startups run their whole raise investor CRM, pipelines, commitments, tasks, secure document sharing with an AI copilot that answers questions about their own documents and cites where each answer came from.",
     longDescription:
@@ -69,6 +72,9 @@ export const projects: Project[] = [
     year: "2026",
     featured: true,
     images: ["/rag-crawler-1.png", "/rag-crawler-3.png", "/rag-crawler-2.png"],
+    links: {
+      github: "https://github.com/mohammadhouda/scrap",
+    },
     description:
       "A queue-based crawler and search engine that partitions scraping, discovery, and indexing into three independently scalable workloads, then answers questions over what it found using hybrid retrieval and grounded generation.",
     longDescription:
@@ -108,6 +114,9 @@ export const projects: Project[] = [
     year: "2025",
     featured: true,
     images: ["/docagent-1.png", "/docagent-2.png", "/docagent-3.png"],
+    links: {
+      github: "https://github.com/mohammadhouda/docAgent",
+    },
     description:
       "Construction documents BOQs, contracts, specs, schedules turned into a queryable system. Ask a question in plain language, get a cited structured answer where every number came from SQL rather than from the model.",
     longDescription:
