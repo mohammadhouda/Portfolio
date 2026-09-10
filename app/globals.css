@@ -1,54 +1,53 @@
 @import "tailwindcss";
 
 /* ===============================================================
-   Design tokens - editorial / Swiss
-   Warm paper ground, near-black warm ink, single oxide accent.
+   Design tokens - deep charcoal
+   Warm near-black ground, off-white text, one ember accent.
+   No texture overlay: a flat ground keeps small text crisp.
    =============================================================== */
 :root {
   /* Ground */
-  --paper: #f3f0ea;
-  --paper-raised: #faf8f4;
-  --paper-sunk: #e9e4da;
+  --bg: #0e0e10;
+  --surface: #17171b;
+  --surface-2: #1f1f25;
 
-  /* Ink. Every step passes WCAG AA (4.5:1) against --paper, including
-     the lightest - these tones carry small uppercase labels, which is
-     exactly the text that most often ends up unreadable in this style. */
-  --ink: #16150f;   /* 16.1:1 */
-  --ink-2: #4a463d; /*  8.3:1 */
-  --ink-3: #5f5b50; /*  6.0:1 */
-  --ink-4: #6f6a5e; /*  4.7:1 */
+  /* Text. Every step passes WCAG AA (4.5:1) against --bg, including
+     the lightest - these tones carry the small uppercase labels, which
+     is exactly the text that most often ends up unreadable. */
+  --fg: #f2f1ee;
+  --fg-2: #c9c6bf;
+  --fg-3: #a5a29b;
+  --fg-4: #857f77;
 
-  /* Rules - hairlines carry the grid in this design */
-  --rule: rgba(22, 21, 15, 0.16);
-  --rule-soft: rgba(22, 21, 15, 0.08);
+  /* Rules */
+  --rule: rgba(255, 255, 255, 0.14);
+  --rule-soft: rgba(255, 255, 255, 0.07);
 
-  /* Single accent: oxide red */
-  --accent: #b0432b;
-  --accent-soft: rgba(176, 67, 43, 0.1);
+  /* Single accent: warm ember */
+  --accent: #f0714a;
+  --accent-soft: rgba(240, 113, 74, 0.12);
 
   /* Layout */
   --gutter: clamp(1.25rem, 5vw, 4.5rem);
-  --measure: 62ch;
   --max: 90rem;
 
   /* Motion */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 @theme inline {
-  --color-paper: var(--paper);
-  --color-paper-raised: var(--paper-raised);
-  --color-paper-sunk: var(--paper-sunk);
-  --color-ink: var(--ink);
-  --color-ink-2: var(--ink-2);
-  --color-ink-3: var(--ink-3);
-  --color-ink-4: var(--ink-4);
+  --color-base: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-fg: var(--fg);
+  --color-fg-2: var(--fg-2);
+  --color-fg-3: var(--fg-3);
+  --color-fg-4: var(--fg-4);
   --color-rule: var(--rule);
   --color-rule-soft: var(--rule-soft);
   --color-accent: var(--accent);
 
-  --font-display: var(--font-instrument), Georgia, "Times New Roman", serif;
+  --font-display: var(--font-archivo), "Helvetica Neue", Arial, sans-serif;
   --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, "SF Mono", monospace;
 }
@@ -76,18 +75,13 @@
     /* No scroll-behavior: smooth - Lenis owns scrolling. Native smooth
        scroll fights the RAF loop and causes jitter. */
     -webkit-text-size-adjust: 100%;
+    background: var(--bg);
   }
 
   body {
     margin: 0;
-    /* Grain is a tiled background image rather than a fixed overlay
-       element: no extra compositing layer, and nothing sitting on top of
-       the content that has to be escaped with z-index. */
-    background-color: var(--paper);
-    background-image: url("/noise.svg");
-    background-size: 180px 180px;
-    background-repeat: repeat;
-    color: var(--ink);
+    background: var(--bg);
+    color: var(--fg);
     font-family: var(--font-sans);
     font-size: 1rem;
     line-height: 1.6;
@@ -117,7 +111,7 @@
 
   ::selection {
     background: var(--accent);
-    color: var(--paper);
+    color: #12100e;
   }
 
   :focus-visible {
@@ -130,52 +124,65 @@
     width: 10px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--paper-sunk);
+    background: var(--bg);
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(22, 21, 15, 0.22);
-    border: 3px solid var(--paper-sunk);
+    background: rgba(255, 255, 255, 0.16);
+    border: 3px solid var(--bg);
     border-radius: 99px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(22, 21, 15, 0.4);
+    background: rgba(255, 255, 255, 0.3);
   }
 }
 
 @layer components {
   /* ===============================================================
      Typography primitives
+
+     All sans. Emphasis comes from weight, size and tight tracking
+     rather than from a contrasting serif.
      =============================================================== */
 
-  /* Display - Instrument Serif, set tight and large. The design leans
-     on this doing the work that glow effects used to. */
+  /* Display - Archivo at 800, uppercase and very tight. Carries the
+     hero, project titles, and section statements. */
   .t-display {
     font-family: var(--font-display);
-    font-weight: 400;
-    line-height: 0.86;
-    letter-spacing: -0.025em;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 0.85;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  /* Same voice, sentence case - for statements that would shout in caps. */
+  .t-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 0.96;
+    letter-spacing: -0.03em;
     text-wrap: balance;
   }
 
   .t-h2 {
     font-family: var(--font-display);
-    font-weight: 400;
-    font-size: clamp(2.1rem, 5.2vw, 4rem);
-    line-height: 0.95;
-    letter-spacing: -0.02em;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
     text-wrap: balance;
   }
 
   .t-h3 {
     font-family: var(--font-display);
-    font-weight: 400;
-    font-size: clamp(1.5rem, 2.6vw, 2.1rem);
-    line-height: 1.1;
-    letter-spacing: -0.015em;
+    font-weight: 600;
+    font-size: clamp(1.35rem, 2.3vw, 1.85rem);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
   }
 
-  /* Metadata - mono, uppercase, wide. Used sparingly: labels, dates,
-     indices. Never for body copy. */
+  /* Metadata - mono, uppercase, wide. Labels, dates, indices.
+     Never body copy. */
   .t-meta {
     font-family: var(--font-mono);
     font-size: 0.6875rem;
@@ -187,14 +194,14 @@
 
   .t-body {
     font-size: clamp(1rem, 1.05vw, 1.0625rem);
-    line-height: 1.72;
-    color: var(--ink-2);
+    line-height: 1.75;
+    color: var(--fg-2);
   }
 
   .t-lead {
-    font-size: clamp(1.125rem, 1.7vw, 1.4rem);
-    line-height: 1.55;
-    color: var(--ink-2);
+    font-size: clamp(1.125rem, 1.7vw, 1.375rem);
+    line-height: 1.6;
+    color: var(--fg-2);
     letter-spacing: -0.01em;
   }
 
@@ -208,14 +215,12 @@
     padding-inline: var(--gutter);
   }
 
-  /* Hairline that carries the grid */
   .rule {
     height: 1px;
     background: var(--rule);
     transform-origin: left center;
   }
 
-  /* 12-column editorial grid */
   .grid-12 {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -261,6 +266,39 @@
   .link-undraw:hover {
     background-size: 0% 1px;
   }
+}
+
+/* ===============================================================
+   Section stack
+
+   Each panel is opaque so that, as the next one scrolls up, it fully
+   occludes the pinned panel receding behind it. The top-edge shadow is
+   what makes the overlap read as layering rather than as a redraw.
+   =============================================================== */
+.panel {
+  position: relative;
+  background: var(--bg);
+}
+
+/* A lit top edge plus a cast shadow. On a near-black ground the shadow
+   alone is invisible against the panel behind it; the hairline is what
+   actually reads as one surface passing in front of another. */
+.js .panel + .panel {
+  box-shadow:
+    0 -1px 0 0 rgba(255, 255, 255, 0.09),
+    0 -34px 70px -20px rgba(0, 0, 0, 0.95);
+}
+
+/* The recede transform is applied to this inner element, never to
+   .panel itself - GSAP's pin writes position/inset onto .panel, and a
+   transform there would fight it. */
+/* Origin sits at the centre of the panel's final viewport-worth of
+   height. While a panel is pinned its bottom edge rests on the bottom of
+   the viewport, so this point lands exactly on the centre of the screen —
+   for a short panel and a very tall one alike. Scaling from anywhere else
+   drags the visible content off-screen as it shrinks. */
+.panel-inner {
+  transform-origin: 50% calc(100% - 50svh);
 }
 
 /* ===============================================================
@@ -312,6 +350,15 @@ html.lenis body {
     transform: none !important;
   }
 
+  .panel-inner {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .js .panel + .panel {
+    box-shadow: none;
+  }
+
   *,
   *::before,
   *::after {
@@ -323,10 +370,10 @@ html.lenis body {
 }
 
 /* ===============================================================
-   React Flow - retheme to paper
+   React Flow
    =============================================================== */
 .react-flow__background {
-  background: var(--paper-sunk) !important;
+  background: var(--surface) !important;
 }
 
 .react-flow__controls {
@@ -334,21 +381,21 @@ html.lenis body {
 }
 
 .react-flow__controls button {
-  background: var(--paper-raised) !important;
+  background: var(--surface-2) !important;
   border: none !important;
   border-bottom: 1px solid var(--rule) !important;
-  color: var(--ink-2) !important;
-  fill: var(--ink-2) !important;
+  color: var(--fg-2) !important;
+  fill: var(--fg-2) !important;
 }
 
 .react-flow__controls button:hover {
   background: var(--accent) !important;
-  color: var(--paper) !important;
-  fill: var(--paper) !important;
+  color: #12100e !important;
+  fill: #12100e !important;
 }
 
 .react-flow__minimap {
-  background: var(--paper-raised) !important;
+  background: var(--surface-2) !important;
   border: 1px solid var(--rule) !important;
   border-radius: 0 !important;
 }

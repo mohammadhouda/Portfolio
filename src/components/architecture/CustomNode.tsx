@@ -2,7 +2,7 @@
 
 import { Handle, Position } from "@xyflow/react";
 import { useState } from "react";
-import { inkColor, inkColorAlpha } from "./palette";
+import { nodeColor, nodeColorAlpha } from "./palette";
 import type { NodeDetail } from "./nodeData";
 
 interface CustomNodeProps {
@@ -12,18 +12,17 @@ interface CustomNodeProps {
 
 export default function CustomNode({ data, selected }: CustomNodeProps) {
   const [hovered, setHovered] = useState(false);
-  const color = inkColor(data.color);
+  const color = nodeColor(data.color);
+  const active = selected || hovered;
 
   return (
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="relative min-w-50 max-w-55 cursor-pointer bg-paper-raised px-4 py-3 transition-[border-color,background-color] duration-200"
+      className="relative min-w-50 max-w-55 cursor-pointer bg-surface-2 px-4 py-3 transition-[border-color,background-color] duration-200"
       style={{
-        border: `1px solid ${
-          selected || hovered ? color : "rgba(22, 21, 15, 0.18)"
-        }`,
-        background: selected ? inkColorAlpha(data.color, 0.06) : undefined,
+        border: `1px solid ${active ? color : "rgba(255, 255, 255, 0.12)"}`,
+        background: selected ? nodeColorAlpha(data.color, 0.1) : undefined,
       }}
     >
       <Handle
@@ -32,29 +31,27 @@ export default function CustomNode({ data, selected }: CustomNodeProps) {
         style={{ background: color, width: 5, height: 5, border: "none" }}
       />
 
-      {/* Category bar rather than a glowing dot — reads on paper. */}
+      {/* A category bar rather than a glowing dot. */}
       <div className="mb-2.5 h-0.5 w-6" style={{ background: color }} />
 
-      <p className="m-0 text-[0.82rem] leading-tight font-medium text-ink">
+      <p className="m-0 text-[0.82rem] leading-tight font-medium text-fg">
         {data.title}
       </p>
 
-      <p className="mt-1 m-0 font-mono text-[0.62rem] leading-snug text-ink-3">
+      {/* fg-3, not fg-4: against --surface-2 the lightest step drops below
+          the 4.5:1 contrast floor. */}
+      <p className="mt-1 m-0 font-mono text-[0.62rem] leading-snug text-fg-3">
         {data.subtitle}
       </p>
 
       {hovered && (
         <div
-          className="pointer-events-none absolute bottom-[calc(100%+8px)] left-1/2 z-[1000] w-60 -translate-x-1/2 bg-ink px-3 py-2"
-          style={{ boxShadow: "0 6px 24px rgba(22, 21, 15, 0.22)" }}
+          className="pointer-events-none absolute bottom-[calc(100%+8px)] left-1/2 z-1000 w-60 -translate-x-1/2 border border-rule bg-base px-3 py-2"
+          style={{ boxShadow: "0 8px 28px rgba(0, 0, 0, 0.6)" }}
         >
-          <p className="m-0 text-[0.75rem] leading-relaxed text-paper">
+          <p className="m-0 text-[0.75rem] leading-relaxed text-fg-2">
             {data.tooltip}
           </p>
-          <div
-            className="absolute bottom-[-4px] left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 bg-ink"
-            aria-hidden="true"
-          />
         </div>
       )}
 

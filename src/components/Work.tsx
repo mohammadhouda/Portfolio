@@ -34,19 +34,19 @@ function FeaturedRow({ project, index }: { project: Project; index: number }) {
           <span className="t-meta text-accent">
             {String(index + 1).padStart(2, "0")}
           </span>
-          <span className="t-meta text-ink-4">{project.year}</span>
+          <span className="t-meta text-fg-4">{project.year}</span>
         </Reveal>
 
         <SplitReveal
           as="h3"
-          className="t-h2 mb-2 text-ink"
-          style={{ fontSize: "clamp(2rem, 4.2vw, 3.25rem)" }}
+          className="t-display mb-3 text-fg"
+          style={{ fontSize: "clamp(2rem, 4.4vw, 3.5rem)" }}
         >
           {project.title}
         </SplitReveal>
 
         <Reveal y={16} delay={0.05}>
-          <p className="t-meta mb-6 text-ink-3">{project.tag}</p>
+          <p className="t-meta mb-6 text-fg-3">{project.tag}</p>
           <p className="t-body mb-8 max-w-[46ch]">{project.description}</p>
         </Reveal>
 
@@ -55,10 +55,10 @@ function FeaturedRow({ project, index }: { project: Project; index: number }) {
             <div className="flex flex-wrap gap-x-10 gap-y-4">
               {project.metrics.map((m) => (
                 <div key={m.label}>
-                  <p className="font-display text-[1.75rem] leading-none text-ink">
+                  <p className="font-display text-[1.9rem] font-bold leading-none tracking-[-0.03em] text-fg">
                     {m.value}
                   </p>
-                  <p className="t-meta mt-1.5 text-ink-4">{m.label}</p>
+                  <p className="t-meta mt-1.5 text-fg-4">{m.label}</p>
                 </div>
               ))}
             </div>
@@ -66,14 +66,14 @@ function FeaturedRow({ project, index }: { project: Project; index: number }) {
         )}
 
         <Reveal y={16} delay={0.15}>
-          <p className="mb-8 font-mono text-[0.7rem] leading-relaxed text-ink-3">
+          <p className="mb-8 font-mono text-[0.7rem] leading-relaxed text-fg-3">
             {project.stack.join("  ·  ")}
           </p>
 
           <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
             <Link
               href={`/projects/${project.slug}`}
-              className="group t-meta flex items-center gap-3 text-ink transition-colors duration-300 hover-fine:hover:text-accent"
+              className="group t-meta flex items-center gap-3 text-fg transition-colors duration-300 hover-fine:hover:text-accent"
             >
               <span className="link-undraw">Read the case study</span>
               <svg
@@ -95,7 +95,7 @@ function FeaturedRow({ project, index }: { project: Project; index: number }) {
                 href={project.links.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="t-meta link-draw text-ink-3 transition-colors duration-300 hover-fine:hover:text-ink"
+                className="t-meta link-draw text-fg-3 transition-colors duration-300 hover-fine:hover:text-fg"
               >
                 Source ↗
               </a>
@@ -106,7 +106,7 @@ function FeaturedRow({ project, index }: { project: Project; index: number }) {
                 href={project.links.live}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="t-meta link-draw text-ink-3 transition-colors duration-300 hover-fine:hover:text-ink"
+                className="t-meta link-draw text-fg-3 transition-colors duration-300 hover-fine:hover:text-fg"
               >
                 Live ↗
               </a>
@@ -125,13 +125,13 @@ function ArchiveRow({ project }: { project: Project }) {
         href={`/projects/${project.slug}`}
         className="group grid-12 items-baseline gap-y-2 py-5 transition-colors duration-300 hover-fine:hover:text-accent"
       >
-        <span className="t-meta col-span-2 text-ink-4 lg:col-span-1">
+        <span className="t-meta col-span-2 text-fg-4 lg:col-span-1">
           {project.year}
         </span>
-        <span className="t-h3 col-span-full text-ink transition-colors duration-300 group-hover:text-accent md:col-span-4 lg:col-span-4">
+        <span className="t-h3 col-span-full text-fg transition-colors duration-300 group-hover:text-accent md:col-span-4 lg:col-span-4">
           {project.title}
         </span>
-        <span className="t-meta col-span-full text-ink-3 md:col-span-6 lg:col-span-5">
+        <span className="t-meta col-span-full text-fg-3 md:col-span-6 lg:col-span-5">
           {project.tag}
         </span>
         <span
@@ -145,7 +145,7 @@ function ArchiveRow({ project }: { project: Project }) {
             fill="none"
             stroke="currentColor"
             strokeWidth="1"
-            className="ml-auto text-ink-4 transition-all duration-500 ease-out group-hover:translate-x-1.5 group-hover:text-accent"
+            className="ml-auto text-fg-4 transition-all duration-500 ease-out group-hover:translate-x-1.5 group-hover:text-accent"
           >
             <path d="M0 5h18M14 1l4 4-4 4" />
           </svg>
@@ -158,7 +158,7 @@ function ArchiveRow({ project }: { project: Project }) {
 
 export default function Work() {
   return (
-    <section id="work" className="shell scroll-mt-24 py-24 md:py-32">
+    <section className="shell py-24 md:py-32">
       <SectionHead
         index="01"
         label="Selected Work"
@@ -174,7 +174,7 @@ export default function Work() {
       {archivedProjects.length > 0 && (
         <div className="mt-20 md:mt-28">
           <Reveal y={14} className="mb-6">
-            <p className="t-meta text-ink-4">Also built</p>
+            <p className="t-meta text-fg-4">Also built</p>
           </Reveal>
           <Rule />
           {archivedProjects.map((project) => (

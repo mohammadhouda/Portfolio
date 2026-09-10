@@ -85,7 +85,7 @@ export default function Lightbox({
       aria-modal="true"
       aria-label={`${title} screenshots`}
       tabIndex={-1}
-      className="fixed inset-0 z-[100] flex flex-col bg-paper"
+      className="fixed inset-0 z-[100] flex flex-col bg-base"
       onClick={onClose}
     >
       {/* Header */}
@@ -93,10 +93,10 @@ export default function Lightbox({
         className="shell flex shrink-0 items-center justify-between py-5"
         onClick={(e) => e.stopPropagation()}
       >
-        <span className="t-meta text-ink-3">
+        <span className="t-meta text-fg-3">
           {title}
           {multiple && (
-            <span className="ml-4 text-ink-4">
+            <span className="ml-4 text-fg-4">
               {String(current + 1).padStart(2, "0")} /{" "}
               {String(images.length).padStart(2, "0")}
             </span>
@@ -105,7 +105,7 @@ export default function Lightbox({
 
         <button
           onClick={onClose}
-          className="t-meta link-draw cursor-pointer border-0 bg-transparent p-0 text-ink transition-colors duration-300 hover-fine:hover:text-accent"
+          className="t-meta link-draw cursor-pointer border-0 bg-transparent p-0 text-fg transition-colors duration-300 hover-fine:hover:text-accent"
         >
           Close ✕
         </button>
@@ -134,13 +134,13 @@ export default function Lightbox({
         >
           <button
             onClick={prev}
-            className="t-meta link-draw cursor-pointer border-0 bg-transparent p-0 text-ink transition-colors duration-300 hover-fine:hover:text-accent"
+            className="t-meta link-draw cursor-pointer border-0 bg-transparent p-0 text-fg transition-colors duration-300 hover-fine:hover:text-accent"
           >
             ← Previous
           </button>
           <button
             onClick={next}
-            className="t-meta link-draw cursor-pointer border-0 bg-transparent p-0 text-ink transition-colors duration-300 hover-fine:hover:text-accent"
+            className="t-meta link-draw cursor-pointer border-0 bg-transparent p-0 text-fg transition-colors duration-300 hover-fine:hover:text-accent"
           >
             Next →
           </button>

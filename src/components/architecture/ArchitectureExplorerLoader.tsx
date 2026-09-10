@@ -8,8 +8,8 @@ import dynamic from "next/dynamic";
  */
 function Skeleton() {
   return (
-    <div className="flex h-[34rem] items-center justify-center border border-rule bg-paper-sunk md:h-[36rem]">
-      <p className="t-meta text-ink-4">Loading diagram…</p>
+    <div className="flex h-[34rem] items-center justify-center border border-rule bg-surface md:h-[36rem]">
+      <p className="t-meta text-fg-4">Loading diagram…</p>
     </div>
   );
 }

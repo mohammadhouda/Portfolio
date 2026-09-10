@@ -5,7 +5,7 @@ import { timeline, certifications } from "../lib/profile";
 
 export default function Career() {
   return (
-    <section id="career" className="shell scroll-mt-24 py-24 md:py-32">
+    <section className="shell py-24 md:py-32">
       <SectionHead index="03" label="Career" note="Experience & Education" />
 
       <Rule />
@@ -15,7 +15,7 @@ export default function Career() {
           <div className="grid-12 gap-y-4 py-9 md:py-11">
             {/* Period */}
             <div className="col-span-full lg:col-span-3">
-              <p className="t-meta flex items-center gap-2 text-ink-3">
+              <p className="t-meta flex items-center gap-2 text-fg-3">
                 {entry.start} — {entry.end}
                 {entry.current && (
                   <span
@@ -25,13 +25,13 @@ export default function Career() {
                 )}
               </p>
               {entry.location && (
-                <p className="t-meta mt-1.5 text-ink-4">{entry.location}</p>
+                <p className="t-meta mt-1.5 text-fg-4">{entry.location}</p>
               )}
             </div>
 
             {/* Role */}
             <div className="col-span-full lg:col-span-4">
-              <h3 className="t-h3 text-ink">{entry.role}</h3>
+              <h3 className="t-h3 text-fg">{entry.role}</h3>
               <p className="t-meta mt-2 text-accent">{entry.org}</p>
             </div>
 
@@ -44,10 +44,10 @@ export default function Career() {
                   {entry.points.map((point, i) => (
                     <li
                       key={i}
-                      className="flex gap-3 text-[0.875rem] leading-relaxed text-ink-2"
+                      className="flex gap-3 text-[0.875rem] leading-relaxed text-fg-2"
                     >
                       <span
-                        className="mt-2.5 h-px w-3 shrink-0 bg-ink-4"
+                        className="mt-2.5 h-px w-3 shrink-0 bg-fg-4"
                         aria-hidden="true"
                       />
                       <span className="max-w-[54ch]">{point}</span>
@@ -64,7 +64,7 @@ export default function Career() {
       {/* ── Certifications ── */}
       <div className="mt-20 md:mt-28">
         <Reveal y={14} className="mb-6">
-          <p className="t-meta text-ink-4">Certifications</p>
+          <p className="t-meta text-fg-4">Certifications</p>
         </Reveal>
 
         <Rule />
@@ -72,13 +72,13 @@ export default function Career() {
         {certifications.map((cert) => (
           <Reveal key={cert.label} y={12}>
             <div className="grid-12 items-baseline gap-y-1.5 py-5">
-              <p className="col-span-full text-[0.95rem] text-ink md:col-span-6 lg:col-span-5">
+              <p className="col-span-full text-[0.95rem] text-fg md:col-span-6 lg:col-span-5">
                 {cert.label}
               </p>
-              <p className="t-meta col-span-full text-ink-3 md:col-span-4 lg:col-span-4">
+              <p className="t-meta col-span-full text-fg-3 md:col-span-4 lg:col-span-4">
                 {cert.issuer ?? ""}
               </p>
-              <p className="t-meta col-span-2 text-ink-4 lg:col-span-2">
+              <p className="t-meta col-span-2 text-fg-4 lg:col-span-2">
                 {cert.date}
               </p>
               <p className="col-span-full text-right md:col-span-2 lg:col-span-1">
@@ -87,7 +87,7 @@ export default function Career() {
                     href={cert.verify}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="t-meta link-draw text-ink-3 transition-colors duration-300 hover-fine:hover:text-accent"
+                    className="t-meta link-draw text-fg-3 transition-colors duration-300 hover-fine:hover:text-accent"
                   >
                     Verify ↗
                   </a>

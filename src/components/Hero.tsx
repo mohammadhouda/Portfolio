@@ -77,7 +77,6 @@ export default function Hero() {
   return (
     <section
       ref={root}
-      id="hero"
       className="shell flex min-h-svh flex-col justify-between pt-28 pb-10 md:pt-36 md:pb-14"
     >
       {/* ── Masthead ─────────────────────────────────────────── */}
@@ -88,10 +87,10 @@ export default function Hero() {
           className="mb-4 flex items-baseline justify-between gap-6"
           style={{ opacity: 0 }}
         >
-          <span className="t-meta line-mask text-ink-3">
+          <span className="t-meta line-mask text-fg-3">
             <span className="block">Portfolio — Selected Work</span>
           </span>
-          <span className="t-meta line-mask text-right text-ink-3">
+          <span className="t-meta line-mask text-right text-fg-3">
             <span className="block">
               {profile.location} · {profile.timezone}
             </span>
@@ -105,8 +104,8 @@ export default function Hero() {
       <div className="grid-12 items-end py-14 md:py-20">
         <h1
           data-hero
-          className="t-display col-span-full text-ink lg:col-span-7"
-          style={{ opacity: 0, fontSize: "clamp(3.75rem, 12.5vw, 11rem)" }}
+          className="t-display col-span-full text-fg lg:col-span-8"
+          style={{ opacity: 0, fontSize: "clamp(2.5rem, 8.6vw, 7.75rem)" }}
         >
           <span className="line-mask">
             <span data-hero-line className="block">
@@ -114,7 +113,9 @@ export default function Hero() {
             </span>
           </span>
           <span className="line-mask">
-            <span data-hero-line className="block italic">
+            {/* The accent sits on the second word rather than on a colour
+                swash or a glow — the only chromatic moment in the hero. */}
+            <span data-hero-line className="block text-accent">
               Engineer
             </span>
           </span>
@@ -123,7 +124,7 @@ export default function Hero() {
         <p
           data-hero
           data-hero-lead
-          className="t-lead col-span-full mt-10 max-w-[38ch] lg:col-span-4 lg:col-start-9 lg:mt-0 lg:mb-3"
+          className="t-lead col-span-full mt-10 max-w-[34ch] lg:col-span-4 lg:col-start-9 lg:mt-0 lg:mb-3"
           style={{ opacity: 0 }}
         >
           I build AI agents, enterprise integrations, and the backends that
@@ -142,15 +143,15 @@ export default function Hero() {
           style={{ opacity: 0 }}
         >
           <div className="col-span-full sm:col-span-3 lg:col-span-4">
-            <p className="t-meta mb-1.5 text-ink-4">Currently</p>
-            <p className="text-[0.9rem] leading-snug text-ink">
+            <p className="t-meta mb-1.5 text-fg-4">Currently</p>
+            <p className="text-[0.9rem] leading-snug text-fg">
               {current ? `${current.role}, ${current.org}` : profile.role}
             </p>
           </div>
 
           <div className="col-span-full sm:col-span-3 lg:col-span-3">
-            <p className="t-meta mb-1.5 text-ink-4">Availability</p>
-            <p className="flex items-center gap-2 text-[0.9rem] leading-snug text-ink">
+            <p className="t-meta mb-1.5 text-fg-4">Availability</p>
+            <p className="flex items-center gap-2 text-[0.9rem] leading-snug text-fg">
               <span
                 className="inline-block h-1.5 w-1.5 rounded-full bg-accent"
                 aria-hidden="true"
@@ -162,7 +163,7 @@ export default function Hero() {
           <div className="col-span-full flex items-end sm:col-span-6 lg:col-span-5 lg:justify-end">
             <button
               onClick={() => scrollToTarget("#work")}
-              className="group t-meta flex cursor-pointer items-center gap-3 border-0 bg-transparent p-0 text-ink transition-colors duration-300 hover-fine:hover:text-accent"
+              className="group t-meta flex cursor-pointer items-center gap-3 border-0 bg-transparent p-0 text-fg transition-colors duration-300 hover-fine:hover:text-accent"
             >
               <span className="link-undraw">Selected Work</span>
               <svg

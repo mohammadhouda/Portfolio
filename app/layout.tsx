@@ -1,16 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Instrument_Serif, Inter, IBM_Plex_Mono } from "next/font/google";
+import { Archivo, Inter, IBM_Plex_Mono } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import SmoothScroll from "../src/components/motion/SmoothScroll";
 import { profile } from "../src/lib/profile";
 import "./globals.css";
 
-/* Display face. Carries every headline on the site. */
-const instrumentSerif = Instrument_Serif({
-  variable: "--font-instrument",
+/* Display face. Carries every headline, set heavy and very tight. */
+const archivo = Archivo({
+  variable: "--font-archivo",
   subsets: ["latin"],
-  weight: ["400"],
-  style: ["normal", "italic"],
+  weight: ["600", "700", "800"],
   display: "swap",
 });
 
@@ -89,8 +88,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f3f0ea",
-  colorScheme: "light",
+  themeColor: "#0e0e10",
+  colorScheme: "dark",
 };
 
 /**
@@ -116,7 +115,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${instrumentSerif.variable} ${inter.variable} ${plexMono.variable}`}
+      className={`${archivo.variable} ${inter.variable} ${plexMono.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: JS_BOOTSTRAP }} />

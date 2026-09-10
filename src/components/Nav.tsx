@@ -115,7 +115,7 @@ export default function Nav({ standalone = false }: NavProps) {
       >
         <div
           data-nav-bg
-          className="absolute inset-0 border-b border-rule bg-paper/85 backdrop-blur-md"
+          className="absolute inset-0 border-b border-rule bg-base/85 backdrop-blur-md"
           style={{ opacity: 0 }}
           aria-hidden="true"
         />
@@ -123,7 +123,7 @@ export default function Nav({ standalone = false }: NavProps) {
         <div className="shell relative flex h-16 items-center justify-between md:h-18">
           <Link
             href="/"
-            className="t-meta text-ink transition-colors duration-300 hover-fine:hover:text-accent"
+            className="t-meta text-fg transition-colors duration-300 hover-fine:hover:text-accent"
             aria-label={`${profile.name} — home`}
           >
             <span className="font-medium">Mohammad Houda</span>
@@ -134,7 +134,7 @@ export default function Nav({ standalone = false }: NavProps) {
               <button
                 key={l.href}
                 onClick={() => go(l.href)}
-                className="t-meta cursor-pointer border-0 bg-transparent p-0 text-ink-3 transition-colors duration-300 hover-fine:hover:text-ink"
+                className="t-meta cursor-pointer border-0 bg-transparent p-0 text-fg-3 transition-colors duration-300 hover-fine:hover:text-fg"
               >
                 {l.label}
               </button>
@@ -156,13 +156,13 @@ export default function Nav({ standalone = false }: NavProps) {
             aria-expanded={open}
           >
             <span
-              className="block h-px w-5 bg-ink transition-transform duration-300 ease-out"
+              className="block h-px w-5 bg-fg transition-transform duration-300 ease-out"
               style={{
                 transform: open ? "translateY(3px) rotate(45deg)" : "none",
               }}
             />
             <span
-              className="block h-px w-5 bg-ink transition-transform duration-300 ease-out"
+              className="block h-px w-5 bg-fg transition-transform duration-300 ease-out"
               style={{
                 transform: open ? "translateY(-3px) rotate(-45deg)" : "none",
               }}
@@ -174,7 +174,7 @@ export default function Nav({ standalone = false }: NavProps) {
       {open && (
         <div
           ref={panelRef}
-          className="fixed inset-0 z-40 flex flex-col justify-center bg-paper px-[var(--gutter)] md:hidden"
+          className="fixed inset-0 z-40 flex flex-col justify-center bg-base px-[var(--gutter)] md:hidden"
         >
           <nav aria-label="Mobile">
             {links.map((l) => (
@@ -182,7 +182,7 @@ export default function Nav({ standalone = false }: NavProps) {
                 <button
                   data-panel-item
                   onClick={() => go(l.href)}
-                  className="t-h2 block w-full cursor-pointer border-0 bg-transparent p-0 text-left text-ink"
+                  className="t-h2 block w-full cursor-pointer border-0 bg-transparent p-0 text-left text-fg"
                 >
                   {l.label}
                 </button>
@@ -203,7 +203,7 @@ export default function Nav({ standalone = false }: NavProps) {
               </a>
             </div>
             <div className="line-mask">
-              <span data-panel-item className="t-meta block text-ink-4">
+              <span data-panel-item className="t-meta block text-fg-4">
                 {profile.location}
               </span>
             </div>

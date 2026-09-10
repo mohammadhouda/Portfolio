@@ -12,13 +12,13 @@ const elsewhere = [
 
 export default function Contact() {
   return (
-    <section id="contact" className="shell scroll-mt-24 pt-24 pb-14 md:pt-32">
+    <section className="shell pt-24 pb-20 md:pt-32 md:pb-28">
       <SectionHead index="04" label="Contact" note="Open to new roles" />
 
       <SplitReveal
         as="h2"
-        className="t-display mb-14 max-w-[16ch] text-ink md:mb-20"
-        style={{ fontSize: "clamp(2.5rem, 7.5vw, 6.5rem)", lineHeight: 0.95 }}
+        className="t-title mb-14 max-w-[15ch] text-fg md:mb-20"
+        style={{ fontSize: "clamp(2.25rem, 6.5vw, 5.5rem)" }}
       >
         Let&rsquo;s build something worth shipping.
       </SplitReveal>
@@ -26,10 +26,10 @@ export default function Contact() {
       <div className="grid-12 gap-y-12">
         <div className="col-span-full lg:col-span-7">
           <Reveal y={18} className="mb-8">
-            <p className="t-meta mb-4 text-ink-4">Email</p>
+            <p className="t-meta mb-4 text-fg-4">Email</p>
             <a
               href={`mailto:${profile.email}`}
-              className="link-draw font-display text-[clamp(1.5rem,3.6vw,2.75rem)] leading-tight text-ink transition-colors duration-300 hover-fine:hover:text-accent"
+              className="link-draw font-display text-[clamp(1.35rem,3.2vw,2.4rem)] leading-tight font-semibold tracking-[-0.03em] text-fg transition-colors duration-300 hover-fine:hover:text-accent"
             >
               {profile.email}
             </a>
@@ -46,7 +46,7 @@ export default function Contact() {
 
         <div className="col-span-full lg:col-span-4 lg:col-start-9">
           <Reveal y={18} className="mb-4">
-            <p className="t-meta text-ink-4">Elsewhere</p>
+            <p className="t-meta text-fg-4">Elsewhere</p>
           </Reveal>
 
           <Rule />
@@ -59,7 +59,7 @@ export default function Contact() {
                 rel="noopener noreferrer"
                 className="group flex items-baseline justify-between gap-4 py-4 transition-colors duration-300"
               >
-                <span className="text-[0.95rem] text-ink transition-colors duration-300 group-hover:text-accent">
+                <span className="text-[0.95rem] text-fg transition-colors duration-300 group-hover:text-accent">
                   {item.label}
                 </span>
                 <svg
@@ -70,7 +70,7 @@ export default function Contact() {
                   stroke="currentColor"
                   strokeWidth="1"
                   aria-hidden="true"
-                  className="shrink-0 text-ink-4 transition-all duration-500 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"
+                  className="shrink-0 text-fg-4 transition-all duration-500 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"
                 >
                   <path d="M2 10L10 2M4 2h6v6" />
                 </svg>

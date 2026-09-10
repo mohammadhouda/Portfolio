@@ -26,7 +26,7 @@ export default function ProjectDetail({
       <Reveal y={12} className="mb-14">
         <Link
           href="/#work"
-          className="group t-meta inline-flex items-center gap-3 text-ink-3 transition-colors duration-300 hover-fine:hover:text-accent"
+          className="group t-meta inline-flex items-center gap-3 text-fg-3 transition-colors duration-300 hover-fine:hover:text-accent"
         >
           <svg
             width="20"
@@ -48,15 +48,15 @@ export default function ProjectDetail({
       <header className="mb-20 md:mb-28">
         <Reveal y={14} className="mb-4 flex items-baseline justify-between gap-6">
           <span className="t-meta text-accent">{project.tag}</span>
-          <span className="t-meta text-ink-4">{project.year}</span>
+          <span className="t-meta text-fg-4">{project.year}</span>
         </Reveal>
 
         <Rule className="mb-10" />
 
         <SplitReveal
           as="h1"
-          className="t-display mb-12 max-w-[14ch] text-ink"
-          style={{ fontSize: "clamp(2.75rem, 9vw, 8rem)" }}
+          className="t-display mb-12 max-w-[13ch] text-fg"
+          style={{ fontSize: "clamp(2.5rem, 8.5vw, 7.5rem)" }}
         >
           {project.title}
         </SplitReveal>
@@ -69,14 +69,14 @@ export default function ProjectDetail({
           <div className="col-span-full lg:col-span-4 lg:col-start-9">
             {project.metrics && (
               <Reveal y={20} className="mb-10">
-                <p className="t-meta mb-5 text-ink-4">At a glance</p>
+                <p className="t-meta mb-5 text-fg-4">At a glance</p>
                 <div className="flex flex-col gap-5">
                   {project.metrics.map((m) => (
                     <div key={m.label} className="flex items-baseline gap-4">
-                      <span className="font-display text-[1.9rem] leading-none text-ink">
+                      <span className="font-display text-[2rem] font-bold leading-none tracking-[-0.03em] text-fg">
                         {m.value}
                       </span>
-                      <span className="t-meta text-ink-3">{m.label}</span>
+                      <span className="t-meta text-fg-3">{m.label}</span>
                     </div>
                   ))}
                 </div>
@@ -84,8 +84,8 @@ export default function ProjectDetail({
             )}
 
             <Reveal y={20}>
-              <p className="t-meta mb-4 text-ink-4">Built with</p>
-              <p className="font-mono text-[0.75rem] leading-relaxed text-ink-2">
+              <p className="t-meta mb-4 text-fg-4">Built with</p>
+              <p className="font-mono text-[0.75rem] leading-relaxed text-fg-2">
                 {project.stack.join("  ·  ")}
               </p>
             </Reveal>
@@ -97,7 +97,7 @@ export default function ProjectDetail({
                     href={project.links.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="t-meta link-draw text-ink transition-colors duration-300 hover-fine:hover:text-accent"
+                    className="t-meta link-draw text-fg transition-colors duration-300 hover-fine:hover:text-accent"
                   >
                     Source ↗
                   </a>
@@ -107,7 +107,7 @@ export default function ProjectDetail({
                     href={project.links.live}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="t-meta link-draw text-ink transition-colors duration-300 hover-fine:hover:text-accent"
+                    className="t-meta link-draw text-fg transition-colors duration-300 hover-fine:hover:text-accent"
                   >
                     Live site ↗
                   </a>
@@ -122,8 +122,8 @@ export default function ProjectDetail({
       {images.length > 0 && (
         <section className="mb-20 md:mb-28">
           <Reveal y={14} className="mb-6 flex items-baseline justify-between">
-            <p className="t-meta text-ink-4">Interface</p>
-            <p className="t-meta text-ink-4">
+            <p className="t-meta text-fg-4">Interface</p>
+            <p className="t-meta text-fg-4">
               {String(images.length).padStart(2, "0")} views
             </p>
           </Reveal>
@@ -135,7 +135,7 @@ export default function ProjectDetail({
               <Reveal key={src} y={26} delay={i * 0.06}>
                 <button
                   onClick={() => setLightboxIndex(i)}
-                  className="group relative block w-full cursor-zoom-in overflow-hidden bg-paper-sunk p-0"
+                  className="group relative block w-full cursor-zoom-in overflow-hidden bg-surface p-0"
                   style={{ aspectRatio: "16 / 10" }}
                   aria-label={`Open ${project.title} screenshot ${i + 1}`}
                 >
@@ -146,7 +146,7 @@ export default function ProjectDetail({
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.04]"
                   />
-                  <span className="t-meta absolute bottom-3 left-3 bg-paper px-2 py-1 text-ink opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  <span className="t-meta absolute bottom-3 left-3 bg-base px-2 py-1 text-fg opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                     View
                   </span>
                 </button>
@@ -160,7 +160,7 @@ export default function ProjectDetail({
       {project.highlights && project.highlights.length > 0 && (
         <section className="mb-20 md:mb-28">
           <Reveal y={14} className="mb-6">
-            <p className="t-meta text-ink-4">Engineering notes</p>
+            <p className="t-meta text-fg-4">Engineering notes</p>
           </Reveal>
 
           <Rule />
@@ -172,7 +172,7 @@ export default function ProjectDetail({
                   <span className="t-meta col-span-2 text-accent lg:col-span-1">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <p className="col-span-full text-[0.95rem] leading-relaxed text-ink-2 md:col-span-6 lg:col-span-9">
+                  <p className="col-span-full text-[0.95rem] leading-relaxed text-fg-2 md:col-span-6 lg:col-span-9">
                     {h}
                   </p>
                 </div>
@@ -187,8 +187,8 @@ export default function ProjectDetail({
       {project.hasArchitecture && (
         <section className="mb-20 md:mb-28">
           <Reveal y={14} className="mb-6 flex items-baseline justify-between">
-            <p className="t-meta text-ink-4">Architecture</p>
-            <p className="t-meta text-ink-4">Interactive — click any node</p>
+            <p className="t-meta text-fg-4">Architecture</p>
+            <p className="t-meta text-fg-4">Interactive — click any node</p>
           </Reveal>
 
           <Rule className="mb-8" />
@@ -202,12 +202,12 @@ export default function ProjectDetail({
         <Rule className="mb-8" />
         <Reveal y={18}>
           <Link href={`/projects/${next.slug}`} className="group block py-6">
-            <p className="t-meta mb-4 text-ink-4">Next project</p>
+            <p className="t-meta mb-4 text-fg-4">Next project</p>
             <div className="flex flex-wrap items-baseline justify-between gap-4">
-              <h2 className="t-h2 text-ink transition-colors duration-300 group-hover:text-accent">
+              <h2 className="t-h2 text-fg transition-colors duration-300 group-hover:text-accent">
                 {next.title}
               </h2>
-              <span className="t-meta text-ink-3">{next.tag}</span>
+              <span className="t-meta text-fg-3">{next.tag}</span>
             </div>
           </Link>
         </Reveal>

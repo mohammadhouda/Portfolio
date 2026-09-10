@@ -19,10 +19,10 @@ export default async function OpengraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#f3f0ea",
-          color: "#16150f",
+          background: "#0e0e10",
+          color: "#f2f1ee",
           padding: "64px 72px",
-          fontFamily: "Georgia, serif",
+          fontFamily: "Helvetica, Arial, sans-serif",
         }}
       >
         {/* Masthead */}
@@ -34,8 +34,8 @@ export default async function OpengraphImage() {
             fontSize: 20,
             letterSpacing: "0.14em",
             textTransform: "uppercase",
-            color: "#6f6a5e",
-            borderBottom: "1px solid rgba(22,21,15,0.16)",
+            color: "#a5a29b",
+            borderBottom: "1px solid rgba(255,255,255,0.14)",
             paddingBottom: 22,
           }}
         >
@@ -48,9 +48,11 @@ export default async function OpengraphImage() {
           <div
             style={{
               display: "flex",
-              fontSize: 132,
-              lineHeight: 0.88,
-              letterSpacing: "-0.03em",
+              fontSize: 138,
+              lineHeight: 0.84,
+              letterSpacing: "-0.05em",
+              fontWeight: 800,
+              textTransform: "uppercase",
             }}
           >
             Software
@@ -58,10 +60,12 @@ export default async function OpengraphImage() {
           <div
             style={{
               display: "flex",
-              fontSize: 132,
-              lineHeight: 0.88,
-              letterSpacing: "-0.03em",
-              fontStyle: "italic",
+              fontSize: 138,
+              lineHeight: 0.84,
+              letterSpacing: "-0.05em",
+              fontWeight: 800,
+              textTransform: "uppercase",
+              color: "#f0714a",
             }}
           >
             Engineer
@@ -75,8 +79,8 @@ export default async function OpengraphImage() {
             justifyContent: "space-between",
             alignItems: "baseline",
             fontSize: 22,
-            color: "#4a463d",
-            borderTop: "1px solid rgba(22,21,15,0.16)",
+            color: "#c9c6bf",
+            borderTop: "1px solid rgba(255,255,255,0.14)",
             paddingTop: 22,
           }}
         >
@@ -84,7 +88,7 @@ export default async function OpengraphImage() {
             AI agents, enterprise integrations, and backends that hold under
             load.
           </span>
-          <span style={{ color: "#b0432b" }}>mohammadhouda.dev</span>
+          <span style={{ color: "#f0714a" }}>mohammadhouda.dev</span>
         </div>
       </div>
     ),
