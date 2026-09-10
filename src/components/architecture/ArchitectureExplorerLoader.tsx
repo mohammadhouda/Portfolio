@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * React Flow is ~130KB and only ever appears far below the fold on the
@@ -34,6 +35,22 @@ const explorers: Record<string, ReturnType<typeof dynamic>> = {
 };
 
 export default function ArchitectureExplorerLoader({ slug }: { slug: string }) {
+  const root = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setVisible(true);
+        observer.disconnect();
+      }
+    }, { rootMargin: "400px" });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   const Explorer = explorers[slug];
-  return Explorer ? <Explorer /> : null;
+  return Explorer ? <div ref={root}>{visible ? <Explorer /> : <Skeleton />}</div> : null;
 }

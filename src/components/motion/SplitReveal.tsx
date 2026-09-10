@@ -47,13 +47,18 @@ export default function SplitReveal({
     let split: SplitResult | null = null;
     let lastWidth = window.innerWidth;
     let raf = 0;
+    let disposed = false;
+    let tween: gsap.core.Tween | null = null;
 
     const build = () => {
+      if (disposed) return;
+      tween?.scrollTrigger?.kill();
+      tween?.kill();
       split?.revert();
       split = splitLines(el);
       gsap.set(el, { opacity: 1 });
 
-      gsap.fromTo(
+      tween = gsap.fromTo(
         split.lines,
         { yPercent: 108 },
         {
@@ -84,6 +89,8 @@ export default function SplitReveal({
       lastWidth = window.innerWidth;
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
+        tween?.scrollTrigger?.kill();
+        tween?.kill();
         split?.revert();
         split = splitLines(el);
         // Past the entrance land straight in the final position.
@@ -94,8 +101,11 @@ export default function SplitReveal({
     window.addEventListener("resize", onResize);
 
     return () => {
+      disposed = true;
       window.removeEventListener("resize", onResize);
       cancelAnimationFrame(raf);
+      tween?.scrollTrigger?.kill();
+      tween?.kill();
       ctx.revert();
       split?.revert();
     };

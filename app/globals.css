@@ -227,10 +227,163 @@
     column-gap: clamp(1rem, 2vw, 2rem);
   }
 
-  @media (max-width: 900px) {
-    .grid-12 {
-      grid-template-columns: repeat(6, minmax(0, 1fr));
+  .project-preview {
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    background: var(--surface);
+    transition: border-color 0.3s, transform 0.5s var(--ease-out);
+  }
+
+  .preview-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--rule-soft);
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    color: var(--fg-3);
+  }
+
+  .preview-toolbar i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--fg-4);
+    opacity: 0.6;
+  }
+
+  .preview-toolbar i:first-child { background: var(--accent); }
+
+  .preview-stage {
+    padding: clamp(0.6rem, 1.8vw, 1.6rem);
+    background: linear-gradient(120deg, var(--accent-soft), transparent 65%), var(--surface-2);
+  }
+
+  .preview-screen {
+    position: relative;
+    aspect-ratio: 2 / 1;
+    overflow: hidden;
+    border-radius: 4px;
+    background: #101114;
+    /* The same gentle left-to-right fade on every screenshot. */
+    mask-image: linear-gradient(to right, #000 45%, rgba(0, 0, 0, 0.78) 100%);
+  }
+
+  .preview-caption {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    line-height: 1.5;
+    color: var(--fg-3);
+  }
+
+  .project-metrics {
+    border-left: 2px solid var(--accent);
+    padding: 0.25rem 0 0.25rem 1.25rem;
+  }
+
+  .skill-card {
+    height: 100%;
+    padding: 1.25rem;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    background: linear-gradient(140deg, var(--surface), var(--bg));
+    transition: border-color 0.3s, transform 0.4s var(--ease-out);
+  }
+
+  .tech-chip {
+    display: inline-flex;
+    padding: 0.35rem 0.6rem;
+    border: 1px solid var(--rule-soft);
+    border-radius: 5px;
+    background: var(--surface-2);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--fg-2);
+  }
+
+  .career-entry {
+    position: relative;
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--rule);
+  }
+
+  .career-entry::before {
+    content: "";
+    position: absolute;
+    top: 2.75rem;
+    left: -5px;
+    width: 9px;
+    height: 9px;
+    border: 2px solid var(--bg);
+    border-radius: 50%;
+    background: var(--fg-4);
+  }
+
+  .career-entry[data-current="true"]::before {
+    background: var(--accent);
+    box-shadow: 0 0 0 5px var(--accent-soft);
+  }
+
+  .contact-card {
+    padding: clamp(1.25rem, 3vw, 2.5rem);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    background: linear-gradient(115deg, var(--accent-soft), transparent 65%), var(--surface);
+  }
+
+  .button-primary, .button-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 44px;
+    padding: 0.8rem 1.1rem;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    transition: transform 0.3s var(--ease-out), background 0.3s, border-color 0.3s;
+  }
+
+  .button-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+  }
+
+  .button-secondary { background: var(--surface); color: var(--fg); }
+
+  .nav-link { position: relative; padding-block: 0.75rem; }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    bottom: 0.25rem;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s var(--ease-out);
+  }
+  .nav-link[aria-current] { color: var(--accent); }
+  .nav-link[aria-current]::after { transform: scaleX(1); }
+
+  @media (hover: hover) and (pointer: fine) {
+    .project-preview:hover, .skill-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent);
     }
+    .button-primary:hover, .button-secondary:hover { transform: translateY(-2px); }
+    .button-secondary:hover { border-color: var(--accent); }
   }
 
   /* ===============================================================
@@ -269,36 +422,15 @@
 }
 
 /* ===============================================================
-   Section stack
-
-   Each panel is opaque so that, as the next one scrolls up, it fully
-   occludes the pinned panel receding behind it. The top-edge shadow is
-   what makes the overlap read as layering rather than as a redraw.
+   Section surfaces. Content stays in normal flow for stable scroll targets.
    =============================================================== */
 .panel {
   position: relative;
   background: var(--bg);
 }
 
-/* A lit top edge plus a cast shadow. On a near-black ground the shadow
-   alone is invisible against the panel behind it; the hairline is what
-   actually reads as one surface passing in front of another. */
-.js .panel + .panel {
-  box-shadow:
-    0 -1px 0 0 rgba(255, 255, 255, 0.09),
-    0 -34px 70px -20px rgba(0, 0, 0, 0.95);
-}
-
-/* The recede transform is applied to this inner element, never to
-   .panel itself - GSAP's pin writes position/inset onto .panel, and a
-   transform there would fight it. */
-/* Origin sits at the centre of the panel's final viewport-worth of
-   height. While a panel is pinned its bottom edge rests on the bottom of
-   the viewport, so this point lands exactly on the centre of the screen —
-   for a short panel and a very tall one alike. Scaling from anywhere else
-   drags the visible content off-screen as it shrinks. */
-.panel-inner {
-  transform-origin: 50% calc(100% - 50svh);
+.panel + .panel {
+  border-top: 1px solid var(--rule-soft);
 }
 
 /* ===============================================================
@@ -308,11 +440,16 @@
    =============================================================== */
 .js [data-reveal] {
   opacity: 0;
-  will-change: transform, opacity;
 }
 
-.js [data-reveal-lines] .line-inner {
-  will-change: transform;
+.line-inner {
+  display: block;
+}
+
+/* Hero content remains readable if JavaScript is unavailable. */
+html:not(.js) [data-hero] {
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 /* Line-mask wrapper: overflow hidden, child slides up into view */
@@ -346,6 +483,12 @@ html.lenis body {
    =============================================================== */
 @media (prefers-reduced-motion: reduce) {
   .js [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+
+  [data-reveal] *, [data-hero], [data-hero] *, .line-inner {
     opacity: 1 !important;
     transform: none !important;
   }

@@ -10,9 +10,12 @@ export function scrollToTarget(selector: string) {
   const lenis = typeof window !== "undefined" ? window.__lenis : undefined;
 
   if (lenis) {
-    lenis.scrollTo(el as HTMLElement, { offset: -8, duration: 1.25 });
+    lenis.scrollTo(el as HTMLElement, { offset: -80, duration: 1 });
   } else {
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    el.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+      block: "start",
+    });
   }
 }
 

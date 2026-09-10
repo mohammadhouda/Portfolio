@@ -22,8 +22,21 @@ interface NavProps {
 export default function Nav({ standalone = false }: NavProps) {
   const barRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
+  const [active, setActive] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    if (standalone) return;
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) setActive(`#${entry.target.id}`);
+      }
+    }, { rootMargin: "-20% 0px -79% 0px" });
+    document.querySelectorAll(".panel[id]").forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, [standalone]);
 
   /* Bar background fades in once scrolled past the hero's first screenful.
      Driven by a direct GSAP tween on scroll rather than React state, so
@@ -87,17 +100,43 @@ export default function Nav({ standalone = false }: NavProps) {
   /* Close on Escape, and release the scroll lock if we unmount while open. */
   useEffect(() => {
     if (!open) return;
+    const panel = panelRef.current;
+    const menuButton = menuButtonRef.current;
+    const focusable = [
+      menuButton,
+      ...Array.from(panel?.querySelectorAll<HTMLElement>("a[href], button") ?? []),
+    ].filter((el): el is HTMLElement => el !== null);
+    focusable[1]?.focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
+      if (e.key === "Tab") {
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last?.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first?.focus();
+        }
+      }
     };
+    const desktop = window.matchMedia("(min-width: 768px)");
+    const onDesktop = () => { if (desktop.matches) setOpen(false); };
+    desktop.addEventListener("change", onDesktop);
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    return () => {
+      desktop.removeEventListener("change", onDesktop);
+      window.removeEventListener("keydown", onKey);
+      menuButton?.focus({ preventScroll: true });
+    };
   }, [open]);
 
   useEffect(() => () => setScrollLocked(false), []);
 
   const go = (href: string) => {
     setOpen(false);
+    setScrollLocked(false);
     if (standalone) {
       // On a project page there are no in-page sections to scroll to, so
       // route home and let the hash land on the right one.
@@ -131,29 +170,37 @@ export default function Nav({ standalone = false }: NavProps) {
 
           <nav className="hidden items-center gap-9 md:flex" aria-label="Primary">
             {links.map((l) => (
-              <button
+              <a
                 key={l.href}
-                onClick={() => go(l.href)}
-                className="t-meta cursor-pointer border-0 bg-transparent p-0 text-fg-3 transition-colors duration-300 hover-fine:hover:text-fg"
+                href={standalone ? `/${l.href}` : l.href}
+                onClick={(event) => {
+                  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                  event.preventDefault();
+                  go(l.href);
+                }}
+                aria-current={active === l.href ? "location" : undefined}
+                className="nav-link t-meta text-fg-3 transition-colors duration-300 hover-fine:hover:text-fg"
               >
                 {l.label}
-              </button>
+              </a>
             ))}
             <a
               href={profile.cv}
               target="_blank"
               rel="noopener noreferrer"
-              className="t-meta link-draw text-accent"
+              className="button-secondary text-accent"
             >
-              CV
+              CV <span aria-hidden="true">↗</span>
             </a>
           </nav>
 
           <button
+            ref={menuButtonRef}
             className="relative z-10 flex h-9 w-9 cursor-pointer flex-col items-center justify-center gap-[5px] border-0 bg-transparent md:hidden"
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
+            aria-controls="mobile-menu"
           >
             <span
               className="block h-px w-5 bg-fg transition-transform duration-300 ease-out"
@@ -173,6 +220,7 @@ export default function Nav({ standalone = false }: NavProps) {
 
       {open && (
         <div
+          id="mobile-menu"
           ref={panelRef}
           className="fixed inset-0 z-40 flex flex-col justify-center bg-base px-[var(--gutter)] md:hidden"
         >

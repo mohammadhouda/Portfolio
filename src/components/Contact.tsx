@@ -23,13 +23,13 @@ export default function Contact() {
         Let&rsquo;s build something worth shipping.
       </SplitReveal>
 
-      <div className="grid-12 gap-y-12">
+      <div className="contact-card grid-12 gap-y-12">
         <div className="col-span-full lg:col-span-7">
-          <Reveal y={18} className="mb-8">
+          <Reveal variant="left" className="mb-8">
             <p className="t-meta mb-4 text-fg-4">Email</p>
             <a
               href={`mailto:${profile.email}`}
-              className="link-draw font-display text-[clamp(1.35rem,3.2vw,2.4rem)] leading-tight font-semibold tracking-[-0.03em] text-fg transition-colors duration-300 hover-fine:hover:text-accent"
+              className="link-draw break-all font-display text-[clamp(1.1rem,2.8vw,2.4rem)] leading-tight font-semibold tracking-[-0.03em] text-fg transition-colors duration-300 hover-fine:hover:text-accent"
             >
               {profile.email}
             </a>
@@ -51,8 +51,8 @@ export default function Contact() {
 
           <Rule />
 
-          {elsewhere.map((item) => (
-            <Reveal key={item.label} y={12}>
+          {elsewhere.map((item, i) => (
+            <Reveal key={item.label} variant="right" delay={i * 0.08}>
               <a
                 href={item.href}
                 target="_blank"

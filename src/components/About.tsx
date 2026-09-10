@@ -1,7 +1,6 @@
 import SectionHead from "./SectionHead";
 import Reveal from "./motion/Reveal";
 import SplitReveal from "./motion/SplitReveal";
-import Rule from "./motion/Rule";
 import { bio, stack, profile } from "../lib/profile";
 
 export default function About() {
@@ -27,7 +26,7 @@ export default function About() {
 
           <div className="flex flex-col gap-6">
             {bio.map((para, i) => (
-              <Reveal key={i} y={20} delay={i * 0.06}>
+              <Reveal key={i} variant="left" delay={i * 0.06}>
                 <p className="t-body max-w-[52ch]">{para}</p>
               </Reveal>
             ))}
@@ -66,21 +65,20 @@ export default function About() {
             </p>
           </Reveal>
 
-          <Rule />
-
-          {stack.map((group) => (
-            <Reveal key={group.group} y={14}>
-              <div className="flex flex-col gap-1 py-5 sm:flex-row sm:gap-8">
-                <p className="t-meta w-32 shrink-0 pt-0.5 text-fg">
-                  {group.group}
-                </p>
-                <p className="text-[0.9rem] leading-relaxed text-fg-2">
-                  {group.items.join("  ·  ")}
-                </p>
-              </div>
-              <Rule />
-            </Reveal>
-          ))}
+          <div className="grid gap-3 sm:grid-cols-2">
+            {stack.map((group, i) => (
+              <Reveal key={group.group} variant={i % 2 === 0 ? "rise" : "scale"} delay={(i % 2) * 0.08}>
+                <div className="skill-card">
+                  <p className="t-meta mb-4 text-accent">{group.group}</p>
+                  <ul className="flex flex-wrap gap-1.5">
+                    {group.items.map((item) => (
+                      <li key={item} className="tech-chip">{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </div>
     </section>

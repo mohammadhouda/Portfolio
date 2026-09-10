@@ -13,15 +13,15 @@ function FeaturedRow({ project, index }: { project: Project; index: number }) {
   const visualFirst = index % 2 === 1;
 
   return (
-    <article className="grid-12 gap-y-8 py-14 md:py-20">
+    <article className="project-row grid-12 items-center gap-y-8 py-14 md:py-20">
       {/* ── Visual ── */}
       <Reveal
-        y={36}
+        variant={index % 3 === 0 ? "wipe" : index % 3 === 1 ? "scale" : "left"}
         className={`col-span-full md:col-span-6 ${
           visualFirst ? "lg:col-span-6" : "lg:col-span-6 lg:col-start-7"
         } ${visualFirst ? "md:order-1" : "md:order-2"}`}
       >
-        <ProjectVisual project={project} priority={index === 0} />
+        <ProjectVisual project={project} />
       </Reveal>
 
       {/* ── Text ── */}
@@ -30,7 +30,7 @@ function FeaturedRow({ project, index }: { project: Project; index: number }) {
           visualFirst ? "lg:col-span-5 lg:col-start-8" : "lg:col-span-5"
         } ${visualFirst ? "md:order-2" : "md:order-1"} md:justify-center`}
       >
-        <Reveal y={18} className="mb-5 flex items-baseline justify-between gap-4">
+        <Reveal variant="fade" className="mb-5 flex items-baseline justify-between gap-4">
           <span className="t-meta text-accent">
             {String(index + 1).padStart(2, "0")}
           </span>
@@ -45,23 +45,21 @@ function FeaturedRow({ project, index }: { project: Project; index: number }) {
           {project.title}
         </SplitReveal>
 
-        <Reveal y={16} delay={0.05}>
+        <Reveal variant={visualFirst ? "right" : "left"} delay={0.05}>
           <p className="t-meta mb-6 text-fg-3">{project.tag}</p>
           <p className="t-body mb-8 max-w-[46ch]">{project.description}</p>
         </Reveal>
 
         {project.metrics && (
-          <Reveal y={16} delay={0.1} className="mb-8">
-            <div className="flex flex-wrap gap-x-10 gap-y-4">
-              {project.metrics.map((m) => (
-                <div key={m.label}>
-                  <p className="font-display text-[1.9rem] font-bold leading-none tracking-[-0.03em] text-fg">
-                    {m.value}
-                  </p>
-                  <p className="t-meta mt-1.5 text-fg-4">{m.label}</p>
-                </div>
-              ))}
-            </div>
+          <Reveal variant="scale" stagger={0.09} delay={0.1} className="project-metrics mb-8 flex flex-wrap gap-x-8 gap-y-4">
+            {project.metrics.map((m) => (
+              <div key={m.label}>
+                <p className="font-display text-[1.9rem] font-bold leading-none tracking-[-0.03em] text-fg">
+                  {m.value}
+                </p>
+                <p className="t-meta mt-1.5 text-fg-4">{m.label}</p>
+              </div>
+            ))}
           </Reveal>
         )}
 

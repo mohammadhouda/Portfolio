@@ -142,14 +142,14 @@ export default function Hero() {
           className="grid-12 gap-y-5"
           style={{ opacity: 0 }}
         >
-          <div className="col-span-full sm:col-span-3 lg:col-span-4">
+          <div className="col-span-full sm:col-span-6 lg:col-span-4">
             <p className="t-meta mb-1.5 text-fg-4">Currently</p>
             <p className="text-[0.9rem] leading-snug text-fg">
               {current ? `${current.role}, ${current.org}` : profile.role}
             </p>
           </div>
 
-          <div className="col-span-full sm:col-span-3 lg:col-span-3">
+          <div className="col-span-full sm:col-span-6 lg:col-span-3">
             <p className="t-meta mb-1.5 text-fg-4">Availability</p>
             <p className="flex items-center gap-2 text-[0.9rem] leading-snug text-fg">
               <span
@@ -160,12 +160,12 @@ export default function Hero() {
             </p>
           </div>
 
-          <div className="col-span-full flex items-end sm:col-span-6 lg:col-span-5 lg:justify-end">
+          <div className="col-span-full flex flex-wrap items-end gap-3 lg:col-span-5 lg:justify-end">
             <button
               onClick={() => scrollToTarget("#work")}
-              className="group t-meta flex cursor-pointer items-center gap-3 border-0 bg-transparent p-0 text-fg transition-colors duration-300 hover-fine:hover:text-accent"
+              className="button-primary group cursor-pointer"
             >
-              <span className="link-undraw">Selected Work</span>
+              <span>Selected Work</span>
               <svg
                 width="14"
                 height="20"
@@ -179,6 +179,9 @@ export default function Hero() {
                 <path d="M7 0v18M1 12l6 6 6-6" />
               </svg>
             </button>
+            <a href={profile.cv} download className="button-secondary">
+              Download CV <span aria-hidden="true">↓</span>
+            </a>
           </div>
         </div>
       </div>

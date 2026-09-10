@@ -12,6 +12,7 @@ interface RevealProps {
   delay?: number;
   /** Distance in px to travel upward. 0 for a pure fade. */
   y?: number;
+  variant?: "rise" | "left" | "right" | "scale" | "wipe" | "fade";
   /** Stagger direct children instead of animating the wrapper itself. */
   stagger?: number;
   /** Viewport position that fires the animation. */
@@ -20,12 +21,8 @@ interface RevealProps {
 }
 
 /**
- * Scroll-triggered fade + rise.
- *
- * Every instance registers with the single ScrollTrigger instance, which
- * updates all of them in one scroll handler and writes transforms directly
- * to the DOM. Nothing here re-renders React, which is the main reason this
- * scales better than the per-element IntersectionObserver + state approach.
+ * One-shot entrances with different directions and a shared motion rhythm.
+ * Completed triggers are removed, and animation frames do not render React.
  */
 export default function Reveal({
   children,
@@ -33,6 +30,7 @@ export default function Reveal({
   className,
   delay = 0,
   y = 26,
+  variant = "rise",
   stagger,
   start = "top 85%",
   ...rest
@@ -51,30 +49,41 @@ export default function Reveal({
     const targets =
       stagger !== undefined ? Array.from(el.children) : el;
 
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
       // Wrapper must be visible when we're staggering its children;
       // globals.css hides it by default to prevent a flash.
       if (stagger !== undefined) gsap.set(el, { opacity: 1 });
 
       gsap.fromTo(
         targets,
-        { opacity: 0, y },
+        {
+          opacity: 0,
+          // Stay within the smallest mobile gutter while the entrance runs.
+          x: variant === "left" ? -16 : variant === "right" ? 16 : 0,
+          y: variant === "rise" ? y : 0,
+          scale: variant === "scale" ? 0.94 : 1,
+          ...(variant === "wipe" ? { clipPath: "inset(0 100% 0 0)" } : {}),
+        },
         {
           opacity: 1,
           y: 0,
+          x: 0,
+          scale: 1,
+          ...(variant === "wipe" ? { clipPath: "inset(0 0% 0 0)" } : {}),
           duration: 0.9,
           delay,
           ease: EASE,
           stagger: stagger ?? 0,
           scrollTrigger: { trigger: el, start, once: true },
           // Drop the compositing hint once we're done painting.
-          onComplete: () => gsap.set(targets, { willChange: "auto" }),
+          onComplete: () => gsap.set(targets, { clearProps: "transform,willChange,clipPath" }),
         }
       );
     }, el);
 
-    return () => ctx.revert();
-  }, [delay, y, stagger, start]);
+    return () => mm.revert();
+  }, [delay, y, stagger, start, variant]);
 
   // The wrapper always carries data-reveal so CSS hides it before GSAP
   // runs. In stagger mode the effect reveals the wrapper first, then

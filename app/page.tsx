@@ -54,9 +54,7 @@ export default function Home() {
       />
       <Nav />
       <main>
-        {/* Each Panel pins and recedes as the next slides over it.
-            The section ids live on the Panel, not on the inner <section>,
-            so in-page nav targets the element the pin actually moves. */}
+        {/* Stable anchor targets; each section has its own entrance rhythm. */}
         <SectionStack>
           <Panel id="hero">
             <Hero />

@@ -13,7 +13,7 @@ export const profile = {
   site: "https://mohammadhouda.dev",
   github: "https://github.com/mohammadhouda",
   linkedin: "https://linkedin.com/in/mohammad-houda",
-  cv: "/Mohammad.Houda_CV.pdf",
+  cv: "/Mohammad_Houda_CV_2026.pdf",
   availableForWork: true,
 } as const;
 
@@ -117,11 +117,6 @@ export const certifications: Certification[] = [
     date: "Jul 2025",
     verify:
       "https://www.credly.com/badges/96b51778-436d-4228-b19d-75099df41ce1/linked_in_profile",
-  },
-  {
-    label: "Bug Bounty Workshop",
-    issuer: "Semicolon Academy",
-    date: "Jun 2025",
   },
   {
     label: "IBM Front-End Developer",

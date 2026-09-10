@@ -2,8 +2,7 @@
  * Splits an element's text into per-line masked spans, the structure GSAP
  * needs for a "lines slide up behind a mask" headline reveal.
  *
- * GSAP's own SplitText is a paid Club plugin, so this does the same job for
- * the one case the site needs: plain-text headings, no nested markup.
+ * Handles the case this site needs: plain-text headings, no nested markup.
  *
  * Result shape (per line):
  *   <span class="line-mask"><span class="line-inner">the words</span></span>
@@ -58,7 +57,7 @@ export function splitLines(el: HTMLElement): SplitResult {
           group.join(" ")
         )}</span></span>`
     )
-    .join("");
+    .join(" ");
 
   const lines = Array.from(el.querySelectorAll<HTMLElement>(".line-inner"));
 

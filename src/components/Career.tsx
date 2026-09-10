@@ -11,12 +11,12 @@ export default function Career() {
       <Rule />
 
       {timeline.map((entry) => (
-        <Reveal key={`${entry.org}-${entry.role}`} y={18}>
-          <div className="grid-12 gap-y-4 py-9 md:py-11">
+        <Reveal key={`${entry.org}-${entry.role}`} variant="left">
+          <div className="career-entry grid-12 gap-y-4 py-9 md:py-11" data-current={entry.current ?? false}>
             {/* Period */}
             <div className="col-span-full lg:col-span-3">
               <p className="t-meta flex items-center gap-2 text-fg-3">
-                {entry.start} {entry.end}
+                {entry.start} — {entry.end}
                 {entry.current && (
                   <span
                     className="inline-block h-1.5 w-1.5 rounded-full bg-accent"
@@ -69,19 +69,19 @@ export default function Career() {
 
         <Rule />
 
-        {certifications.map((cert) => (
-          <Reveal key={cert.label} y={12}>
+        {certifications.map((cert, i) => (
+          <Reveal key={cert.label} variant="right" delay={i * 0.06}>
             <div className="grid-12 items-baseline gap-y-1.5 py-5">
               <p className="col-span-full text-[0.95rem] text-fg md:col-span-6 lg:col-span-5">
                 {cert.label}
               </p>
-              <p className="t-meta col-span-full text-fg-3 md:col-span-4 lg:col-span-4">
+              <p className="t-meta col-span-full text-fg-3 md:col-span-3 lg:col-span-4">
                 {cert.issuer ?? ""}
               </p>
               <p className="t-meta col-span-2 text-fg-4 lg:col-span-2">
                 {cert.date}
               </p>
-              <p className="col-span-full text-right md:col-span-2 lg:col-span-1">
+              <p className="col-span-full text-right md:col-span-1">
                 {cert.verify && (
                   <a
                     href={cert.verify}

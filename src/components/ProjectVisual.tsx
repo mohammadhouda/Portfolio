@@ -1,58 +1,44 @@
-"use client";
-
 import Image from "next/image";
-import Parallax from "./motion/Parallax";
+import Link from "next/link";
 import type { Project } from "../lib/projects";
 
-/**
- * A project's visual slot.
- *
- * When there's no screenshot, this renders a typographic plate rather than a
- * grey "no preview" box the stack set on a sunk paper ground reads as a
- * deliberate composition instead of a hole in the layout.
- */
-export default function ProjectVisual({
-  project,
-  priority = false,
-}: {
-  project: Project;
-  priority?: boolean;
-}) {
+export default function ProjectVisual({ project }: { project: Project }) {
   const src = project.images?.[0];
 
-  if (!src) {
-    return (
-      <div className="relative aspect-[3/2] w-full overflow-hidden bg-surface">
-        <div className="absolute inset-0 flex flex-col justify-between p-7 md:p-9">
-          <span className="t-meta text-fg-4">{project.tag}</span>
-
-          <div className="flex flex-wrap gap-x-3 gap-y-1.5">
+  return (
+    <Link
+      href={`/projects/${project.slug}`}
+      className="project-preview group block"
+      aria-label={`Explore ${project.title} case study`}
+    >
+      <div className="preview-toolbar" aria-hidden="true">
+        <span className="flex gap-1.5"><i /><i /><i /></span>
+        <span className="truncate">{project.title} / Preview</span>
+        <span className="text-accent">↗</span>
+      </div>
+      <div className="preview-stage">
+        {src ? (
+          <div className="preview-screen">
+            <Image
+              src={src}
+              alt={`${project.title} interface`}
+              fill
+              sizes="(max-width: 767px) 90vw, (max-width: 1440px) 43vw, 620px"
+              className="object-contain"
+            />
+          </div>
+        ) : (
+          <div className="flex aspect-[2/1] flex-wrap content-center gap-3 p-6">
             {project.stack.slice(0, 7).map((tech) => (
-              <span
-                key={tech}
-                className="font-display text-[clamp(1rem,2.1vw,1.7rem)] font-bold uppercase leading-tight tracking-[-0.03em] text-fg-3"
-              >
-                {tech}
-              </span>
+              <span key={tech} className="tech-chip">{tech}</span>
             ))}
           </div>
-
-          <span className="t-meta text-fg-4">{project.year}</span>
-        </div>
+        )}
       </div>
-    );
-  }
-
-  return (
-    <Parallax amount={8} className="relative aspect-[3/2] w-full bg-surface">
-      <Image
-        src={src}
-        alt={`${project.title} interface`}
-        fill
-        sizes="(max-width: 900px) 100vw, 45vw"
-        priority={priority}
-        className="object-cover object-top"
-      />
-    </Parallax>
+      <div className="preview-caption">
+        <span>{project.tag}</span>
+        <span className="shrink-0 text-fg transition-colors group-hover:text-accent">Explore project ↗</span>
+      </div>
+    </Link>
   );
 }
