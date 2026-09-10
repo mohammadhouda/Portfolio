@@ -188,7 +188,7 @@ export default function ProjectDetail({
         <section className="mb-20 md:mb-28">
           <Reveal y={14} className="mb-6 flex items-baseline justify-between">
             <p className="t-meta text-fg-4">Architecture</p>
-            <p className="t-meta text-fg-4">Interactive — click any node</p>
+            <p className="t-meta text-fg-4">Interactive click any node</p>
           </Reveal>
 
           <Rule className="mb-8" />

@@ -5,7 +5,7 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from "../../lib/gsap";
 
 /**
  * Section-level scroll choreography: as you reach the end of a section it
- * pins briefly and recedes — scaling down and dimming — while the next
+ * pins briefly and recedes scaling down and dimming while the next
  * section slides up and covers it.
  *
  * How the layering works: GSAP's pin switches the outgoing panel to
@@ -20,7 +20,7 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from "../../lib/gsap";
  *      siblings regardless of DOM order, so without this the pinned panel
  *      would sit on top of the section meant to cover it.
  *
- * The transform goes on an inner element, never on the panel itself — pin
+ * The transform goes on an inner element, never on the panel itself pin
  * writes position and inset onto the panel, and a transform there would
  * also create a containing block that breaks the fixed positioning.
  */
@@ -51,7 +51,7 @@ export default function SectionStack({ children }: { children: ReactNode }) {
         ScrollTrigger.create({
           trigger: panel,
           // Begin the moment the panel's bottom edge reaches the bottom of
-          // the viewport — i.e. the moment you've finished reading it.
+          // the viewport i.e. the moment you've finished reading it.
           start: "bottom bottom",
           // One viewport of scroll: exactly the distance the incoming
           // panel needs to travel from the bottom edge to full cover.
@@ -61,7 +61,7 @@ export default function SectionStack({ children }: { children: ReactNode }) {
           // length of the pin, so the outgoing panel dims against empty
           // space and the next one only appears afterwards. With it false no
           // space is added, so the next panel scrolls straight up over the
-          // pinned one — which is the overlap this effect is made of.
+          // pinned one which is the overlap this effect is made of.
           pinSpacing: false,
           // A little scrub smoothing so the recede lags the wheel slightly
           // and feels weighted rather than mechanically linked.

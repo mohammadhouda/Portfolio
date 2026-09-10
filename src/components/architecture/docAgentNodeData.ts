@@ -12,7 +12,7 @@ export const nodeDetails: Record<string, NodeDetail> = {
   "express-api": {
     title: "Express API",
     subtitle: "REST · /api/upload · /api/ask · /api/documents",
-    tooltip: "Thin REST layer — validates requests, enqueues BullMQ jobs, returns 202 immediately. No synchronous AI calls on the request path.",
+    tooltip: "Thin REST layer validates requests, enqueues BullMQ jobs, returns 202 immediately. No synchronous AI calls on the request path.",
     detail:
       "Every heavy operation returns 202 and enqueues a job. Clients poll /api/ask/jobs/:id and /api/upload/jobs/:id for updates and final results.\n\nKey endpoints: POST /api/upload (multipart file upload), POST /api/ask (enqueue question), GET /api/documents (list ingested files), DELETE /api/documents (cascade delete with chunks + extracted_values), POST/GET/DELETE /api/conversations.",
     color: "#fbbf24",
@@ -20,15 +20,15 @@ export const nodeDetails: Record<string, NodeDetail> = {
   "bullmq-redis": {
     title: "BullMQ + Redis",
     subtitle: "upload-queue · ask-queue · job progress",
-    tooltip: "Two BullMQ queues backed by Redis — one for document ingestion, one for Q&A. Job progress updates are stored in Redis and polled by the frontend.",
+    tooltip: "Two BullMQ queues backed by Redis one for document ingestion, one for Q&A. Job progress updates are stored in Redis and polled by the frontend.",
     detail:
-      "upload-queue processes document ingestion jobs (each file is one job, sequential stages inside the worker). ask-queue processes question-answering jobs with concurrency: 3 — three questions can run in parallel.\n\nJob.updateProgress() writes live status strings to Redis during ingestion (e.g., 'Parsing PDF...', 'Generating embeddings...'). The /api/upload/jobs/:id endpoint reads this progress so the frontend can show a live status indicator.",
+      "upload-queue processes document ingestion jobs (each file is one job, sequential stages inside the worker). ask-queue processes question-answering jobs with concurrency: 3 three questions can run in parallel.\n\nJob.updateProgress() writes live status strings to Redis during ingestion (e.g., 'Parsing PDF...', 'Generating embeddings...'). The /api/upload/jobs/:id endpoint reads this progress so the frontend can show a live status indicator.",
     color: "#f87171",
   },
   "ingestion-pipeline": {
     title: "Ingestion Pipeline",
     subtitle: "7 stages · parse → chunk → embed → classify → profile → extract → store",
-    tooltip: "7-stage async pipeline that transforms uploaded files into searchable vectors and structured SQL rows — both written to PostgreSQL.",
+    tooltip: "7-stage async pipeline that transforms uploaded files into searchable vectors and structured SQL rows both written to PostgreSQL.",
     detail:
       "1. Parse: pdf-parse for PDFs (page-by-page, coordinate-based line reconstruction, max 50 pages); exceljs for Excel (section-aware, auto-detects header rows and section groupings)\n2. Chunk: token-bounded splits (~800 tokens text, ~500 tokens tables) with 75-token smart overlap (last paragraph / last 2 rows)\n3. Embed: text-embedding-3-small → 1,536-dim vectors, batched 100 at a time, stored via pgvector\n4. Classify: gpt-4o-mini reads first 2 chunks → extracts documentType, projectName, currency, parties, summary\n5. Profile: second LLM pass → full DocumentProfile JSONB with keyCategories, queryHints, suggestedTools, sheetProfiles\n6. Extract: Excel uses LLM schema inference once then deterministic regex per row (zero tokens/row); PDFs use gpt-4o-mini per page, 5 concurrent\n7. Store: Drizzle ORM writes all three tables; cascade deletes keep everything in sync",
     color: "#34d399",
@@ -38,7 +38,7 @@ export const nodeDetails: Record<string, NodeDetail> = {
     subtitle: "gpt-4o-mini · 5 tools · max 5 iterations",
     tooltip: "Agent loop: system prompt loads document inventory, model picks a tool, tool runs SQL, result returned. Repeats up to 5 times then synthesizes structured JSON.",
     detail:
-      "System prompt includes the full document inventory (from JSONB profiles) so the model knows what files are loaded and what tools are suggested per document. Each loop iteration: model calls a tool → tool executes SQL → result returned as function output → model decides to call another tool or synthesize the answer.\n\nCritical design constraint: the agent never does arithmetic. All calculations go through compute_result. This means every number in the final answer is fetched from SQL or computed by a tool — zero hallucinated figures. Debug output logs each loop: tools called, duration per LLM call, total wall time.",
+      "System prompt includes the full document inventory (from JSONB profiles) so the model knows what files are loaded and what tools are suggested per document. Each loop iteration: model calls a tool → tool executes SQL → result returned as function output → model decides to call another tool or synthesize the answer.\n\nCritical design constraint: the agent never does arithmetic. All calculations go through compute_result. This means every number in the final answer is fetched from SQL or computed by a tool zero hallucinated figures. Debug output logs each loop: tools called, duration per LLM call, total wall time.",
     color: "#60a5fa",
   },
   "agent-tools": {
@@ -46,7 +46,7 @@ export const nodeDetails: Record<string, NodeDetail> = {
     subtitle: "get_document_info · search_documents · query_values · aggregate_values · compute_result",
     tooltip: "Five flexible SQL tools that cover all question types. Each translates a natural language intent into a parameterized database query.",
     detail:
-      "get_document_info: list all documents, fetch section breakdown, or summarize content.\n\nsearch_documents: pgvector cosine similarity search on the chunks table — embeds the query at runtime and finds semantically matching chunks.\n\nquery_values: filtered retrieval from extracted_values by type (cost, date, quantity, party, status), category, numeric range, unit, or raw value filter.\n\naggregate_values: SUM/COUNT/AVG/MAX/MIN over extracted_values, grouped by sheet, section, document, or category. Type aliases (budget → budget + budgeted_cost + contract_value) ensure consistent results regardless of extraction path.\n\ncompute_result: all arithmetic — sum, difference, ratio, apply_rate (VAT/markup), unit_rate (cost÷quantity).",
+      "get_document_info: list all documents, fetch section breakdown, or summarize content.\n\nsearch_documents: pgvector cosine similarity search on the chunks table embeds the query at runtime and finds semantically matching chunks.\n\nquery_values: filtered retrieval from extracted_values by type (cost, date, quantity, party, status), category, numeric range, unit, or raw value filter.\n\naggregate_values: SUM/COUNT/AVG/MAX/MIN over extracted_values, grouped by sheet, section, document, or category. Type aliases (budget → budget + budgeted_cost + contract_value) ensure consistent results regardless of extraction path.\n\ncompute_result: all arithmetic sum, difference, ratio, apply_rate (VAT/markup), unit_rate (cost÷quantity).",
     color: "#38bdf8",
   },
   "openai": {
@@ -62,7 +62,7 @@ export const nodeDetails: Record<string, NodeDetail> = {
     subtitle: "HNSW index · documents · chunks · extracted_values",
     tooltip: "PostgreSQL stores all data: document metadata (JSONB profile), chunk text with 1,536-dim embeddings (HNSW index), and structured extracted values for SQL queries.",
     detail:
-      "Three main tables: documents (id, file metadata, profile JSONB, meta_* columns), chunks (id, document_id, content, embedding vector, page_number, sheet_name, section_title, chunk_type), extracted_values (id, document_id, type, label, raw_value, numeric_value, date_value, unit, context, sheet_name).\n\nThe HNSW index on chunks.embedding enables fast approximate nearest-neighbor search — the search_documents tool queries this for semantic search. Cascade deletes (ON DELETE CASCADE on foreign keys) mean deleting a document automatically removes all its chunks and extracted_values in a single SQL statement.",
+      "Three main tables: documents (id, file metadata, profile JSONB, meta_* columns), chunks (id, document_id, content, embedding vector, page_number, sheet_name, section_title, chunk_type), extracted_values (id, document_id, type, label, raw_value, numeric_value, date_value, unit, context, sheet_name).\n\nThe HNSW index on chunks.embedding enables fast approximate nearest-neighbor search the search_documents tool queries this for semantic search. Cascade deletes (ON DELETE CASCADE on foreign keys) mean deleting a document automatically removes all its chunks and extracted_values in a single SQL statement.",
     color: "#22c55e",
   },
 };

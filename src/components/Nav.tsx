@@ -124,7 +124,7 @@ export default function Nav({ standalone = false }: NavProps) {
           <Link
             href="/"
             className="t-meta text-fg transition-colors duration-300 hover-fine:hover:text-accent"
-            aria-label={`${profile.name} — home`}
+            aria-label={`${profile.name} home`}
           >
             <span className="font-medium">Mohammad Houda</span>
           </Link>

@@ -16,7 +16,7 @@ export function scrollToTarget(selector: string) {
   }
 }
 
-/** Locks/unlocks page scroll — used by the lightbox and mobile menu. */
+/** Locks/unlocks page scroll used by the lightbox and mobile menu. */
 export function setScrollLocked(locked: boolean) {
   const lenis = typeof window !== "undefined" ? window.__lenis : undefined;
 

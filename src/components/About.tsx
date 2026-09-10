@@ -9,7 +9,7 @@ export default function About() {
     <section className="shell py-24 md:py-32">
       <SectionHead index="02" label="About" note={profile.location} />
 
-      {/* Pull statement — the one place body-scale copy gets display type. */}
+      {/* Pull statement the one place body-scale copy gets display type. */}
       <SplitReveal
         as="p"
         className="t-title mb-20 max-w-[20ch] text-fg md:mb-28"

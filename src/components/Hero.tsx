@@ -88,7 +88,7 @@ export default function Hero() {
           style={{ opacity: 0 }}
         >
           <span className="t-meta line-mask text-fg-3">
-            <span className="block">Portfolio — Selected Work</span>
+            <span className="block">Portfolio Selected Work</span>
           </span>
           <span className="t-meta line-mask text-right text-fg-3">
             <span className="block">
@@ -114,7 +114,7 @@ export default function Hero() {
           </span>
           <span className="line-mask">
             {/* The accent sits on the second word rather than on a colour
-                swash or a glow — the only chromatic moment in the hero. */}
+                swash or a glow the only chromatic moment in the hero. */}
             <span data-hero-line className="block text-accent">
               Engineer
             </span>

@@ -54,7 +54,7 @@ export default function Lightbox({
       if (e.key === "ArrowLeft") return prev();
       if (e.key === "ArrowRight") return next();
 
-      // Focus trap — keep Tab cycling within the dialog.
+      // Focus trap keep Tab cycling within the dialog.
       if (e.key === "Tab") {
         const focusables =
           dialogRef.current?.querySelectorAll<HTMLElement>("button");

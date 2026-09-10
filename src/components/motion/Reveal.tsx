@@ -78,7 +78,7 @@ export default function Reveal({
 
   // The wrapper always carries data-reveal so CSS hides it before GSAP
   // runs. In stagger mode the effect reveals the wrapper first, then
-  // animates the children in from behind it — so there's no flash either way.
+  // animates the children in from behind it so there's no flash either way.
   return (
     <Tag ref={ref} data-reveal="" className={className} {...rest}>
       {children}

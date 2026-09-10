@@ -8,7 +8,7 @@ import type { Project } from "../lib/projects";
  * A project's visual slot.
  *
  * When there's no screenshot, this renders a typographic plate rather than a
- * grey "no preview" box — the stack set on a sunk paper ground reads as a
+ * grey "no preview" box the stack set on a sunk paper ground reads as a
  * deliberate composition instead of a hole in the layout.
  */
 export default function ProjectVisual({

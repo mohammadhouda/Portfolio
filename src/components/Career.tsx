@@ -16,7 +16,7 @@ export default function Career() {
             {/* Period */}
             <div className="col-span-full lg:col-span-3">
               <p className="t-meta flex items-center gap-2 text-fg-3">
-                {entry.start} — {entry.end}
+                {entry.start} {entry.end}
                 {entry.current && (
                   <span
                     className="inline-block h-1.5 w-1.5 rounded-full bg-accent"

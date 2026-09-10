@@ -12,7 +12,7 @@ interface SectionHeadProps {
 
 /**
  * The recurring section marker: an index, a label, a hairline that draws
- * itself in. Replaces the old `// comment` label — the numbering does the
+ * itself in. Replaces the old `// comment` label the numbering does the
  * same structural job without cosplaying as source code.
  */
 export default function SectionHead({ index, label, note }: SectionHeadProps) {

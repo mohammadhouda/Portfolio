@@ -22,8 +22,8 @@ export const headline =
   "I build AI agents, enterprise integrations, and the backends that hold under load.";
 
 export const bio = [
-  "Software Engineer working across AI agents, enterprise integrations, automation workflows, and scalable backend systems. Most of my work sits at the point where a business requirement has to become a running system — discovery calls on one end, queue workers and database indexes on the other.",
-  "Day to day that means Node.js, PostgreSQL, Prisma, Redis and REST APIs, with Next.js when the work reaches the frontend. I've shipped RAG pipelines and LLM integrations, distributed job systems, real-time features, and a lot of third-party API glue — with an eye on reliability and measurable impact rather than novelty.",
+  "Software Engineer working across AI agents, enterprise integrations, automation workflows, and scalable backend systems. Most of my work sits at the point where a business requirement has to become a running system discovery calls on one end, queue workers and database indexes on the other.",
+  "Day to day that means Node.js, PostgreSQL, Prisma, Redis and REST APIs, with Next.js when the work reaches the frontend. I've shipped RAG pipelines and LLM integrations, distributed job systems, real-time features, and a lot of third-party API glue with an eye on reliability and measurable impact rather than novelty.",
   "Currently Solution Engineer at VAYACOM / DLVRD in Beirut, building AI agents and conversational workflows for sales, support, and e-commerce clients.",
 ];
 
@@ -108,7 +108,7 @@ export interface Certification {
 
 export const certifications: Certification[] = [
   {
-    label: "Forward MENA — Junior to Mid Software Program",
+    label: "Forward MENA Junior to Mid Software Program",
     date: "Aug 2026",
   },
   {

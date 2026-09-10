@@ -17,7 +17,7 @@ interface SplitRevealProps {
 
 /**
  * Headline reveal: text is split into lines, each line masked, then slid up
- * into view on a stagger. This is the signature move of the design — it is
+ * into view on a stagger. This is the signature move of the design it is
  * used only on section headlines, never on body copy.
  *
  * Re-splits on resize because line breaks change with width; the split is
@@ -72,7 +72,7 @@ export default function SplitReveal({
       );
     };
 
-    // Wait for webfonts — splitting against fallback metrics produces the
+    // Wait for webfonts splitting against fallback metrics produces the
     // wrong line breaks and the reveal snaps when the real font swaps in.
     const ctx = gsap.context(() => {
       if (document.fonts?.status === "loaded") build();
@@ -86,7 +86,7 @@ export default function SplitReveal({
       raf = requestAnimationFrame(() => {
         split?.revert();
         split = splitLines(el);
-        // Past the entrance — land straight in the final position.
+        // Past the entrance land straight in the final position.
         gsap.set(split.lines, { yPercent: 0 });
       });
     };

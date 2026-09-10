@@ -12,7 +12,7 @@
 const WORD_ATTR = "data-split-word";
 
 export interface SplitResult {
-  /** The .line-inner elements, in document order — animate these. */
+  /** The .line-inner elements, in document order animate these. */
   lines: HTMLElement[];
   /** Puts the original text back. Call before re-splitting or unmounting. */
   revert: () => void;
@@ -27,7 +27,7 @@ export function splitLines(el: HTMLElement): SplitResult {
     return { lines: [], revert: () => { el.innerHTML = original; } };
   }
 
-  // Pass 1 — lay every word out individually so we can read its y position.
+  // Pass 1 lay every word out individually so we can read its y position.
   el.innerHTML = words
     .map((w) => `<span ${WORD_ATTR}>${escapeHtml(w)}</span>`)
     .join(" ");
@@ -50,7 +50,7 @@ export function splitLines(el: HTMLElement): SplitResult {
     groups[groups.length - 1].push(wordEl.textContent ?? "");
   }
 
-  // Pass 2 — rebuild as masked lines.
+  // Pass 2 rebuild as masked lines.
   el.innerHTML = groups
     .map(
       (group) =>

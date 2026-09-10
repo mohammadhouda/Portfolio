@@ -20,7 +20,7 @@ const inter = Inter({
   display: "swap",
 });
 
-/* Metadata only — labels, dates, indices. Never body copy. */
+/* Metadata only labels, dates, indices. Never body copy. */
 const plexMono = IBM_Plex_Mono({
   variable: "--font-plex-mono",
   subsets: ["latin"],
@@ -36,8 +36,8 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: `${profile.name} — ${profile.role}`,
-    template: `%s — ${profile.name}`,
+    default: `${profile.name} ${profile.role}`,
+    template: `%s ${profile.name}`,
   },
   description: DESCRIPTION,
   keywords: [
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
   creator: profile.name,
   alternates: { canonical: BASE_URL },
   openGraph: {
-    title: `${profile.name} — ${profile.role}`,
+    title: `${profile.name} ${profile.role}`,
     description: DESCRIPTION,
     url: BASE_URL,
     siteName: profile.name,
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${profile.name} — ${profile.role}`,
+    title: `${profile.name} ${profile.role}`,
     description: DESCRIPTION,
   },
   robots: {
@@ -94,7 +94,7 @@ export const viewport: Viewport = {
 
 /**
  * Applied before first paint so [data-reveal] elements are hidden from the
- * very first frame — otherwise content flashes in, then hides, then animates.
+ * very first frame otherwise content flashes in, then hides, then animates.
  *
  * The failsafe matters: if the motion chunk fails to load, nothing would ever
  * reveal those elements and the page would read as blank. Removing `.js`

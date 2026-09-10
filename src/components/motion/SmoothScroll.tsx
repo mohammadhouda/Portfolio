@@ -29,7 +29,7 @@ export default function SmoothScroll() {
 
     const lenis = new Lenis({
       duration: 1.05,
-      // Slightly overshooting exponential — reads as weighty without
+      // Slightly overshooting exponential reads as weighty without
       // feeling laggy on a trackpad.
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
