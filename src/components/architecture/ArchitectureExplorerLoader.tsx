@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 
 /**
- * React Flow is ~130KB and only ever appears far below the fold on two
+ * React Flow is ~130KB and only ever appears far below the fold on the
  * project pages, so it loads on demand rather than in the page bundle.
  */
 function Skeleton() {
@@ -14,18 +14,26 @@ function Skeleton() {
   );
 }
 
-const HopeLink = dynamic(() => import("./HopeLinkExplorer"), {
-  ssr: false,
-  loading: Skeleton,
-});
-
-const DocAgent = dynamic(() => import("./DocAgentExplorer"), {
-  ssr: false,
-  loading: Skeleton,
-});
+const explorers: Record<string, ReturnType<typeof dynamic>> = {
+  hopelink: dynamic(() => import("./HopeLinkExplorer"), {
+    ssr: false,
+    loading: Skeleton,
+  }),
+  "doc-agent": dynamic(() => import("./DocAgentExplorer"), {
+    ssr: false,
+    loading: Skeleton,
+  }),
+  raise: dynamic(() => import("./RaiseExplorer"), {
+    ssr: false,
+    loading: Skeleton,
+  }),
+  "rag-crawler": dynamic(() => import("./RagCrawlerExplorer"), {
+    ssr: false,
+    loading: Skeleton,
+  }),
+};
 
 export default function ArchitectureExplorerLoader({ slug }: { slug: string }) {
-  if (slug === "doc-agent") return <DocAgent />;
-  if (slug === "hopelink") return <HopeLink />;
-  return null;
+  const Explorer = explorers[slug];
+  return Explorer ? <Explorer /> : null;
 }

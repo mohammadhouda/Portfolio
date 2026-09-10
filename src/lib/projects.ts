@@ -28,8 +28,9 @@ export const projects: Project[] = [
     tag: "Multi-Tenant AI Fundraising Platform",
     year: "2026",
     featured: true,
+    images: ["/raise-2.png", "/raise-3.png", "/raise-1.png"],
     description:
-      "A fundraising SaaS where startups run their whole raise investor CRM, pipelines, commitments, tasks, secure document sharing with an AI copilot that answers questions about their own documents and cites where each answer came from.",
+      "A fundraising SaaS where startups run their whole raise — investor CRM, pipelines, commitments, tasks, secure document sharing — with an AI copilot that answers questions about their own documents and cites where each answer came from.",
     longDescription:
       "Raise is a multi-tenant fundraising platform built around six workflows startups actually run during a raise: investor CRM, pipeline tracking, commitments, tasks, secure document sharing, and team collaboration. The engineering weight sits in two places. First, tenant isolation: every query is scoped to a startup, enforced at the database access layer rather than trusted to callers, with fine-grained RBAC on top and a separate restricted authentication path for outside reviewers who should see documents but not the rest of the workspace. Second, the AI copilot: fundraising documents are parsed with LlamaParse, embedded into pgvector, and retrieved to answer contextual questions with citations so an answer can always be traced back to a page. Everything slow runs off the request path through BullMQ and streams back over SSE.",
     stack: [
@@ -43,20 +44,22 @@ export const projects: Project[] = [
       "OpenAI",
       "pgvector",
       "LlamaParse",
+      "Supabase",
     ],
     metrics: [
       { value: "6", label: "Core workflows" },
-      { value: "Multi", label: "Tenant isolation" },
+      { value: "2", label: "Isolated auth paths" },
       { value: "SSE", label: "Real-time delivery" },
     ],
+    hasArchitecture: true,
     highlights: [
-      "Tenant isolation enforced at the data-access layer with startup-scoped queries, so a missing filter in a route handler can't leak across tenants",
-      "JWT access + refresh-token sessions with Google OAuth, plus a separate restricted reviewer auth path scoped to shared documents only",
-      "AI copilot built on RAG: LlamaParse for document parsing, OpenAI embeddings into pgvector, retrieval with citations back to the source",
-      "BullMQ + Redis carry AI processing, document parsing, embedding generation, notifications, and email delivery off the request path",
-      "SSE streaming for AI responses and live notifications answers render token by token instead of blocking on a full completion",
-      "Gmail and Google Calendar integrations sync investor correspondence and meetings into the pipeline",
-      "Fine-grained RBAC across six workflows, with permissions checked per-resource rather than per-route",
+      "Tenant isolation enforced twice: role middleware plus services that select through composite keys like startupId_id, so a stray findUnique({ id }) still can't cross tenants",
+      "External reviewers run on a separate auth path entirely — link token, email OTP, separate cookie and table — that can only reach /reviewer-portal/*",
+      "AI copilot treats the model as untrusted input: it can never write, only propose actions a human approves, and approval re-checks the permission the manual action needs",
+      "Grounded RAG over pgvector with hnsw.iterative_scan = 'relaxed_order', because the HNSW index is global across tenants and a small corpus would otherwise lose real matches",
+      "Prompt submit and response read are separate requests; a Redis run registry (TTL + 8s heartbeat) makes reconnect, multi-tab, and cross-replica resume work",
+      "API and worker are separate processes from one package; eight BullMQ queues plus six recurring maintenance jobs run as Redis-native repeatable schedules",
+      "Three-phase uploads so the API never proxies file bytes — signed target, direct PUT to storage, confirm — with private bytes served only through short-lived signed paths",
     ],
   },
   {
@@ -65,24 +68,29 @@ export const projects: Project[] = [
     tag: "Web Crawler & Search Engine",
     year: "2026",
     featured: true,
+    images: ["/rag-crawler-1.png", "/rag-crawler-2.png", "/rag-crawler-3.png"],
     description:
       "A queue-based crawler and search engine that partitions scraping, discovery, and indexing into three independently scalable workloads, then answers questions over what it found using hybrid retrieval and grounded generation.",
     longDescription:
       "A distributed crawling and indexing system built to be operated, not just demoed. Scraping, link discovery, and indexing run as three separate BullMQ queues so each can scale on its own bottleneck discovery is cheap and wide, rendering is expensive and narrow. Six reliability controls keep it from being the kind of crawler that gets a domain blocked: robots.txt enforcement, per-domain rate limiting, retry with backoff, dead-letter queues for poison jobs, content hashing to skip unchanged pages, and page versioning so history isn't lost on re-crawl. On the retrieval side, PostgreSQL full-text search and pgvector HNSW embeddings run in parallel and are fused with Reciprocal Rank Fusion, which beats either strategy alone on queries that mix exact terms with fuzzy intent. The question-answering API returns grounded answers with citations over SSE.",
     stack: [
       "Node.js",
+      "Fastify",
+      "Next.js",
       "BullMQ",
       "Redis",
       "PostgreSQL",
       "pgvector",
       "Cheerio",
       "Playwright",
+      "OpenAI",
     ],
     metrics: [
       { value: "3", label: "Independent queues" },
       { value: "6", label: "Reliability controls" },
       { value: "RRF", label: "Hybrid retrieval fusion" },
     ],
+    hasArchitecture: true,
     highlights: [
       "Three independently scalable BullMQ queues split scraping, discovery, and indexing so each scales against its own bottleneck",
       "Six crawler reliability controls: robots.txt enforcement, per-domain rate limiting, retry/backoff, dead-letter queues, content hashing, and page versioning",
