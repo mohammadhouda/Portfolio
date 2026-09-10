@@ -1,33 +1,48 @@
-import Navbar from "../src/components/Navbar";
+import Nav from "../src/components/Nav";
 import Hero from "../src/components/Hero";
-import ProjectList from "../src/components/ProjectList";
+import Work from "../src/components/Work";
 import About from "../src/components/About";
-import Experience from "../src/components/Experience";
-import ApiPlayground from "../src/components/playground/ApiPlayground";
+import Career from "../src/components/Career";
 import Contact from "../src/components/Contact";
+import Footer from "../src/components/Footer";
+import { profile, headline } from "../src/lib/profile";
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
-  name: "Mohammad Houda",
-  url: "https://mohammadhouda.dev",
-  jobTitle: "Software Engineer",
-  description:
-    "Backend-focused Software Engineer building production-grade REST APIs, scalable multi-tenant platforms, and distributed systems.",
+  name: profile.name,
+  url: profile.site,
+  jobTitle: profile.role,
+  email: `mailto:${profile.email}`,
+  description: headline,
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Tripoli",
+    addressLocality: "Beirut",
     addressCountry: "LB",
   },
-  knowsAbout: ["Node.js", "Express", "PostgreSQL", "Redis", "Next.js", "TypeScript", "AWS"],
-  sameAs: ["https://github.com/mohammadhouda"],
+  worksFor: {
+    "@type": "Organization",
+    name: "VAYACOM / DLVRD",
+  },
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: "Arab Open University",
+  },
+  knowsAbout: [
+    "AI Agents",
+    "Retrieval-Augmented Generation",
+    "Node.js",
+    "Express",
+    "PostgreSQL",
+    "Prisma",
+    "Redis",
+    "BullMQ",
+    "Next.js",
+    "TypeScript",
+    "System Design",
+  ],
+  sameAs: [profile.github, profile.linkedin],
 };
-
-const Divider = () => (
-  <div className="max-w-300 mx-auto px-8">
-    <div className="h-px bg-linear-to-r from-transparent via-border to-transparent" />
-  </div>
-);
 
 export default function Home() {
   return (
@@ -36,20 +51,15 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Navbar />
+      <Nav />
       <main>
         <Hero />
-        <Divider />
+        <Work />
         <About />
-        <Divider />
-        <ProjectList />
-        <Divider />
-        <Experience />
-        <Divider />
-        <ApiPlayground />
-        <Divider />
+        <Career />
         <Contact />
       </main>
+      <Footer />
     </>
   );
 }

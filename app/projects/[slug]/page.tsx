@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
-import { getProject, projects } from "../../../src/lib/projects";
-import Navbar from "../../../src/components/Navbar";
-import ProjectDetail from "../../../src/components/ProjectDetail";
 import type { Metadata } from "next";
+import { getProject, projects } from "../../../src/lib/projects";
+import { profile } from "../../../src/lib/profile";
+import Nav from "../../../src/components/Nav";
+import Footer from "../../../src/components/Footer";
+import ProjectDetail from "../../../src/components/ProjectDetail";
 
 export async function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -17,31 +19,22 @@ export async function generateMetadata({
   const project = getProject(slug);
   if (!project) return {};
 
-  const url = `https://mohammadhouda.dev/projects/${slug}`;
+  const url = `${profile.site}/projects/${slug}`;
 
   return {
     title: project.title,
     description: project.description,
     alternates: { canonical: url },
     openGraph: {
-      title: `${project.title} — Mohammad Houda`,
+      title: `${project.title} — ${profile.name}`,
       description: project.description,
       url,
       type: "article",
-      images: [
-        {
-          url: "/og-image.png",
-          width: 1200,
-          height: 630,
-          alt: project.title,
-        },
-      ],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${project.title} — Mohammad Houda`,
+      title: `${project.title} — ${profile.name}`,
       description: project.description,
-      images: ["/og-image.png"],
     },
   };
 }
@@ -56,10 +49,29 @@ export default async function ProjectPage({
 
   if (!project) notFound();
 
+  // Wrap around so the last project points back at the first.
+  const i = projects.findIndex((p) => p.slug === slug);
+  const next = projects[(i + 1) % projects.length];
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: project.title,
+    description: project.description,
+    url: `${profile.site}/projects/${slug}`,
+    author: { "@type": "Person", name: profile.name, url: profile.site },
+    keywords: project.stack.join(", "),
+  };
+
   return (
     <>
-      <Navbar />
-      <ProjectDetail project={project} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <Nav standalone />
+      <ProjectDetail project={project} next={next} />
+      <Footer />
     </>
   );
 }

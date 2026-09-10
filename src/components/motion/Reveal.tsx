@@ -1,0 +1,130 @@
+"use client";
+
+import { useRef, useEffect, type ElementType, type ReactNode } from "react";
+import { gsap, ScrollTrigger, EASE, prefersReducedMotion } from "../../lib/gsap";
+
+interface RevealProps {
+  children: ReactNode;
+  /** Element to render. Defaults to div. */
+  as?: ElementType;
+  className?: string;
+  /** Seconds to wait after the trigger fires. */
+  delay?: number;
+  /** Distance in px to travel upward. 0 for a pure fade. */
+  y?: number;
+  /** Stagger direct children instead of animating the wrapper itself. */
+  stagger?: number;
+  /** Viewport position that fires the animation. */
+  start?: string;
+  [key: string]: unknown;
+}
+
+/**
+ * Scroll-triggered fade + rise.
+ *
+ * Every instance registers with the single ScrollTrigger instance, which
+ * updates all of them in one scroll handler and writes transforms directly
+ * to the DOM. Nothing here re-renders React, which is the main reason this
+ * scales better than the per-element IntersectionObserver + state approach.
+ */
+export default function Reveal({
+  children,
+  as: Tag = "div",
+  className,
+  delay = 0,
+  y = 26,
+  stagger,
+  start = "top 85%",
+  ...rest
+}: RevealProps) {
+  const ref = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    if (prefersReducedMotion()) {
+      gsap.set(el, { opacity: 1, y: 0 });
+      return;
+    }
+
+    const targets =
+      stagger !== undefined ? Array.from(el.children) : el;
+
+    const ctx = gsap.context(() => {
+      // Wrapper must be visible when we're staggering its children;
+      // globals.css hides it by default to prevent a flash.
+      if (stagger !== undefined) gsap.set(el, { opacity: 1 });
+
+      gsap.fromTo(
+        targets,
+        { opacity: 0, y },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          delay,
+          ease: EASE,
+          stagger: stagger ?? 0,
+          scrollTrigger: { trigger: el, start, once: true },
+          // Drop the compositing hint once we're done painting.
+          onComplete: () => gsap.set(targets, { willChange: "auto" }),
+        }
+      );
+    }, el);
+
+    return () => ctx.revert();
+  }, [delay, y, stagger, start]);
+
+  // The wrapper always carries data-reveal so CSS hides it before GSAP
+  // runs. In stagger mode the effect reveals the wrapper first, then
+  // animates the children in from behind it — so there's no flash either way.
+  return (
+    <Tag ref={ref} data-reveal="" className={className} {...rest}>
+      {children}
+    </Tag>
+  );
+}
+
+/**
+ * Standalone hook version for cases where an extra wrapper element would
+ * break a layout (grid children, table rows, flex measurements).
+ */
+export function useReveal<T extends HTMLElement>(
+  options: { delay?: number; y?: number; start?: string } = {}
+) {
+  const ref = useRef<T>(null);
+  const { delay = 0, y = 26, start = "top 85%" } = options;
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    if (prefersReducedMotion()) {
+      gsap.set(el, { opacity: 1, y: 0 });
+      return;
+    }
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        el,
+        { opacity: 0, y },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          delay,
+          ease: EASE,
+          scrollTrigger: { trigger: el, start, once: true },
+          onComplete: () => gsap.set(el, { willChange: "auto" }),
+        }
+      );
+    }, el);
+
+    return () => ctx.revert();
+  }, [delay, y, start]);
+
+  return ref;
+}
+
+export { ScrollTrigger };

@@ -1,144 +1,185 @@
 "use client";
 
-import { motion } from "framer-motion";
-import TerminalSnippet from "./TerminalSnippet";
-import SectionLabel from "./SectionLabel";
-import ScrollReveal from "./ScrollReveal";
+import { useEffect, useRef } from "react";
+import { gsap, prefersReducedMotion } from "../lib/gsap";
+import { scrollToTarget } from "../lib/scroll";
+import { profile, timeline } from "../lib/profile";
 
-const ease = [0.16, 1, 0.3, 1] as [number, number, number, number];
-
-const fadeUp = (delay: number) => ({
-  initial: { opacity: 0, y: 28 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.8, delay, ease },
-});
+const current = timeline.find((t) => t.current);
 
 export default function Hero() {
-  const handleScroll = () => {
-    const el = document.querySelector("#projects");
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-  };
+  const root = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+
+    if (prefersReducedMotion()) {
+      gsap.set(el.querySelectorAll("[data-hero]"), { opacity: 1, y: 0 });
+      return;
+    }
+
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        defaults: { ease: "expo.out" },
+        // Let the webfont land first; animating display type mid-swap
+        // makes the headline visibly jump.
+        delay: 0.12,
+      });
+
+      // fromTo throughout, never from(). The wrappers carry an inline
+      // opacity:0 to prevent a pre-hydration flash, and a from() tween
+      // records its END value from whatever the element reads as at init —
+      // which is that same 0. The result is an element that animates from
+      // invisible to invisible. Stating both ends removes the ambiguity.
+      tl.set(el.querySelectorAll("[data-hero]"), { opacity: 1 })
+        .fromTo(
+          "[data-hero-rule]",
+          { scaleX: 0 },
+          { scaleX: 1, duration: 1.4 },
+          0
+        )
+        .fromTo(
+          "[data-hero-meta] > * > *",
+          { yPercent: 120 },
+          { yPercent: 0, duration: 1, stagger: 0.08 },
+          0.1
+        )
+        .fromTo(
+          "[data-hero-line]",
+          { yPercent: 115 },
+          { yPercent: 0, duration: 1.3, stagger: 0.09 },
+          0.2
+        )
+        .fromTo(
+          "[data-hero-lead]",
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
+          0.7
+        )
+        .fromTo(
+          "[data-hero-foot] > *",
+          { opacity: 0, y: 16 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.9,
+            stagger: 0.07,
+            ease: "power3.out",
+          },
+          0.85
+        );
+    }, el);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
+      ref={root}
       id="hero"
-      className="relative flex items-center pt-24 px-8 pb-16 max-w-300 mx-auto w-full min-h-svh"
+      className="shell flex min-h-svh flex-col justify-between pt-28 pb-10 md:pt-36 md:pb-14"
     >
-      {/* Decorative elements — isolated so they can't affect layout */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        {/* Atmospheric grid */}
+      {/* ── Masthead ─────────────────────────────────────────── */}
+      <div>
         <div
-          className="absolute inset-0 opacity-[0.025]"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)",
-            backgroundSize: "80px 80px",
-          }}
-        />
-        {/* Glow accent */}
-        <div
-          className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full opacity-[0.06]"
-          style={{
-            background: "radial-gradient(circle, var(--accent) 0%, transparent 70%)",
-          }}
-        />
-      </div>
-
-      <div className="relative w-full z-10">
-        {/* Status line */}
-        <motion.div {...fadeUp(0.05)} className="mb-8">
-          <ScrollReveal>
-            <SectionLabel label="Based In Lebanon" lineNumber={1} />
-          </ScrollReveal>
-        </motion.div>
-
-        {/* Two-column split */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-
-          {/* Left: identity + terminal */}
-          <div>
-            <motion.h1
-              {...fadeUp(0.15)}
-              className="font-mono font-bold leading-[0.95] tracking-[-0.04em] text-fg m-0"
-              style={{ fontSize: "clamp(3.2rem, 7.5vw, 5.5rem)" }}
-            >
-              <span className="block">Mohammad</span>
-              <span className="block mt-1">
-                Houda
-                {/* Pure CSS cursor — no JS animation loop */}
-                <span className="cursor-blink ml-2" />
-              </span>
-            </motion.h1>
-
-            <motion.div {...fadeUp(0.3)} className="mt-5 mb-10 flex items-center gap-3">
-              <span className="block w-8 h-px bg-accent/50" />
-              <p className="font-mono text-[0.8rem] text-accent tracking-[0.08em] uppercase m-0">
-                Software Engineer · Full-Stack Reach
-              </p>
-            </motion.div>
-
-            <motion.div {...fadeUp(0.45)}>
-              <TerminalSnippet />
-            </motion.div>
-          </div>
-
-          {/* Right: intro + CTA */}
-          <motion.div {...fadeUp(0.35)} className="relative lg:pl-12">
-            {/* Vertical divider — desktop only */}
-            <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-px">
-              <span className="block w-full h-full bg-white/[0.06]" />
-              <span className="absolute top-0 left-0 w-full h-12 bg-accent/40" />
-            </div>
-
-            <p className="font-mono text-[0.65rem] text-muted/30 tracking-[0.15em] uppercase mb-4 select-none">
-              {"/* what I build */"}
-            </p>
-
-            <p className="text-[1.05rem] leading-[1.8] text-muted max-w-[42ch] mb-10">
-              I design the systems behind the product auth flows, job pipelines,
-              real-time features, and APIs that hold under load. I ship fast
-              without cutting corners, and I reach into the frontend
-              when the work calls for it.
-            </p>
-
-            <div className="flex items-center gap-6 flex-wrap">
-              <motion.button
-                onClick={handleScroll}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                className="group inline-flex items-center gap-3 px-7 py-3.5 bg-accent/[0.08] border border-accent/60 rounded-md text-accent font-mono text-[0.8rem] tracking-[0.06em] cursor-pointer pointer-fine:transition-[background-color,border-color,box-shadow] pointer-fine:duration-300 pointer-fine:hover:bg-accent/[0.14] pointer-fine:hover:border-accent pointer-fine:hover:shadow-[0_0_30px_rgba(34,197,94,0.12)]"
-              >
-                view_projects
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 14 14"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  className="pointer-fine:transition-transform pointer-fine:duration-300 pointer-fine:group-hover:translate-x-1"
-                >
-                  <path d="M2 7h10M8 3l4 4-4 4" />
-                </svg>
-              </motion.button>
-            </div>
-          </motion.div>
+          data-hero
+          data-hero-meta
+          className="mb-4 flex items-baseline justify-between gap-6"
+          style={{ opacity: 0 }}
+        >
+          <span className="t-meta line-mask text-ink-3">
+            <span className="block">Portfolio — Selected Work</span>
+          </span>
+          <span className="t-meta line-mask text-right text-ink-3">
+            <span className="block">
+              {profile.location} · {profile.timezone}
+            </span>
+          </span>
         </div>
 
-        {/* Bottom status bar */}
-        <motion.div
-          {...fadeUp(0.6)}
-          className="mt-20 flex items-center gap-6 font-mono text-[0.65rem] text-muted/30 tracking-[0.1em] uppercase select-none"
+        <div data-hero data-hero-rule className="rule" style={{ opacity: 0 }} />
+      </div>
+
+      {/* ── Statement ────────────────────────────────────────── */}
+      <div className="grid-12 items-end py-14 md:py-20">
+        <h1
+          data-hero
+          className="t-display col-span-full text-ink lg:col-span-7"
+          style={{ opacity: 0, fontSize: "clamp(3.75rem, 12.5vw, 11rem)" }}
         >
-          <span className="flex items-center gap-2">
-            <span className="block w-1.5 h-1.5 rounded-full bg-accent/70 shadow-[0_0_6px_rgba(34,197,94,0.4)]" />
-            available for work
+          <span className="line-mask">
+            <span data-hero-line className="block">
+              Software
+            </span>
           </span>
-          <span className="hidden sm:inline">·</span>
-          <span className="hidden sm:inline">UTC+3</span>
-          <span className="hidden sm:inline">·</span>
-          <span className="hidden sm:inline">v2.0</span>
-        </motion.div>
+          <span className="line-mask">
+            <span data-hero-line className="block italic">
+              Engineer
+            </span>
+          </span>
+        </h1>
+
+        <p
+          data-hero
+          data-hero-lead
+          className="t-lead col-span-full mt-10 max-w-[38ch] lg:col-span-4 lg:col-start-9 lg:mt-0 lg:mb-3"
+          style={{ opacity: 0 }}
+        >
+          I build AI agents, enterprise integrations, and the backends that
+          hold under load.
+        </p>
+      </div>
+
+      {/* ── Footer strip ─────────────────────────────────────── */}
+      <div>
+        <div data-hero data-hero-rule className="rule mb-5" style={{ opacity: 0 }} />
+
+        <div
+          data-hero
+          data-hero-foot
+          className="grid-12 gap-y-5"
+          style={{ opacity: 0 }}
+        >
+          <div className="col-span-full sm:col-span-3 lg:col-span-4">
+            <p className="t-meta mb-1.5 text-ink-4">Currently</p>
+            <p className="text-[0.9rem] leading-snug text-ink">
+              {current ? `${current.role}, ${current.org}` : profile.role}
+            </p>
+          </div>
+
+          <div className="col-span-full sm:col-span-3 lg:col-span-3">
+            <p className="t-meta mb-1.5 text-ink-4">Availability</p>
+            <p className="flex items-center gap-2 text-[0.9rem] leading-snug text-ink">
+              <span
+                className="inline-block h-1.5 w-1.5 rounded-full bg-accent"
+                aria-hidden="true"
+              />
+              Open to new roles
+            </p>
+          </div>
+
+          <div className="col-span-full flex items-end sm:col-span-6 lg:col-span-5 lg:justify-end">
+            <button
+              onClick={() => scrollToTarget("#work")}
+              className="group t-meta flex cursor-pointer items-center gap-3 border-0 bg-transparent p-0 text-ink transition-colors duration-300 hover-fine:hover:text-accent"
+            >
+              <span className="link-undraw">Selected Work</span>
+              <svg
+                width="14"
+                height="20"
+                viewBox="0 0 14 20"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1"
+                aria-hidden="true"
+                className="transition-transform duration-500 ease-out group-hover:translate-y-1"
+              >
+                <path d="M7 0v18M1 12l6 6 6-6" />
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -2,6 +2,7 @@
 
 import { Handle, Position } from "@xyflow/react";
 import { useState } from "react";
+import { inkColor, inkColorAlpha } from "./palette";
 import type { NodeDetail } from "./nodeData";
 
 interface CustomNodeProps {
@@ -11,65 +12,48 @@ interface CustomNodeProps {
 
 export default function CustomNode({ data, selected }: CustomNodeProps) {
   const [hovered, setHovered] = useState(false);
+  const color = inkColor(data.color);
 
   return (
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="bg-surface rounded-lg px-4 py-3 min-w-50 max-w-55 transition-[border-color,box-shadow] duration-200 cursor-pointer relative"
+      className="relative min-w-50 max-w-55 cursor-pointer bg-paper-raised px-4 py-3 transition-[border-color,background-color] duration-200"
       style={{
         border: `1px solid ${
-          selected ? data.color : hovered ? `${data.color}55` : "rgba(255,255,255,0.07)"
+          selected || hovered ? color : "rgba(22, 21, 15, 0.18)"
         }`,
-        boxShadow: selected
-          ? `0 0 20px ${data.color}30`
-          : hovered
-          ? `0 0 12px ${data.color}18`
-          : "none",
+        background: selected ? inkColorAlpha(data.color, 0.06) : undefined,
       }}
     >
       <Handle
         type="target"
         position={Position.Top}
-        style={{ background: data.color, width: 6, height: 6, border: "none", opacity: 0.5 }}
+        style={{ background: color, width: 5, height: 5, border: "none" }}
       />
 
-      {/* Color dot */}
-      <div
-        className="w-1.5 h-1.5 rounded-full mb-2"
-        style={{ background: data.color, boxShadow: `0 0 6px ${data.color}80` }}
-      />
+      {/* Category bar rather than a glowing dot — reads on paper. */}
+      <div className="mb-2.5 h-0.5 w-6" style={{ background: color }} />
 
-      <p className="font-mono font-bold text-[0.78rem] text-fg m-0 tracking-[-0.01em] leading-[1.3]">
+      <p className="m-0 text-[0.82rem] leading-tight font-medium text-ink">
         {data.title}
       </p>
 
-      <p className="font-mono text-[0.62rem] text-muted mt-1 m-0 opacity-65 leading-[1.4]">
+      <p className="mt-1 m-0 font-mono text-[0.62rem] leading-snug text-ink-3">
         {data.subtitle}
       </p>
 
-      {/* Hover tooltip */}
       {hovered && (
         <div
-          className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-60 z-[1000] pointer-events-none rounded-md px-3 py-[0.6rem]"
-          style={{
-            background: "rgba(10,10,15,0.97)",
-            border: `1px solid ${data.color}40`,
-            boxShadow: `0 4px 20px rgba(0,0,0,0.5), 0 0 12px ${data.color}15`,
-          }}
+          className="pointer-events-none absolute bottom-[calc(100%+8px)] left-1/2 z-[1000] w-60 -translate-x-1/2 bg-ink px-3 py-2"
+          style={{ boxShadow: "0 6px 24px rgba(22, 21, 15, 0.22)" }}
         >
-          <p className="font-sans text-[0.78rem] text-muted m-0 leading-[1.6]">
+          <p className="m-0 text-[0.75rem] leading-relaxed text-paper">
             {data.tooltip}
           </p>
-          {/* Arrow */}
           <div
-            className="absolute bottom-[-5px] left-1/2 -translate-x-1/2 rotate-45 w-2 h-2"
-            style={{
-              background: "rgba(10,10,15,0.97)",
-              border: `1px solid ${data.color}40`,
-              borderTop: "none",
-              borderLeft: "none",
-            }}
+            className="absolute bottom-[-4px] left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 bg-ink"
+            aria-hidden="true"
           />
         </div>
       )}
@@ -77,7 +61,7 @@ export default function CustomNode({ data, selected }: CustomNodeProps) {
       <Handle
         type="source"
         position={Position.Bottom}
-        style={{ background: data.color, width: 6, height: 6, border: "none", opacity: 0.5 }}
+        style={{ background: color, width: 5, height: 5, border: "none" }}
       />
     </div>
   );

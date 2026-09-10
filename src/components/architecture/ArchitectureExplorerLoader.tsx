@@ -2,44 +2,30 @@
 
 import dynamic from "next/dynamic";
 
+/**
+ * React Flow is ~130KB and only ever appears far below the fold on two
+ * project pages, so it loads on demand rather than in the page bundle.
+ */
 function Skeleton() {
   return (
-    <div
-      style={{
-        height: "580px",
-        border: "1px solid var(--border)",
-        borderRadius: "10px",
-        background: "var(--surface)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <p
-        style={{
-          fontFamily: "var(--font-jetbrains)",
-          fontSize: "0.8rem",
-          color: "var(--text-secondary)",
-          opacity: 0.4,
-        }}
-      >
-        loading diagram...
-      </p>
+    <div className="flex h-[34rem] items-center justify-center border border-rule bg-paper-sunk md:h-[36rem]">
+      <p className="t-meta text-ink-4">Loading diagram…</p>
     </div>
   );
 }
 
-const HopeLinkExplorer = dynamic(
-  () => import("./ArchitectureExplorer"),
-  { ssr: false, loading: () => <Skeleton /> }
-);
+const HopeLink = dynamic(() => import("./HopeLinkExplorer"), {
+  ssr: false,
+  loading: Skeleton,
+});
 
-const DocAgentExplorer = dynamic(
-  () => import("./DocAgentArchitectureExplorer"),
-  { ssr: false, loading: () => <Skeleton /> }
-);
+const DocAgent = dynamic(() => import("./DocAgentExplorer"), {
+  ssr: false,
+  loading: Skeleton,
+});
 
 export default function ArchitectureExplorerLoader({ slug }: { slug: string }) {
-  if (slug === "doc-agent") return <DocAgentExplorer />;
-  return <HopeLinkExplorer />;
+  if (slug === "doc-agent") return <DocAgent />;
+  if (slug === "hopelink") return <HopeLink />;
+  return null;
 }

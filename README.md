@@ -1,19 +1,45 @@
 # Mohammad Houda — Portfolio
 
-Personal developer portfolio built with Next.js 16 App Router. Features a live API playground, an interactive architecture explorer, and smooth scroll-reveal animations.
+Personal portfolio built with Next.js 16 App Router. Editorial layout, GSAP
+scroll animation over Lenis smooth scroll, and an interactive architecture
+explorer on the case-study pages.
 
 **Live:** [mohammadhouda.dev](https://mohammadhouda.dev) &nbsp;·&nbsp; **GitHub:** [github.com/mohammadhouda](https://github.com/mohammadhouda)
 
 ---
 
-## Features
+## Design
 
-- **Live API Playground** — Hit real REST endpoints directly from the browser. Split-panel UI with JSON syntax highlighting, response time, and status badges.
-- **Architecture Explorer** — Interactive React Flow diagram for the HopeLink project. Click any node for an inline detail panel explaining the design decision.
-- **Typewriter Terminal** — Animated terminal snippet cycling through backend commands in the hero section.
-- **Scroll Reveal** — GPU-composited fade-up animations via Framer Motion `useInView`.
-- **Project case studies** — Dedicated pages for each project with stack, highlights, and external links.
-- **Responsive** — Two-column grids collapse to single-column on mobile; playground grid stacks vertically.
+Warm paper ground, near-black warm ink, a single oxide-red accent, and
+hairline rules carrying a 12-column grid. Instrument Serif does the display
+work; Inter carries body copy; IBM Plex Mono is reserved for metadata —
+labels, dates, indices — and never used for prose.
+
+Every step of the ink scale passes WCAG AA (4.5:1) against the paper
+background, including the lightest, since those tones carry the small
+uppercase labels.
+
+---
+
+## Motion
+
+- **Lenis** drives smooth scrolling, stepped from `gsap.ticker` rather than
+  its own rAF loop. Two independent loops is what makes most smooth-scroll
+  sites jitter — ScrollTrigger reads the scroll position on one frame while
+  Lenis writes it on another.
+- **GSAP ScrollTrigger** handles every reveal. All triggers share one scroll
+  handler and write transforms straight to the DOM, so scrolling never
+  re-renders React.
+- **Headline reveals** split text into lines and slide each out from behind a
+  mask (`src/lib/splitLines.ts` — a small stand-in for the paid SplitText
+  plugin). Splitting waits on `document.fonts.ready`, because splitting
+  against fallback metrics produces the wrong line breaks.
+- **`prefers-reduced-motion`** is honoured throughout: Lenis never starts,
+  and every reveal renders in its final state.
+- Content is hidden pre-reveal by a `.js` class set in a blocking inline
+  script, with a 2.5s failsafe that removes it if the motion chunk never
+  loads — so a failed bundle degrades to a plain visible page rather than a
+  blank one.
 
 ---
 
@@ -21,88 +47,85 @@ Personal developer portfolio built with Next.js 16 App Router. Features a live A
 
 | Layer | Library / Tool |
 |---|---|
-| Framework | Next.js 16.2.3 (App Router) |
+| Framework | Next.js 16.2.3 (App Router, Turbopack) |
 | Language | TypeScript |
-| Styling | CSS variables + `globals.css` (no Tailwind) |
-| Animation | Framer Motion v12 |
+| Styling | Tailwind CSS v4 (CSS-first `@theme`) |
+| Smooth scroll | Lenis v1 |
+| Animation | GSAP v3 + ScrollTrigger |
 | Diagram | @xyflow/react v12 |
-| Fonts | JetBrains Mono · Plus Jakarta Sans (Google Fonts) |
+| Fonts | Instrument Serif · Inter · IBM Plex Mono |
 | Deployment | Vercel |
+
+### A note on CSS layers
+
+Custom rules in `globals.css` live inside `@layer base` / `@layer components`
+on purpose. Tailwind v4 emits utilities into `@layer utilities`, and an
+**unlayered** rule beats a layered one regardless of specificity — so a bare
+`body > *` selector will silently defeat every utility class on a direct
+child of `body`. Keep new global rules inside a layer.
 
 ---
 
 ## Project Structure
 
 ```
-my-portfolio/
+Portfolio/
 ├── app/
-│   ├── layout.tsx              # Fonts, metadata, OpenGraph
-│   ├── page.tsx                # Home page — section order
-│   ├── globals.css             # Design tokens, animations, media queries
-│   ├── projects/[slug]/        # Dynamic project detail pages
-│   └── api/
-│       ├── health/route.ts     # GET  /api/health
-│       ├── projects/route.ts   # GET  /api/projects
-│       ├── stack/route.ts      # GET  /api/stack
-│       └── contact/route.ts    # POST /api/contact
+│   ├── layout.tsx              # Fonts, metadata, JS bootstrap + failsafe
+│   ├── page.tsx                # Home — section order, Person JSON-LD
+│   ├── globals.css             # Tokens, layered base/components, Lenis CSS
+│   ├── icon.tsx                # Generated favicon
+│   ├── opengraph-image.tsx     # Social card, generated at build time
+│   └── projects/[slug]/        # Case-study pages (SSG)
 ├── src/
 │   ├── lib/
-│   │   └── projects.ts         # Project data + getProject()
+│   │   ├── profile.ts          # Bio, timeline, certifications, stack
+│   │   ├── projects.ts         # Project data, featured/archive split
+│   │   ├── gsap.ts             # Plugin registration, shared easings
+│   │   ├── splitLines.ts       # Line splitter for headline reveals
+│   │   └── scroll.ts           # Lenis-aware scrollTo + scroll lock
+│   ├── types/global.d.ts       # window.__lenis
 │   └── components/
-│       ├── Hero.tsx
-│       ├── About.tsx
-│       ├── Experience.tsx
-│       ├── Contact.tsx
-│       ├── ProjectCard.tsx
-│       ├── ProjectDetail.tsx
-│       ├── TerminalSnippet.tsx
-│       ├── ScrollReveal.tsx
-│       ├── Navbar.tsx
-│       ├── SectionLabel.tsx
-│       ├── playground/
-│       │   ├── ApiPlayground.tsx
-│       │   ├── EndpointSelector.tsx
-│       │   ├── RequestPanel.tsx
-│       │   ├── ResponsePanel.tsx
-│       │   └── JsonHighlighter.tsx
+│       ├── Nav.tsx  Hero.tsx  Work.tsx  About.tsx
+│       ├── Career.tsx  Contact.tsx  Footer.tsx
+│       ├── SectionHead.tsx  ProjectVisual.tsx
+│       ├── ProjectDetail.tsx  Lightbox.tsx
+│       ├── motion/
+│       │   ├── SmoothScroll.tsx    # Lenis ↔ GSAP ticker bridge
+│       │   ├── Reveal.tsx          # Fade + rise on scroll
+│       │   ├── SplitReveal.tsx     # Masked per-line headline reveal
+│       │   ├── Parallax.tsx        # Scroll-linked image drift
+│       │   └── Rule.tsx            # Self-drawing hairline
 │       └── architecture/
-│           ├── ArchitectureExplorerLoader.tsx  # Client boundary for ssr:false
-│           ├── ArchitectureExplorer.tsx
+│           ├── ArchitectureExplorerLoader.tsx  # ssr:false boundary
+│           ├── Explorer.tsx        # Shared, data-driven explorer
+│           ├── HopeLinkExplorer.tsx / DocAgentExplorer.tsx
 │           ├── CustomNode.tsx
-│           └── nodeData.ts
+│           ├── palette.ts          # Dark-theme colors → ink-safe tones
+│           └── nodeData.ts / docAgentNodeData.ts
 └── public/
-    ├── noise.svg               # Grain overlay texture
-    └── Mohammad.Houda_CV.pdf   # CV download (add manually)
+    ├── noise.svg               # Tiled paper grain (alpha speckle)
+    └── Mohammad.Houda_CV.pdf
 ```
 
 ---
 
-## API Routes
+## Content
 
-All routes are live — the playground section hits them in real time.
+All copy lives in two files — nothing is hardcoded in components:
 
-### `GET /api/health`
-Returns server status, uptime, version, and current timestamp.
+- `src/lib/profile.ts` — bio, career timeline, certifications, skills, contact
+- `src/lib/projects.ts` — projects, with `featured: true` promoting one to a
+  full row and case study, and `featured: false` demoting it to the archive
+  list
 
-```json
-{
-  "status": "ok",
-  "uptime": 42.3,
-  "version": "1.0.0",
-  "timestamp": "2025-07-15T10:00:00.000Z",
-  "region": "local"
-}
-```
+---
 
-### `GET /api/projects`
-Returns all portfolio projects with title, description, stack, and links.
+## Development
 
-### `GET /api/stack`
-Returns the full tech stack grouped by category: backend, frontend, tools & cloud, AI.
-
-### `POST /api/contact`
-Accepts a contact message payload. Validates `name`, `email`, and `message` (≥ 10 chars).
-
-```json
-{ "name": "Jane Doe", "email": "jane@example.com", "message": "Let's work together!" }
+```bash
+npm install
+npm run dev      # http://localhost:3000
+npm run build
+npm run lint
 ```

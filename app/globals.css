@@ -1,212 +1,361 @@
 @import "tailwindcss";
 
+/* ===============================================================
+   Design tokens - editorial / Swiss
+   Warm paper ground, near-black warm ink, single oxide accent.
+   =============================================================== */
 :root {
-  --bg: #0a0a0f;
-  --surface: #111118;
-  --border: rgba(255, 255, 255, 0.06);
-  --accent: #22c55e;
-  --accent-glow: rgba(34, 197, 94, 0.15);
-  --accent-glow-strong: rgba(34, 197, 94, 0.25);
-  --text-primary: #e4e4e7;
-  --text-secondary: #71717a;
-  --border-hover: rgba(34, 197, 94, 0.3);
+  /* Ground */
+  --paper: #f3f0ea;
+  --paper-raised: #faf8f4;
+  --paper-sunk: #e9e4da;
+
+  /* Ink. Every step passes WCAG AA (4.5:1) against --paper, including
+     the lightest - these tones carry small uppercase labels, which is
+     exactly the text that most often ends up unreadable in this style. */
+  --ink: #16150f;   /* 16.1:1 */
+  --ink-2: #4a463d; /*  8.3:1 */
+  --ink-3: #5f5b50; /*  6.0:1 */
+  --ink-4: #6f6a5e; /*  4.7:1 */
+
+  /* Rules - hairlines carry the grid in this design */
+  --rule: rgba(22, 21, 15, 0.16);
+  --rule-soft: rgba(22, 21, 15, 0.08);
+
+  /* Single accent: oxide red */
+  --accent: #b0432b;
+  --accent-soft: rgba(176, 67, 43, 0.1);
+
+  /* Layout */
+  --gutter: clamp(1.25rem, 5vw, 4.5rem);
+  --measure: 62ch;
+  --max: 90rem;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 @theme inline {
-  --color-bg: var(--bg);
-  --color-surface: var(--surface);
-  --color-border: var(--border);
+  --color-paper: var(--paper);
+  --color-paper-raised: var(--paper-raised);
+  --color-paper-sunk: var(--paper-sunk);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-ink-4: var(--ink-4);
+  --color-rule: var(--rule);
+  --color-rule-soft: var(--rule-soft);
   --color-accent: var(--accent);
-  --color-fg: var(--text-primary);
-  --color-muted: var(--text-secondary);
-  --font-mono: var(--font-jetbrains);
-  --font-sans: var(--font-satoshi);
+
+  --font-display: var(--font-instrument), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SF Mono", monospace;
 }
 
-* {
-  box-sizing: border-box;
-}
+/* Hover effects only where a real pointer exists - avoids sticky
+   hover states on touch devices. */
+@custom-variant hover-fine (@media (hover: hover) and (pointer: fine));
 
-html {
-  scroll-behavior: smooth;
-}
+/* ===============================================================
+   Base
 
-body {
-  background: var(--bg);
-  color: var(--text-primary);
-  font-family: var(--font-satoshi), system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
-}
-
-/* Grain / noise overlay */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image: url("/noise.svg");
-  background-repeat: repeat;
-  background-size: 200px 200px;
-  opacity: 0.035;
-  pointer-events: none;
-  z-index: 9999;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 4px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg);
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(34, 197, 94, 0.3);
-  border-radius: 2px;
-}
-
-/* Selection */
-::selection {
-  background: rgba(34, 197, 94, 0.2);
-  color: var(--text-primary);
-}
-
-/* Focus */
-:focus-visible {
-  outline: 1px solid var(--accent);
-  outline-offset: 2px;
-}
-
-/* Blinking cursor */
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
-.cursor-blink {
-  display: inline-block;
-  width: 2px;
-  height: 1em;
-  background: var(--accent);
-  margin-left: 2px;
-  vertical-align: text-bottom;
-  animation: blink 1s step-end infinite;
-}
-
-/* Accent glow */
-.glow {
-  text-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
-}
-
-/* Card base */
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card:hover {
-  border-color: var(--border-hover);
-  box-shadow: 0 0 20px var(--accent-glow);
-}
-
-/* ── Layout grid classes ─────────────────────────────── */
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: start;
-}
-
-.about-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 5rem;
-  align-items: start;
-}
-
-.playground-grid {
-  display: grid;
-  grid-template-columns: 220px 1fr 1fr;
-  min-height: 420px;
-}
-
-/* ── Responsive layout helpers ───────────────────────── */
-@media (max-width: 700px) {
-  .hero-grid {
-    grid-template-columns: 1fr !important;
-    gap: 2.5rem !important;
+   Everything below lives in @layer base / @layer components on
+   purpose. Tailwind v4 emits utilities into @layer utilities, and an
+   UNLAYERED rule beats a layered one no matter how low its
+   specificity - so a bare `body > *` here would silently defeat every
+   utility on a direct child of body. Keeping these layered means
+   utilities always win, which is what a utility class is for.
+   =============================================================== */
+@layer base {
+  * {
+    box-sizing: border-box;
   }
-  .about-grid {
-    grid-template-columns: 1fr !important;
-    gap: 2.5rem !important;
+
+  html {
+    /* No scroll-behavior: smooth - Lenis owns scrolling. Native smooth
+       scroll fights the RAF loop and causes jitter. */
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    /* Grain is a tiled background image rather than a fixed overlay
+       element: no extra compositing layer, and nothing sitting on top of
+       the content that has to be escaped with z-index. */
+    background-color: var(--paper);
+    background-image: url("/noise.svg");
+    background-size: 180px 180px;
+    background-repeat: repeat;
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+
+  h1, h2, h3, h4, p, figure, blockquote, ul, ol {
+    margin: 0;
+  }
+
+  ul, ol {
+    padding: 0;
+    list-style: none;
+  }
+
+  img {
+    max-width: 100%;
+    display: block;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--paper-sunk);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(22, 21, 15, 0.22);
+    border: 3px solid var(--paper-sunk);
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(22, 21, 15, 0.4);
   }
 }
 
-@media (max-width: 860px) {
-  .playground-grid {
-    grid-template-columns: 1fr !important;
+@layer components {
+  /* ===============================================================
+     Typography primitives
+     =============================================================== */
+
+  /* Display - Instrument Serif, set tight and large. The design leans
+     on this doing the work that glow effects used to. */
+  .t-display {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 0.86;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
   }
-  .playground-grid > div {
-    border-right: none !important;
-    border-bottom: 1px solid var(--border);
+
+  .t-h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2.1rem, 5.2vw, 4rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
   }
-  .playground-grid > div:last-child {
-    border-bottom: none;
+
+  .t-h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+  }
+
+  /* Metadata - mono, uppercase, wide. Used sparingly: labels, dates,
+     indices. Never for body copy. */
+  .t-meta {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+
+  .t-body {
+    font-size: clamp(1rem, 1.05vw, 1.0625rem);
+    line-height: 1.72;
+    color: var(--ink-2);
+  }
+
+  .t-lead {
+    font-size: clamp(1.125rem, 1.7vw, 1.4rem);
+    line-height: 1.55;
+    color: var(--ink-2);
+    letter-spacing: -0.01em;
+  }
+
+  /* ===============================================================
+     Layout
+     =============================================================== */
+  .shell {
+    width: 100%;
+    max-width: var(--max);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  /* Hairline that carries the grid */
+  .rule {
+    height: 1px;
+    background: var(--rule);
+    transform-origin: left center;
+  }
+
+  /* 12-column editorial grid */
+  .grid-12 {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2vw, 2rem);
+  }
+
+  @media (max-width: 900px) {
+    .grid-12 {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+  }
+
+  /* ===============================================================
+     Link underlines
+     =============================================================== */
+
+  /* Draws in from the left on hover */
+  .link-draw {
+    position: relative;
+    text-decoration: none;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.4s var(--ease-out), color 0.3s ease;
+    padding-bottom: 1px;
+  }
+
+  .link-draw:hover {
+    background-size: 100% 1px;
+  }
+
+  /* Starts drawn, retracts to the right on hover */
+  .link-undraw {
+    text-decoration: none;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 100% 1px;
+    background-position: 100% 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.4s var(--ease-out);
+  }
+
+  .link-undraw:hover {
+    background-size: 0% 1px;
   }
 }
 
-/* ── Animation will-change hints ─────────────────────── */
-.motion-reveal {
+/* ===============================================================
+   Reveal base states
+   Guarded by .js so content is never trapped invisible if the
+   animation bundle fails to load or JS is off entirely.
+   =============================================================== */
+.js [data-reveal] {
+  opacity: 0;
   will-change: transform, opacity;
 }
 
-/* ── Project card image scroll-driven fade ───────────── */
-@keyframes image-fade-in {
-  from {
-    opacity: 0;
-    translate: var(--x-start, -36px) 0;
-    scale: 1.06;
+.js [data-reveal-lines] .line-inner {
+  will-change: transform;
+}
+
+/* Line-mask wrapper: overflow hidden, child slides up into view */
+.line-mask {
+  display: block;
+  overflow: hidden;
+}
+
+/* ===============================================================
+   Lenis
+   =============================================================== */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ===============================================================
+   Reduced motion - show everything, kill all transforms
+   =============================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
   }
-  to {
-    opacity: 1;
-    translate: 0px 0px;
-    scale: 1;
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
-.image-fade {
-  animation: image-fade-in linear both;
-  animation-timeline: view();
-  animation-range: entry 15% entry 95%;
-}
-
-@supports not (animation-timeline: view()) {
-  .image-fade { opacity: 1; translate: 0px; scale: 1; }
-}
-
-/* ── React Flow overrides ────────────────────────────── */
+/* ===============================================================
+   React Flow - retheme to paper
+   =============================================================== */
 .react-flow__background {
-  background: var(--bg) !important;
+  background: var(--paper-sunk) !important;
+}
+
+.react-flow__controls {
+  box-shadow: none !important;
 }
 
 .react-flow__controls button {
-  background: var(--surface) !important;
-  border: 1px solid var(--border) !important;
-  color: var(--text-secondary) !important;
-  fill: var(--text-secondary) !important;
+  background: var(--paper-raised) !important;
+  border: none !important;
+  border-bottom: 1px solid var(--rule) !important;
+  color: var(--ink-2) !important;
+  fill: var(--ink-2) !important;
 }
 
 .react-flow__controls button:hover {
-  background: rgba(34, 197, 94, 0.1) !important;
-  border-color: var(--accent) !important;
-  color: var(--accent) !important;
-  fill: var(--accent) !important;
+  background: var(--accent) !important;
+  color: var(--paper) !important;
+  fill: var(--paper) !important;
 }
 
 .react-flow__minimap {
-  background: var(--surface) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 6px !important;
+  background: var(--paper-raised) !important;
+  border: 1px solid var(--rule) !important;
+  border-radius: 0 !important;
+}
+
+.react-flow__attribution {
+  background: transparent !important;
+  font-family: var(--font-mono) !important;
+  font-size: 9px !important;
+  opacity: 0.35;
 }
