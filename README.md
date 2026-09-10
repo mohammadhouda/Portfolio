@@ -10,18 +10,49 @@ explorer on the case-study pages.
 
 ## Design
 
-Warm paper ground, near-black warm ink, a single oxide-red accent, and
-hairline rules carrying a 12-column grid. Instrument Serif does the display
-work; Inter carries body copy; IBM Plex Mono is reserved for metadata —
-labels, dates, indices — and never used for prose.
+Deep charcoal ground, off-white text, a single warm-ember accent, and
+hairline rules carrying a 12-column grid. All sans: Archivo at 800 does the
+display work — uppercase and very tightly tracked, so emphasis comes from
+weight and size rather than from a contrasting serif. Inter carries body
+copy; IBM Plex Mono is reserved for metadata — labels, dates, indices — and
+never used for prose.
 
-Every step of the ink scale passes WCAG AA (4.5:1) against the paper
-background, including the lightest, since those tones carry the small
-uppercase labels.
+Every step of the text scale passes WCAG AA (4.5:1) against the background,
+including the lightest, since those tones carry the small uppercase labels.
+There is no grain or texture overlay: a flat ground keeps small text crisp.
 
 ---
 
 ## Motion
+
+### Section stack
+
+Reaching the end of a section pins it briefly; it recedes — scaling down and
+dimming — while the next section slides up and covers it.
+
+GSAP's pin switches the outgoing panel to `position: fixed`. Three details
+make that read as depth rather than as a glitch:
+
+- **`pinSpacing: false`.** With spacing on, GSAP inserts a spacer as long as
+  the pin, so the outgoing panel dims against empty space and the next one
+  only arrives afterwards. With it off, no space is added and the next panel
+  scrolls straight up over the pinned one — which is the whole effect.
+- **Ascending `z-index` per panel.** A fixed element paints above static
+  siblings regardless of DOM order, so without this the pinned panel would
+  sit on top of the section meant to cover it.
+- **`transform-origin: 50% calc(100% - 50svh)`.** While pinned, a panel's
+  bottom edge rests on the bottom of the viewport, so this point lands
+  exactly on screen centre — for a short panel and a very tall one alike.
+  Scaling from anywhere else drags visible content off-screen as it shrinks.
+
+The transform goes on an inner element, never the panel itself: pin writes
+position and inset onto the panel, and a transform there would also create a
+containing block that breaks the fixed positioning. The whole effect is
+gated behind `(min-width: 900px)` via `gsap.matchMedia` — on short viewports
+the transition eats too much of the screen, and mobile browsers resize on
+address-bar show/hide, which invalidates pin measurements constantly.
+
+### Everything else
 
 - **Lenis** drives smooth scrolling, stepped from `gsap.ticker` rather than
   its own rAF loop. Two independent loops is what makes most smooth-scroll
@@ -53,7 +84,7 @@ uppercase labels.
 | Smooth scroll | Lenis v1 |
 | Animation | GSAP v3 + ScrollTrigger |
 | Diagram | @xyflow/react v12 |
-| Fonts | Instrument Serif · Inter · IBM Plex Mono |
+| Fonts | Archivo · Inter · IBM Plex Mono |
 | Deployment | Vercel |
 
 ### A note on CSS layers
@@ -91,6 +122,7 @@ Portfolio/
 │       ├── SectionHead.tsx  ProjectVisual.tsx
 │       ├── ProjectDetail.tsx  Lightbox.tsx
 │       ├── motion/
+│       │   ├── SectionStack.tsx    # Pinned section recede + overlap
 │       │   ├── SmoothScroll.tsx    # Lenis ↔ GSAP ticker bridge
 │       │   ├── Reveal.tsx          # Fade + rise on scroll
 │       │   ├── SplitReveal.tsx     # Masked per-line headline reveal
@@ -101,10 +133,9 @@ Portfolio/
 │           ├── Explorer.tsx        # Shared, data-driven explorer
 │           ├── HopeLinkExplorer.tsx / DocAgentExplorer.tsx
 │           ├── CustomNode.tsx
-│           ├── palette.ts          # Dark-theme colors → ink-safe tones
+│           ├── palette.ts          # Node colour toning + edge strokes
 │           └── nodeData.ts / docAgentNodeData.ts
 └── public/
-    ├── noise.svg               # Tiled paper grain (alpha speckle)
     └── Mohammad.Houda_CV.pdf
 ```
 

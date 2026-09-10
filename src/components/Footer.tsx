@@ -17,7 +17,7 @@ export default function Footer() {
         {/* A colophon: what the page is set in. Cheap to include, and it
             says a person made deliberate choices here. */}
         <p className="t-meta col-span-full text-fg-4 md:col-span-5">
-          Set in Instrument Serif, Inter &amp; IBM Plex Mono
+          Set in Archivo, Inter &amp; IBM Plex Mono
         </p>
 
         <div className="col-span-full md:col-span-3 md:text-right">
