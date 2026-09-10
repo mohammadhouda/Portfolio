@@ -33,7 +33,7 @@ export const projects: Project[] = [
       github: "https://github.com/MoustafaWehbe/onramp-fp-founders-app",
     },
     description:
-      "A fundraising SaaS where startups run their whole raise investor CRM, pipelines, commitments, tasks, secure document sharing with an AI copilot that answers questions about their own documents and cites where each answer came from.",
+      "A multi-tenant fundraising SaaS where startups run their raise: investor CRM, pipeline, commitments, tasks, and secure document sharing with an AI copilot.",
     longDescription:
       "Raise is a multi-tenant fundraising platform built around six workflows startups actually run during a raise: investor CRM, pipeline tracking, commitments, tasks, secure document sharing, and team collaboration. The engineering weight sits in two places. First, tenant isolation: every query is scoped to a startup, enforced at the database access layer rather than trusted to callers, with fine-grained RBAC on top and a separate restricted authentication path for outside reviewers who should see documents but not the rest of the workspace. Second, the AI copilot: fundraising documents are parsed with LlamaParse, embedded into pgvector, and retrieved to answer contextual questions with citations so an answer can always be traced back to a page. Everything slow runs off the request path through BullMQ and streams back over SSE.",
     stack: [
@@ -76,7 +76,7 @@ export const projects: Project[] = [
       github: "https://github.com/mohammadhouda/scrap",
     },
     description:
-      "A queue-based crawler and search engine that partitions scraping, discovery, and indexing into three independently scalable workloads, then answers questions over what it found using hybrid retrieval and grounded generation.",
+      "A queue-based crawler and search engine that splits scraping, discovery, and indexing into three scalable workloads, then answers questions over what it finds.",
     longDescription:
       "A distributed crawling and indexing system built to be operated, not just demoed. Scraping, link discovery, and indexing run as three separate BullMQ queues so each can scale on its own bottleneck discovery is cheap and wide, rendering is expensive and narrow. Six reliability controls keep it from being the kind of crawler that gets a domain blocked: robots.txt enforcement, per-domain rate limiting, retry with backoff, dead-letter queues for poison jobs, content hashing to skip unchanged pages, and page versioning so history isn't lost on re-crawl. On the retrieval side, PostgreSQL full-text search and pgvector HNSW embeddings run in parallel and are fused with Reciprocal Rank Fusion, which beats either strategy alone on queries that mix exact terms with fuzzy intent. The question-answering API returns grounded answers with citations over SSE.",
     stack: [
@@ -118,7 +118,7 @@ export const projects: Project[] = [
       github: "https://github.com/mohammadhouda/docAgent",
     },
     description:
-      "Construction documents BOQs, contracts, specs, schedules turned into a queryable system. Ask a question in plain language, get a cited structured answer where every number came from SQL rather than from the model.",
+      "Construction documents (BOQs, contracts, specs, schedules) turned into a queryable system: ask in plain language, get cited answers with every number from SQL.",
     longDescription:
       "DocAgent transforms raw construction documents into an intelligent query system. Files flow through a 7-stage async pipeline parse, chunk, embed, classify, profile, extract, store producing both semantic search vectors and structured SQL extractions. An AI agent with 5 flexible tools then answers business questions: aggregating costs, comparing budgets against actuals, listing line items, or searching document text. Every number in an answer is fetched from SQL and never fabricated; the agent does no arithmetic itself. Document profiles stored as JSONB supply per-document query hints and tool suggestions that guide the agent's strategy, and answers render as typed cards tables, timelines, fact grids, party cards so the frontend can stay predictable while the questions stay open-ended.",
     stack: [
@@ -157,7 +157,7 @@ export const projects: Project[] = [
     featured: true,
     images: ["/hopelink-1.png", "/hopelink-2.png", "/hopelink-3.png"],
     description:
-      "A multi-portal platform connecting NGOs, charities, and volunteers across Lebanon, with a personalized opportunity feed whose ranking is pre-computed by background workers so every page of results stays a fast index scan.",
+      "A multi-portal platform connecting NGOs, charities, and volunteers across Lebanon, with an opportunity feed ranked by background workers for fast page reads.",
     longDescription:
       "Hope Link is a full-stack multi-portal platform built to connect NGOs, charities, and volunteers across Lebanon. Three isolated role contexts Admin, Charity, and Volunteer run under a single Express server with role middleware enforcing access at the route level. The signature engineering problem was making a personalized opportunity ranking that stays fast as both sides of the marketplace grow: scores are pre-computed by a BullMQ background worker and written to an indexed junction table, which turns every paginated feed request into a B-tree scan instead of a full table scan plus sort.",
     stack: [
@@ -197,7 +197,7 @@ export const projects: Project[] = [
     featured: false,
     images: ["/shopify-1.png", "/shopify-2.png", "/shopify-3.png"],
     description:
-      "End-to-end Shopify checkout automation in Puppeteer product selection, address fill, hCaptcha solving, proxy routing, and payment submission across two separate store flows.",
+      "End-to-end Shopify checkout automation in Puppeteer: product selection, address fill, hCaptcha solving, proxy routing, and payment across two store flows.",
     longDescription:
       "A Puppeteer-based automation that completes a full Shopify checkout in under 15 seconds. Built against real e-commerce automation obstacles: Shopify's bot protections, hCaptcha challenges, Shadow DOM card fields, and US-only shipping restrictions. Two separate flows kith.com with proxy and captcha solving, and ShopNiceKicks with an Electron desktop GUI. Task speed is logged in real time from cart to payment confirmation.",
     stack: ["Node.js", "Puppeteer", "2Captcha API", "Oxylabs Proxy", "Electron"],
@@ -219,7 +219,7 @@ export const projects: Project[] = [
     year: "2026",
     featured: false,
     description:
-      "A WhatsApp assistant for clinics that books appointments and answers patient questions, querying real schedule data before it responds so it can't invent availability. In active development.",
+      "A WhatsApp assistant for clinics that books appointments and answers patient questions, querying real schedule data first so it can't invent availability.",
     longDescription:
       "Clinic Assistant brings WhatsApp automation to healthcare practices. Patients message the clinic's number and the assistant handles the conversation end to end checking doctor availability, booking, answering common questions, and sending confirmations. The DB-first design is the point: the assistant queries real schedule data before it responds, so it can't fabricate an open slot. Currently in active development.",
     stack: [

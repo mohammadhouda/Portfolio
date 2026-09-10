@@ -31,7 +31,7 @@ const plexMono = IBM_Plex_Mono({
 const BASE_URL = profile.site;
 
 const DESCRIPTION =
-  "Software Engineer in Beirut building AI agents, enterprise integrations, and scalable backend systems. Node.js · PostgreSQL · Prisma · Redis · Next.js · RAG.";
+  "Software Engineer in Beirut building AI agents, enterprise integrations, and scalable backend systems with Node.js, PostgreSQL, Redis, and Next.js.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
