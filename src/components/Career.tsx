@@ -19,8 +19,9 @@ export default function Career() {
                 {entry.start} — {entry.end}
                 {entry.current && (
                   <span
-                    className="inline-block h-1.5 w-1.5 rounded-full bg-accent"
+                    role="img"
                     aria-label="Current role"
+                    className="inline-block h-1.5 w-1.5 rounded-full bg-accent"
                   />
                 )}
               </p>
