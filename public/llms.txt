@@ -1,0 +1,25 @@
+# Mohammad Houda
+
+> Software Engineer in Beirut building AI agents, enterprise integrations, and scalable backend systems with Node.js, PostgreSQL, Redis, and Next.js.
+
+Portfolio and case studies at https://mohammadhouda.dev. Currently Solution Engineer at VAYACOM / DLVRD, building AI agents and conversational workflows for sales, support, and e-commerce clients.
+
+## Projects
+
+- [Raise](https://mohammadhouda.dev/projects/raise): Multi-tenant fundraising SaaS where startups run investor CRM, pipeline, commitments, and secure document sharing, with an AI copilot that cites its sources.
+- [Distributed RAG Crawler](https://mohammadhouda.dev/projects/rag-crawler): Queue-based crawler and search engine splitting scraping, discovery, and indexing into independently scalable workloads, with hybrid retrieval.
+- [DocAgent](https://mohammadhouda.dev/projects/doc-agent): AI query system over construction documents (BOQs, contracts, specs, schedules) that answers in plain language with every number grounded in SQL.
+- [Hope Link](https://mohammadhouda.dev/projects/hopelink): Multi-portal platform connecting NGOs, charities, and volunteers across Lebanon, with a pre-computed opportunity ranking feed.
+- [Shopify Checkout Automation](https://mohammadhouda.dev/projects/shopify-automation): End-to-end Shopify checkout automation in Puppeteer across two store flows.
+- [Clinic Assistant](https://mohammadhouda.dev/projects/clinic-assistant): WhatsApp assistant for clinics that books appointments against real schedule data. In active development.
+
+## Stack
+
+Node.js, Express, PostgreSQL, Prisma, Redis, BullMQ, Next.js, TypeScript, React, pgvector, RAG pipelines, AI agents.
+
+## Contact
+
+- Email: muhamad.houda@gmail.com
+- GitHub: https://github.com/mohammadhouda
+- LinkedIn: https://linkedin.com/in/mohammad-houda
+- CV: https://mohammadhouda.dev/Mohammad_Houda_CV_2026.pdf
