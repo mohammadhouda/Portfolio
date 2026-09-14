@@ -2,10 +2,16 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap, prefersReducedMotion } from "../lib/gsap";
 import { scrollToTarget, setScrollLocked } from "../lib/scroll";
 import { profile } from "../lib/profile";
+
+/* The panel's entrance must be written before the browser paints it, so it
+   runs as a layout effect. useLayoutEffect warns during SSR, and `open` is
+   always false on the server anyway, so fall back to useEffect there. */
+const useIsomorphicLayoutEffect =
+  typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 const links = [
   { label: "Work", href: "#work" },
@@ -72,9 +78,19 @@ export default function Nav({ standalone = false }: NavProps) {
     return () => ctx.revert();
   }, []);
 
-  /* Mobile panel: lock scroll while open, stagger the links in. */
   useEffect(() => {
     setScrollLocked(open);
+  }, [open]);
+
+  /* Mobile panel: stagger the links in.
+
+     As a passive effect this fired after the browser had already painted the
+     freshly mounted panel in its finished state, so every tap of the burger
+     showed the links fully in place for a frame, snapped them back down
+     behind their masks, and only then ran the stagger. Writing the from-state
+     in a layout effect means the first frame the reader sees is the one the
+     animation starts from. */
+  useIsomorphicLayoutEffect(() => {
     if (!open) return;
 
     const panel = panelRef.current;
@@ -106,7 +122,7 @@ export default function Nav({ standalone = false }: NavProps) {
       menuButton,
       ...Array.from(panel?.querySelectorAll<HTMLElement>("a[href], button") ?? []),
     ].filter((el): el is HTMLElement => el !== null);
-    focusable[1]?.focus();
+    focusable[1]?.focus({ preventScroll: true });
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
       if (e.key === "Tab") {

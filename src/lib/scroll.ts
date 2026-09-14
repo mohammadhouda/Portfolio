@@ -19,15 +19,38 @@ export function scrollToTarget(selector: string) {
   }
 }
 
-/** Locks/unlocks page scroll used by the lightbox and mobile menu. */
+/**
+ * Locks/unlocks page scroll used by the lightbox and mobile menu.
+ *
+ * Idempotent on purpose: the callers fire `false` more than once for a single
+ * lock (state effect, click handler, unmount cleanup), and unlocking twice
+ * used to re-run the restore below against a scroll position that had already
+ * moved on.
+ */
+let lockedScrollY: number | null = null;
+
 export function setScrollLocked(locked: boolean) {
-  const lenis = typeof window !== "undefined" ? window.__lenis : undefined;
+  if (typeof window === "undefined") return;
+
+  const lenis = window.__lenis;
+  const root = document.documentElement;
 
   if (locked) {
+    if (lockedScrollY !== null) return;
+    lockedScrollY = window.scrollY;
     lenis?.stop();
-    document.documentElement.style.overflow = "hidden";
+    root.style.overflow = "hidden";
   } else {
+    if (lockedScrollY === null) return;
+    const restore = lockedScrollY;
+    lockedScrollY = null;
+    root.style.overflow = "";
     lenis?.start();
-    document.documentElement.style.overflow = "";
+    // Some mobile browsers clamp the offset while the document is
+    // unscrollable, so closing the overlay would drop the reader at the top
+    // of the page and replay every entrance on the way back down.
+    if (Math.abs(window.scrollY - restore) > 1) {
+      window.scrollTo(0, restore);
+    }
   }
 }

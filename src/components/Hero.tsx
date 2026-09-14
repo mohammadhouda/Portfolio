@@ -32,7 +32,14 @@ export default function Hero() {
       // records its END value from whatever the element reads as at init —
       // which is that same 0. The result is an element that animates from
       // invisible to invisible. Stating both ends removes the ambiguity.
-      tl.set(el.querySelectorAll("[data-hero]"), { opacity: 1 })
+      // :not([data-hero-lead]) matters. The lead paragraph is itself a
+      // [data-hero] wrapper AND the target of its own opacity tween further
+      // down the timeline. Sweeping it visible here made it flash in at t=0,
+      // sit there offset by 20px, then blink back out when its tween reached
+      // the playhead at 0.7. It stays hidden until its own tween owns it.
+      tl.set(el.querySelectorAll("[data-hero]:not([data-hero-lead])"), {
+        opacity: 1,
+      })
         .fromTo(
           "[data-hero-rule]",
           { scaleX: 0 },
